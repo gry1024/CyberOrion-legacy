@@ -33,6 +33,7 @@ from .cybersoceval import (
     _THINKING, compute_scores, grade, make_llm, parse_answers,
     sample_questions, write_report,
 )
+from .model_config import max_output_tokens
 
 SUITE = "attack_kb"
 SUITE_DESC = "ATT&CK 知识库访问能力测试（knowledge-access MCQ，答案在 KB 中）"
@@ -348,7 +349,7 @@ async def run_bench(n: int = 100, mode: str = "base", seed: int = 42,
         },
         "methodology": {
             "arm_budget": {"max_llm_calls_per_task": 1,
-                           "max_output_tokens_per_call": 4096,
+                           "max_output_tokens_per_call": max_output_tokens(),
                            "max_tool_calls_per_task": 0},
             "score_label": "internal engineering exact-match/Jaccard",
         },

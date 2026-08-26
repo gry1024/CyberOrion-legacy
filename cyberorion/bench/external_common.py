@@ -15,6 +15,7 @@ from typing import Any
 from .assets import sha256_file
 from .assets import BenchmarkAssetMissing
 from .cybersoceval import DEFAULT_LOG_DIR, LLM_TIMEOUT, _model_name, make_llm
+from .model_config import max_output_tokens
 
 SIZE_LIMIT_BYTES = 1024 ** 3
 TOTAL_CACHE_LIMIT_BYTES = 5 * 1024 ** 3
@@ -132,7 +133,7 @@ def model_metadata(model: str | None = None,
         "configured_model": str(configured),
         "thinking": ("enabled" if os.getenv("CO_BENCH_THINKING") == "enabled"
                      else "disabled"),
-        "max_output_tokens": int(os.getenv("CO_BENCH_MAX_TOKENS", "4096")),
+        "max_output_tokens": max_output_tokens(),
         "temperature": effective,
         "temperature_status": ("explicit" if effective is not None
                                else "provider_default"),

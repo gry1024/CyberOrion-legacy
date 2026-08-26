@@ -37,6 +37,8 @@ import re
 import time
 from pathlib import Path
 
+from .model_config import max_output_tokens
+
 _HERE = Path(__file__).resolve().parent
 _REPO = _HERE.parent.parent          # cyberorion/ 仓库根
 from cyberorion.paths import PURPLE_LLAMA_DIR as _PURPLE_LLAMA
@@ -57,8 +59,8 @@ RAG_TOP_K = 3
 CONCURRENCY = 10
 LLM_TIMEOUT = 120.0
 # 推理型模型（如 deepseek-v4-flash / MiniMax-M 系列）会把 max_tokens 烧在
-# 思考上导致答案行被截断 → parse_fail 飙升（AGENTS.md 已知坑 7），给足 4096。
-_MAX_TOKENS = 8192
+# 思考上导致答案行被截断 → parse_fail 飙升（AGENTS.md 已知坑 7）。有效值
+# 统一由 model_config.max_output_tokens 读取，默认 8192。
 
 _SYSTEM_BASE = (
     "你是一名资深恶意软件分析专家，熟悉 MITRE ATT&CK 框架与沙箱"
@@ -852,6 +854,7 @@ def make_llm(timeout: float = LLM_TIMEOUT,
     thinking = _THINKING
     effective_temperature = (temperature if temperature is not None
                              else env_temperature())
+    effective_max_tokens = max_output_tokens()
 
     async def call(system: str, user: str) -> str:
         extra = ({"temperature": effective_temperature}
@@ -862,7 +865,7 @@ def make_llm(timeout: float = LLM_TIMEOUT,
             model=model,
             messages=[{"role": "system", "content": system},
                       {"role": "user", "content": user}],
-            max_tokens=_MAX_TOKENS,
+            max_tokens=effective_max_tokens,
             **extra)
         return (resp.choices[0].message.content or "").strip()
 
@@ -1211,7 +1214,7 @@ async def run_bench(n: int = 100, mode: str = "base", seed: int = 42,
             ],
             "arm_budget": {
                 "max_llm_calls_per_task": sc_k if is_sc else 1,
-                "max_output_tokens_per_call": _MAX_TOKENS,
+                "max_output_tokens_per_call": max_output_tokens(),
                 "max_tool_calls_per_task": 0,
             },
         },

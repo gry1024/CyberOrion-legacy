@@ -351,6 +351,64 @@ def test_absent_temperature_preserves_provider_default(monkeypatch) -> None:
     assert "temperature" not in captured
 
 
+def test_default_max_output_tokens_matches_request_and_metadata(monkeypatch) -> None:
+    from cyberorion.bench.external_common import model_metadata
+
+    captured: dict = {}
+    _fake_openai(monkeypatch, captured)
+    monkeypatch.delenv("CO_BENCH_MAX_TOKENS", raising=False)
+    llm = cybersoceval.make_llm()
+    asyncio.run(llm("system", "user"))
+    assert captured["max_tokens"] == 8192
+    assert model_metadata("openai/x")["max_output_tokens"] == 8192
+
+
+def test_explicit_max_output_tokens_controls_request_and_metadata(monkeypatch) -> None:
+    from cyberorion.bench.external_common import model_metadata
+
+    captured: dict = {}
+    _fake_openai(monkeypatch, captured)
+    monkeypatch.setenv("CO_BENCH_MAX_TOKENS", "6144")
+    llm = cybersoceval.make_llm()
+    asyncio.run(llm("system", "user"))
+    assert captured["max_tokens"] == 6144
+    assert model_metadata("openai/x")["max_output_tokens"] == 6144
+
+
+@pytest.mark.parametrize("raw", ["0", "-1", "not-an-int", "1.5"])
+def test_invalid_max_output_tokens_fails_clearly(monkeypatch, raw: str) -> None:
+    from cyberorion.bench.external_common import model_metadata
+
+    captured: dict = {}
+    _fake_openai(monkeypatch, captured)
+    monkeypatch.setenv("CO_BENCH_MAX_TOKENS", raw)
+    with pytest.raises(ValueError, match="CO_BENCH_MAX_TOKENS 必须是正整数"):
+        cybersoceval.make_llm()
+    with pytest.raises(ValueError, match="CO_BENCH_MAX_TOKENS 必须是正整数"):
+        model_metadata("openai/x")
+
+
+def test_secalert_persists_effective_max_output_tokens(
+        tmp_path: Path, monkeypatch) -> None:
+    data_dir = tmp_path / "alerts_max_tokens"
+    data_dir.mkdir()
+    (data_dir / "alerts.json").write_text(json.dumps([
+        {"id": "a1", "alert": "malware", "label": "Attack"},
+        {"id": "a2", "alert": "backup", "label": "Non-Attack"},
+    ]), encoding="utf-8")
+    monkeypatch.setenv("CYBERORION_SECALERTBENCH_DIR", str(data_dir))
+    monkeypatch.setenv("CO_BENCH_MAX_TOKENS", "6144")
+
+    async def llm(_system: str, _user: str) -> str:
+        return '{"verdict":"attack","attack_probability":0.5}'
+
+    run = asyncio.run(secalertbench.run_bench(
+        n=2, mode="base", log_dir=tmp_path / "logs", llm=llm))
+    persisted = json.loads(Path(run["path"]).read_text(encoding="utf-8"))
+    assert run["model_settings"]["max_output_tokens"] == 6144
+    assert persisted["model_settings"]["max_output_tokens"] == 6144
+
+
 def test_compare_parent_keeps_three_arms_under_one_run(tmp_path: Path,
                                                        monkeypatch) -> None:
     data_dir = tmp_path / "alerts_compare"

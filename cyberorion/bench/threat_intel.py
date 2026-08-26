@@ -33,6 +33,7 @@ from .cybersoceval import (
     sample_questions,
     write_report,
 )
+from .model_config import max_output_tokens
 
 MODES = ("base", "rag")
 METHODOLOGY_STATUS = "external_track"
@@ -237,7 +238,7 @@ async def run_bench(n: int = 100, mode: str = "base", seed: int = 42,
         },
         "methodology": {
             "arm_budget": {"max_llm_calls_per_task": 1,
-                           "max_output_tokens_per_call": 4096,
+                           "max_output_tokens_per_call": max_output_tokens(),
                            "max_tool_calls_per_task": 0},
             "score_label": "CyberOrion exact-match/Jaccard external track",
         },

@@ -80,7 +80,9 @@ evaluation-only aliases。当前固定上游 schema 的 19 个字段中只有 `L
 字段，其余 18 个是遥测特征。解码温度可通过 `CO_BENCH_TEMPERATURE` 显式配置
 （如 `0`），`model_settings` 持久化 `temperature` 与 `temperature_status`
 （explicit/provider_default）；未配置时保持 provider 默认行为，绝不声称确定性
-解码——样本 seed 与生成设置是两个独立概念。
+解码——样本 seed 与生成设置是两个独立概念。输出上限由
+`CO_BENCH_MAX_TOKENS` 控制，默认 8192；同一有效值同时用于 API `max_tokens`
+与 `model_settings.max_output_tokens`，非法或非正整数会在模型调用前明确失败。
 ExCyTIn 记录证据数、SQL 查询数/成本和 adapter `native_reward`；CAGE-2 记录
 Restore 次数、CyberOrion 自定义的非原生 `restore_cost_proxy`（−Restore 次数代理，
 `restore_cost_proxy_status="non_native_proxy"`，不是官方 CAGE availability 组件）
