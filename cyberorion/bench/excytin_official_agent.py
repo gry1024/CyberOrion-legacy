@@ -46,7 +46,8 @@ def create_agent(*, arm: str = "single", **_factory_kwargs: Any):
             from inspect_ai.model import ChatMessageSystem, ChatMessageUser, get_model
             from inspect_ai.util import store
 
-            official_tools = [_tool_spec(t) for t in (tools or [])]
+            official_tools = {spec.name: spec
+                              for spec in (_tool_spec(t) for t in (tools or []))}
             messages = []
             for message in getattr(state, "messages", [])[-12:]:
                 content = getattr(message, "content", "")
