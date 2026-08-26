@@ -1,0 +1,12 @@
+{
+  "run_id": "20260826_cage2_calibration_agent_n3",
+  "suite": "cage2",
+  "seed": 42,
+  "selection": "seeded_stratified",
+  "sample_ids": [
+    "B_lineAgent:30:episode-1",
+    "RedMeanderAgent:30:episode-1",
+    "SleepAgent:30:episode-1"
+  ],
+  "sha256": "913b993246f8cf61e48f9315ff761cc76c5479f82aa2ba3a5a2222e2b6604209"
+}
