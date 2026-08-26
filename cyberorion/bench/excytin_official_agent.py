@@ -56,7 +56,8 @@ def create_agent(*, arm: str = "single", **_factory_kwargs: Any):
                                      "content": str(content)[:12000]})
             visible = getattr(state, "input", "") or (messages[-1]["content"] if messages else "")
             tools_json = [{"name": t.name, "description": t.description,
-                           "input_schema": t.input_schema} for t in official_tools]
+                           "input_schema": t.input_schema}
+                          for t in official_tools.values()]
 
             async def llm(system: str, user: str) -> str:
                 prompt = (system + "\n\nOfficial task context:\n" + str(visible)[:12000]
