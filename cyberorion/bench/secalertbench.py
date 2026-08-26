@@ -95,8 +95,23 @@ def load_alerts(paths: list[Path]) -> list[dict]:
     return list(unique.values())
 
 
+def class_balanced_quotas(n: int) -> tuple[int, int]:
+    """按 gold 类的确定性平衡配额：attack=floor(n/2)，benign=n-attack。
+
+    奇数 n 时由该规则固定地把多出的 1 条给 benign，不随机决定。
+    """
+    attack = n // 2
+    return attack, n - attack
+
+
 def select_representative_alerts(rows: list[dict], n: int, seed: int) -> list[dict]:
-    """固定种子分层选样；代表集必须同时含 attack 与 benign。"""
+    """固定种子按类平衡选样；代表集必须同时含 attack 与 benign。
+
+    顶层先按 gold 类配平（attack=floor(n/2)、benign=n-attack），类内再按
+    alert_type × enterprise 固定种子轮询分层（复用 stratified_sample），
+    最后两类确定性交错输出。任一类容量不足以满足其配额时 fail closed，
+    绝不静默改变 Attack/Benign 类比例。
+    """
     available = Counter(row["label"] for row in rows)
     if not available.get("attack") or not available.get("benign"):
         from .assets import BenchmarkAssetMissing
@@ -104,7 +119,24 @@ def select_representative_alerts(rows: list[dict], n: int, seed: int) -> list[di
             SUITE, "SecAlertBench 代表集源数据必须同时包含 attack 与 benign")
     if n < 2:
         raise ValueError("SecAlertBench representative n 必须至少为 2 才能覆盖两类")
-    selected = stratified_sample(rows, n, seed, ("label", "alert_type", "enterprise"))
+    attack_quota, benign_quota = class_balanced_quotas(n)
+    attack_rows = [row for row in rows if row["label"] == "attack"]
+    benign_rows = [row for row in rows if row["label"] == "benign"]
+    if len(attack_rows) < attack_quota or len(benign_rows) < benign_quota:
+        from .assets import BenchmarkAssetMissing
+        raise BenchmarkAssetMissing(
+            SUITE,
+            "SecAlertBench 代表集类平衡配额无法满足：需要 attack="
+            f"{attack_quota}（可用 {len(attack_rows)}）、benign={benign_quota}"
+            f"（可用 {len(benign_rows)}）；fail closed，不静默改变类比例")
+    attack_selected = stratified_sample(attack_rows, attack_quota, seed,
+                                        ("alert_type", "enterprise"))
+    benign_selected = stratified_sample(benign_rows, benign_quota, seed,
+                                        ("alert_type", "enterprise"))
+    # 确定性交错输出，保证有序 manifest 顶层也是平衡的。
+    selected = [row for pair in zip(attack_selected, benign_selected) for row in pair]
+    selected.extend(attack_selected[len(benign_selected):])
+    selected.extend(benign_selected[len(attack_selected):])
     selected_counts = Counter(row["label"] for row in selected)
     if not selected_counts.get("attack") or not selected_counts.get("benign"):
         raise RuntimeError("deterministic stratification failed to preserve both classes")
@@ -249,7 +281,7 @@ async def run_bench(n: int | None = None, mode: str = "base", seed: int = 42,
                     profile: str = "daily", dataset_version: str | None = None,
                     log_dir: str | Path = DEFAULT_LOG_DIR, concurrency: int = 8,
                     llm=None, on_progress=None, run_id: str | None = None,
-                    **_: Any) -> dict:
+                    source_provenance: dict | None = None, **_: Any) -> dict:
     if mode not in MODES:
         raise ValueError(f"secalertbench mode 必须是 {'/'.join(MODES)}")
     root, files = require_asset(SUITE)
@@ -260,6 +292,7 @@ async def run_bench(n: int | None = None, mode: str = "base", seed: int = 42,
         raise BenchmarkAssetMissing(SUITE, "未识别出带 label 与 alert/text 的记录")
     count, size_decision = apply_size_policy(
         SUITE, profile, n, len(all_rows), files)
+    attack_quota, benign_quota = class_balanced_quotas(count)
     selected = select_representative_alerts(all_rows, count, seed)
     llm = llm or make_llm(timeout=LLM_TIMEOUT)
     sem = asyncio.Semaphore(max(1, concurrency))
@@ -355,10 +388,22 @@ async def run_bench(n: int | None = None, mode: str = "base", seed: int = 42,
             "recursive_denied_key_canonical_forms": sorted(EVALUATION_ONLY_KEYS),
         },
         "selection_manifest": {
-            "algorithm": "seeded_round_robin_stratified_v1",
-            "strata": ["label", "alert_type", "enterprise"],
+            "algorithm": "class_balanced_seeded_stratified_v1",
+            "sampling_policy": {
+                "top_level": "balanced_by_gold_class",
+                "within_class": "deterministic_stratified",
+                "within_class_fields": ["alert_type", "enterprise"],
+                "odd_n_rule": "attack=floor(n/2), benign=n-attack",
+                "seed": seed,
+                "output_order": "deterministic_class_interleave",
+            },
+            "requested_class_counts": {
+                "attack": attack_quota, "benign": benign_quota,
+            },
+            "selected_class_counts": dict(
+                sorted(Counter(r["label"] for r in selected).items())),
             "class_counts": dict(sorted(Counter(r["label"] for r in selected).items())),
             "selected_ids": [r["id"] for r in selected],
         },
     }
-    return persist_run(run, log_dir)
+    return persist_run(run, log_dir, source_provenance=source_provenance)

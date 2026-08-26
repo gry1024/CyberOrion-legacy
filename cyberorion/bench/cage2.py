@@ -35,7 +35,7 @@ async def run_bench(n: int | None = None, mode: str = "base", seed: int = 42,
                     profile: str = "daily", dataset_version: str | None = None,
                     log_dir: str | Path = DEFAULT_LOG_DIR, llm=None,
                     on_progress=None, run_id: str | None = None,
-                    **_: Any) -> dict:
+                    source_provenance: dict | None = None, **_: Any) -> dict:
     if mode not in MODES:
         raise ValueError(f"cage2 mode 必须是 {'/'.join(MODES)}")
     root, files = require_asset(SUITE)
@@ -201,8 +201,11 @@ async def run_bench(n: int | None = None, mode: str = "base", seed: int = 42,
         "confidence_intervals": {"mean_reward": bootstrap_ci(rewards, seed)},
         "host_compromise_events": None,
         "host_compromise_metric_status": "not_exposed_by_official_ChallengeWrapper",
-        "availability_penalty": round(sum(float(r.get("availability_penalty", 0.0))
-                                           for r in episode_rows), 4),
+        # restore_cost_proxy 是 CyberOrion 自定义的非原生代理
+        # （-Restore 次数），不是官方 CAGE availability 组件。
+        "restore_cost_proxy": round(sum(float(r.get("restore_cost_proxy", 0.0))
+                                         for r in episode_rows), 4),
+        "restore_cost_proxy_status": "non_native_proxy",
         "restore_actions": sum(int(r.get("restore_actions", 0)) for r in episode_rows),
         "illegal_actions": sum(int(r.get("illegal_actions", 0)) for r in episode_rows),
     }
@@ -223,6 +226,7 @@ async def run_bench(n: int | None = None, mode: str = "base", seed: int = 42,
                 "condition seeds are explicit and independent for reproducibility",
                 "LLM policies are callbacks rather than submitted BaseAgent classes",
                 "host compromise event counts are unavailable from ChallengeWrapper and remain null",
+                "restore_cost_proxy is a CyberOrion-defined non-native proxy (-Restore count), not an official CAGE availability component",
                 "not directly comparable to the official leaderboard",
             ],
             "arm_budget": dict(FAIR_ARM_BUDGET),
@@ -238,4 +242,4 @@ async def run_bench(n: int | None = None, mode: str = "base", seed: int = 42,
     if mode != "base":
         run["agent_traces"] = audit_traces
         run["episode_resource_usage"] = episode_resources
-    return persist_run(run, log_dir)
+    return persist_run(run, log_dir, source_provenance=source_provenance)

@@ -327,7 +327,9 @@ def run_cage2(episodes: int = 3, steps: int = 100,
             "red_agent": red_agent, "steps": len(actions), "actions": actions,
             "illegal_actions": illegal_actions,
             "restore_actions": restore_actions,
-            "availability_penalty": -float(restore_actions),
+            # CyberOrion 自定义的非原生 Restore 成本代理，不是官方 CAGE
+            # availability 组件。
+            "restore_cost_proxy": -float(restore_actions),
             # ChallengeWrapper exposes scalar reward only; do not fabricate a
             # compromise count from that aggregate.
             "host_compromise_events": None,
@@ -426,7 +428,10 @@ async def run_cage2_async(episodes: int = 3, steps: int = 100,
         rewards.append({
             "episode": ep + 1, "reward": round(total, 3), "red_agent": red_agent,
             "steps": len(actions), "actions": actions, "illegal_actions": illegal_actions,
-            "restore_actions": restore_actions, "availability_penalty": -float(restore_actions),
+            "restore_actions": restore_actions,
+            # CyberOrion 自定义的非原生 Restore 成本代理，不是官方 CAGE
+            # availability 组件。
+            "restore_cost_proxy": -float(restore_actions),
             "host_compromise_events": None,
             "host_compromise_metric_status": "not_exposed_by_official_wrapper",
         })

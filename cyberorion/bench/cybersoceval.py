@@ -876,7 +876,8 @@ async def run_bench(n: int = 100, mode: str = "base", seed: int = 42,
                     sc_temperature: float = SC_TEMPERATURE,
                     suite: str = "malware_analysis",
                     profile: str = "daily",
-                    dataset_version: "str | None" = None) -> dict:
+                    dataset_version: "str | None" = None,
+                    source_provenance: "dict | None" = None) -> dict:
     """跑一次基准并持久化结果，返回 run dict。
 
     Args:
@@ -912,6 +913,12 @@ async def run_bench(n: int = 100, mode: str = "base", seed: int = 42,
             f"%Y%m%d_%H%M%S_{suite}_compare_n{n}")
         arms = []
         started_compare = time.time()
+        # 一个 compare 实验 = 一个不可变的源码 provenance 快照。必须在任何
+        # 臂产生结果文件之前捕获：先臂写入 logs/bench 的 untracked 产物会
+        # 让后臂在 persist 时重新捕获的 git status 变 dirty，使 benchmark
+        # 自己否定自己。三臂必须持久化完全相同的这一份快照。
+        from .external_common import git_provenance
+        compare_source_provenance = source_provenance or git_provenance()
         for arm_index, arm_mode in enumerate(arm_modes):
             def arm_progress(done: int, total: int, errors: int = 0,
                              *, _offset: int = arm_index) -> None:
@@ -923,7 +930,8 @@ async def run_bench(n: int = 100, mode: str = "base", seed: int = 42,
                 log_dir=log_dir, concurrency=concurrency, llm=llm, kb=kb,
                 on_progress=arm_progress, run_id=f"{parent_id}_{arm_mode}",
                 sc_k=sc_k, sc_temperature=sc_temperature, suite=suite,
-                profile=profile, dataset_version=dataset_version)
+                profile=profile, dataset_version=dataset_version,
+                source_provenance=compare_source_provenance)
             arms.append(arm_run)
             # 端点/配额全失败时不继续烧后续臂；父 run 仍持久化并明确
             # publication_valid=false，不能把错误输出当成零分比较。
@@ -971,11 +979,12 @@ async def run_bench(n: int = 100, mode: str = "base", seed: int = 42,
             "methodology_status": arms[-1].get("methodology_status"),
             "benchmark_provenance": arms[-1].get("benchmark_provenance"),
             "model_settings": arms[-1].get("model_settings"),
-            "git_head_sha": arms[-1].get("git_head_sha"),
-            "git_tree_sha": arms[-1].get("git_tree_sha"),
-            "git_dirty": arms[-1].get("git_dirty"),
-            "git_diff_sha256": arms[-1].get("git_diff_sha256"),
-            "git_commit_sha": arms[-1].get("git_head_sha"),
+            "git_head_sha": compare_source_provenance.get("git_head_sha"),
+            "git_tree_sha": compare_source_provenance.get("git_tree_sha"),
+            "git_dirty": compare_source_provenance.get("git_dirty"),
+            "git_diff_sha256": compare_source_provenance.get("git_diff_sha256"),
+            "git_commit_sha": compare_source_provenance.get("git_head_sha"),
+            "git_provenance_source": "compare_shared_source_snapshot",
             "comparison": {
                 "arms": [{"run_id": a["run_id"], "mode": a["mode"],
                           "scores": a.get("scores")} for a in arms],
@@ -1028,7 +1037,8 @@ async def run_bench(n: int = 100, mode: str = "base", seed: int = 42,
             n=n, mode=mode, seed=seed, profile=profile,
             dataset_version=dataset_version, log_dir=log_dir,
             concurrency=concurrency, llm=llm,
-            on_progress=on_progress, run_id=run_id)
+            on_progress=on_progress, run_id=run_id,
+            source_provenance=source_provenance)
     if suite == "cybergym_lite":
         from . import cybergym_lite
         return await cybergym_lite.run_bench(
@@ -1048,7 +1058,8 @@ async def run_bench(n: int = 100, mode: str = "base", seed: int = 42,
             n=n, mode=mode, seed=seed, profile=profile,
             dataset_version=dataset_version, log_dir=log_dir,
             concurrency=concurrency, llm=llm,
-            on_progress=on_progress, run_id=run_id)
+            on_progress=on_progress, run_id=run_id,
+            source_provenance=source_provenance)
     if suite != "malware_analysis":
         raise ValueError(f"未知 suite: {suite!r}（支持 {SUITES}）")
     if mode not in MODES:

@@ -181,6 +181,76 @@ def test_compare_parent_keeps_three_arms_under_one_run(tmp_path: Path,
     assert Path(run["path"]).is_file()
 
 
+def _secalert_compare_fixture(tmp_path: Path, monkeypatch) -> Path:
+    data_dir = tmp_path / "alerts_compare_prov"
+    data_dir.mkdir()
+    (data_dir / "alerts.json").write_text(json.dumps([
+        {"id": "a1", "alert": "malware", "label": "Attack", "alert_type": "edr"},
+        {"id": "a2", "alert": "backup", "label": "Non-Attack", "alert_type": "backup"},
+    ]), encoding="utf-8")
+    monkeypatch.setenv("CYBERORION_SECALERTBENCH_DIR", str(data_dir))
+    return data_dir
+
+
+def test_compare_captures_shared_provenance_before_any_output(
+        tmp_path: Path, monkeypatch) -> None:
+    """compare 只捕获一次共享源码快照；三臂持久化同一份干净 provenance，
+    基准自身产物不污染后臂。旧行为会在每臂 persist 时重捕获 → dirty。"""
+    import cyberorion.bench.external_common as external_common
+    _secalert_compare_fixture(tmp_path, monkeypatch)
+
+    async def llm(_system: str, _user: str) -> str:
+        return json.dumps({"verdict": "attack", "confidence": 1.0})
+
+    calls = {"count": 0}
+
+    def fake_git_provenance():
+        calls["count"] += 1
+        # 除 compare 开始时的共享快照外，任何重捕获都视为被本 run 自己
+        # 刚写出的结果文件污染 → dirty。
+        dirty = calls["count"] > 1
+        return {"git_head_sha": "h1", "git_tree_sha": "t1",
+                "git_dirty": dirty, "git_diff_sha256": "d" if dirty else None}
+
+    monkeypatch.setattr(external_common, "git_provenance", fake_git_provenance)
+    run = asyncio.run(cybersoceval.run_bench(
+        n=2, mode="compare", suite="secalertbench", llm=llm,
+        log_dir=tmp_path / "logs", run_id="parent"))
+    assert calls["count"] == 1
+    arm_jsons = {
+        mode: json.loads((tmp_path / "logs" / f"parent_{mode}.json")
+                         .read_text(encoding="utf-8"))
+        for mode in ("base", "single", "agent")}
+    for arm in arm_jsons.values():
+        assert arm["git_dirty"] is False
+        assert arm["git_head_sha"] == "h1" and arm["git_tree_sha"] == "t1"
+        assert arm["git_provenance_source"] == "compare_shared_source_snapshot"
+    assert run["git_dirty"] is False and run["git_head_sha"] == "h1"
+    assert run["git_provenance_source"] == "compare_shared_source_snapshot"
+    assert run["comparison"]["publication_valid"] is True
+
+
+def test_compare_starting_from_dirty_tree_is_not_publication_valid(
+        tmp_path: Path, monkeypatch) -> None:
+    import cyberorion.bench.external_common as external_common
+    _secalert_compare_fixture(tmp_path, monkeypatch)
+
+    async def llm(_system: str, _user: str) -> str:
+        return json.dumps({"verdict": "attack", "confidence": 1.0})
+
+    def fake_git_provenance():
+        return {"git_head_sha": "h1", "git_tree_sha": "t1",
+                "git_dirty": True, "git_diff_sha256": "dirty-diff"}
+
+    monkeypatch.setattr(external_common, "git_provenance", fake_git_provenance)
+    run = asyncio.run(cybersoceval.run_bench(
+        n=2, mode="compare", suite="secalertbench", llm=llm,
+        log_dir=tmp_path / "logs", run_id="parent_dirty"))
+    assert run["git_dirty"] is True
+    assert run["comparison"]["publication_valid"] is False
+    assert "clean_complete_provenance" in run["comparison"]["invalid_reasons"]
+
+
 def test_excytin_fixture_run_with_read_only_database(tmp_path: Path, monkeypatch) -> None:
     data_dir = tmp_path / "excytin"
     data_dir.mkdir()
@@ -279,7 +349,7 @@ def test_cage2_uses_official_3x3_matrix_but_is_not_leaderboard_comparable(
     def fake_run(episodes, steps, llm_driven, policy, scenario, red_agent, seed, wrapper):
         return {"episodes": [{"episode": i + 1, "reward": -float(steps),
                               "illegal_actions": 0, "restore_actions": 0,
-                              "availability_penalty": 0.0}
+                              "restore_cost_proxy": 0.0}
                              for i in range(episodes)]}
 
     monkeypatch.setattr("cyberorion.eval.benchmarks.run_cage2", fake_run)
@@ -287,6 +357,8 @@ def test_cage2_uses_official_3x3_matrix_but_is_not_leaderboard_comparable(
     assert len(run["conditions"]) == 9
     assert run["methodology_status"] == "external_track"
     assert run["benchmark_provenance"]["comparable_to_upstream"] is False
+    assert "availability_penalty" not in run["scores"]
+    assert run["scores"]["restore_cost_proxy_status"] == "non_native_proxy"
 
 
 def test_cage_challenge_wrapper_executes_exact_non_sleep_action_id() -> None:

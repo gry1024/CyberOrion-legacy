@@ -51,7 +51,8 @@ def _print_result(run: dict) -> None:
         preferred = (
             "accuracy", "attack_recall", "precision", "f1", "pr_auc",
             "native_reward", "official_reward", "mean_reward",
-            "availability_penalty", "illegal_action_rate", "task_success",
+            "restore_cost_proxy", "availability_penalty",
+            "illegal_action_rate", "task_success",
         )
         shown = False
         for name in preferred:

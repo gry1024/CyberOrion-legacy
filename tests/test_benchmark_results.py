@@ -4,9 +4,14 @@ from __future__ import annotations
 
 import asyncio
 import json
+import subprocess
+from collections import Counter
 from pathlib import Path
 
+import pytest
+
 from cyberorion.bench import cage2, secalertbench
+from cyberorion.bench.assets import BenchmarkAssetMissing
 from cyberorion.bench.external_common import FAIR_ARM_BUDGET
 from cyberorion.bench.result_export import (
     export_results, normalize_run, paired_statistics, validate_compare_runs,
@@ -174,7 +179,7 @@ def test_cage_episode_budget_is_global_across_environment_steps(
             for step in range(1, 21):
                 await policy({}, episode=episode, step=step, available_actions=actions)
             rows.append({"episode": episode, "reward": 0.0, "illegal_actions": 0,
-                         "restore_actions": 0, "availability_penalty": 0.0})
+                         "restore_actions": 0, "restore_cost_proxy": 0.0})
         return {"episodes": rows}
 
     async def fake_runtime(*, llm, tools, **kwargs):
@@ -195,3 +200,144 @@ def test_cage_episode_budget_is_global_across_environment_steps(
                for row in run["episode_resource_usage"])
     assert all(row["budget_exhausted_steps"] == 8
                for row in run["episode_resource_usage"])
+
+
+# --------------------------------------------------------------------------- #
+# SecAlertBench 代表集类平衡抽样（P0 #2 回归）
+# --------------------------------------------------------------------------- #
+def _secalert_rows(n_attack: int, n_benign: int) -> list[dict]:
+    rows = [{"id": f"a{i}", "label": "attack",
+             "alert_type": f"t{i % 5}", "enterprise": f"e{i % 3}"}
+            for i in range(n_attack)]
+    rows += [{"id": f"b{i}", "label": "benign",
+              "alert_type": f"t{i % 7}", "enterprise": f"e{i % 4}"}
+             for i in range(n_benign)]
+    return rows
+
+
+def test_secalert_representative_sampling_is_class_balanced_n30() -> None:
+    selected = secalertbench.select_representative_alerts(
+        _secalert_rows(400, 400), 30, 42)
+    assert Counter(row["label"] for row in selected) == {"attack": 15, "benign": 15}
+
+
+def test_secalert_representative_sampling_is_class_balanced_n600() -> None:
+    selected = secalertbench.select_representative_alerts(
+        _secalert_rows(400, 400), 600, 42)
+    assert Counter(row["label"] for row in selected) == {"attack": 300, "benign": 300}
+
+
+def test_secalert_representative_sampling_odd_n_uses_documented_rule() -> None:
+    selected = secalertbench.select_representative_alerts(
+        _secalert_rows(400, 400), 7, 42)
+    assert Counter(row["label"] for row in selected) == {"attack": 3, "benign": 4}
+
+
+def test_secalert_representative_sampling_is_reproducible_in_order() -> None:
+    rows = _secalert_rows(400, 400)
+    one = secalertbench.select_representative_alerts(rows, 30, 42)
+    two = secalertbench.select_representative_alerts(rows, 30, 42)
+    three = secalertbench.select_representative_alerts(rows, 30, 42)
+    assert [row["id"] for row in one] == [row["id"] for row in two] == \
+        [row["id"] for row in three]
+
+
+def test_secalert_representative_sampling_fails_closed_on_class_capacity() -> None:
+    rows = _secalert_rows(5, 100)
+    with pytest.raises(BenchmarkAssetMissing, match="类平衡配额"):
+        secalertbench.select_representative_alerts(rows, 20, 42)
+
+
+def test_secalert_representative_manifest_is_identical_across_arms() -> None:
+    """三臂以同 seed 同 n 各自选样时必须得到完全相同的样本 manifest。"""
+    rows = _secalert_rows(400, 400)
+    manifests = [
+        [row["id"] for row in secalertbench.select_representative_alerts(
+            rows, 30, seed)]
+        for seed in (42, 42, 42)]
+    assert manifests[0] == manifests[1] == manifests[2]
+
+
+# --------------------------------------------------------------------------- #
+# compare 共享源码 provenance 快照（P0 #1 回归）
+# --------------------------------------------------------------------------- #
+def _init_git_repo(root: Path) -> None:
+    def git(*args: str) -> None:
+        subprocess.run(["git", *args], cwd=root, check=True,
+                       capture_output=True, text=True)
+    git("init", "-q")
+    git("config", "user.email", "bench@example.com")
+    git("config", "user.name", "bench")
+    (root / "src.py").write_text("print('x')\n", encoding="utf-8")
+    git("add", "src.py")
+    git("commit", "-q", "-m", "init")
+
+
+def _arm_run(mode: str) -> dict:
+    return {
+        "run_id": f"parent_{mode}", "suite": "secalertbench", "mode": mode,
+        "arm": mode, "status": "done", "n": 2, "seed": 42,
+        "scores": {"macro_f1": 0.5}, "results": [],
+        "benchmark_provenance": {"sample_manifest": ["a", "b"]},
+    }
+
+
+def test_compare_arms_share_one_source_provenance_snapshot(
+        tmp_path: Path, monkeypatch) -> None:
+    """compare 从一次共享干净快照开始；base 落盘后，single/agent 仍记录
+    同一份干净 provenance（旧逐臂重捕获行为会因 base 的 untracked 产物
+    把后臂污染成 dirty）。"""
+    from cyberorion.bench.external_common import git_provenance, persist_run
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    _init_git_repo(repo)
+    monkeypatch.chdir(repo)
+    log_dir = repo / "logs" / "bench"
+    snapshot = git_provenance()
+    assert snapshot["git_dirty"] is False and snapshot["git_head_sha"]
+    arms = [persist_run(_arm_run(mode), log_dir, source_provenance=snapshot)
+            for mode in ("base", "single", "agent")]
+    # base 的输出此刻已落盘：直接重捕获必然看到 untracked 结果文件。
+    assert git_provenance()["git_dirty"] is True
+    for field in ("git_head_sha", "git_tree_sha", "git_dirty", "git_diff_sha256"):
+        assert {arm[field] for arm in arms} == {snapshot[field]}
+    assert all(arm["git_dirty"] is False for arm in arms)
+    assert all(arm["git_provenance_source"] == "compare_shared_source_snapshot"
+               for arm in arms)
+
+
+def test_standalone_persist_captures_own_provenance_normally(
+        tmp_path: Path, monkeypatch) -> None:
+    from cyberorion.bench.external_common import persist_run
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    _init_git_repo(repo)
+    monkeypatch.chdir(repo)
+    run = persist_run(_arm_run("single"), repo / "logs" / "bench")
+    assert run["git_provenance_source"] == "captured_at_persist"
+    assert run["git_dirty"] is False
+
+
+def test_compare_from_dirty_source_tree_stays_publication_invalid(
+        tmp_path: Path, monkeypatch) -> None:
+    """compare 开始时树就已脏：共享快照应如实记录 dirty=true，
+    且三臂全部保持 publication-invalid。"""
+    from cyberorion.bench.external_common import git_provenance, persist_run
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    _init_git_repo(repo)
+    (repo / "untracked.bin").write_bytes(b"x")
+    monkeypatch.chdir(repo)
+    snapshot = git_provenance()
+    assert snapshot["git_dirty"] is True and snapshot["git_diff_sha256"]
+    arms = [persist_run(_arm_run(mode), repo / "logs" / "bench",
+                        source_provenance=snapshot)
+            for mode in ("base", "single", "agent")]
+    normalized = [normalize_run(arm, Path(arm["path"]), arm["git_head_sha"])
+                  for arm in arms]
+    assert all(arm["git_dirty"] is True for arm in arms)
+    assert all("git_worktree_not_clean" in arm["publication_exclusion_reasons"]
+               for arm in normalized)
+    audit = validate_compare_runs(normalized)
+    assert audit["checks"]["clean_complete_provenance"] is False
+    assert audit["publication_valid"] is False

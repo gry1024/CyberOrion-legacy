@@ -276,16 +276,26 @@ def resource_usage(*, started: float, llm_calls: int, tool_calls: int,
     }
 
 
-def persist_run(run: dict, log_dir: str | Path = DEFAULT_LOG_DIR) -> dict:
+def persist_run(run: dict, log_dir: str | Path = DEFAULT_LOG_DIR,
+                source_provenance: dict[str, Any] | None = None) -> dict:
     directory = Path(log_dir)
     directory.mkdir(parents=True, exist_ok=True)
     path = directory / f"{run['run_id']}.json"
-    revision = git_provenance()
+    if source_provenance is not None:
+        # compare 模式：整个实验共享一个在产生任何结果文件之前捕获的源码
+        # provenance 快照。此处绝不重新捕获——后臂的 git status 会被先臂
+        # 刚写出的 untracked 结果文件污染成 dirty，让 benchmark 自己否定
+        # 自己。快照直接覆盖，保证三臂完全一致。
+        revision = dict(source_provenance)
+        run["git_provenance_source"] = "compare_shared_source_snapshot"
+    else:
+        revision = git_provenance()
+        run["git_provenance_source"] = "captured_at_persist"
     for key, value in revision.items():
-        run.setdefault(key, value)
+        run[key] = value
     # Retain the legacy name for old readers, but publication validation uses
     # the complete four-field provenance contract above.
-    run.setdefault("git_commit_sha", run.get("git_head_sha"))
+    run["git_commit_sha"] = run.get("git_head_sha")
     run.setdefault("model_settings", model_metadata(run.get("model")))
     run["path"] = str(path)
     provenance_data = run.get("benchmark_provenance") or {}

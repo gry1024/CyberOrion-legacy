@@ -108,7 +108,7 @@ async def run_bench(n: int = 12, mode: str = "agent", seed: int = 42,
                     profile: str = "daily", dataset_version: str | None = None,
                     log_dir: str | Path = DEFAULT_LOG_DIR, concurrency: int = 4,
                     llm=None, on_progress=None, run_id: str | None = None,
-                    **_: Any) -> dict:
+                    source_provenance: dict | None = None, **_: Any) -> dict:
     if mode not in MODES:
         raise ValueError(f"soc_contract mode 必须是 {'/'.join(MODES)}")
     llm = llm or make_llm(timeout=LLM_TIMEOUT)
@@ -197,6 +197,6 @@ async def run_bench(n: int = 12, mode: str = "agent", seed: int = 42,
             "leaderboard_comparable": False, "arm_budget": dict(FAIR_ARM_BUDGET),
         },
     }
-    run = persist_run(run, log_dir)
+    run = persist_run(run, log_dir, source_provenance=source_provenance)
     run["report"] = write_report(run, Path(log_dir) / f"{rid}.md")
     return run

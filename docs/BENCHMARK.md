@@ -75,7 +75,9 @@ SecAlertBench 额外计算 PR-AUC、Brier、10-bin ECE 和 FN=5/FP=1 的显式�
 的 `Label/label/ground_truth/verdict/class` 及其它 evaluation-only aliases。当前固定
 上游 schema 的 19 个字段中只有 `Label` 是评估字段，其余 18 个是遥测特征。
 ExCyTIn 记录证据数、SQL 查询数/成本和 adapter `native_reward`；CAGE-2 记录
-Restore/可用性惩罚与非法动作。ChallengeWrapper 不公开主机失陷事件数时该字段为
+Restore 次数、CyberOrion 自定义的非原生 `restore_cost_proxy`（−Restore 次数代理，
+`restore_cost_proxy_status="non_native_proxy"`，不是官方 CAGE availability 组件）
+与非法动作。ChallengeWrapper 不公开主机失陷事件数时该字段为
 `null` 并附状态，不从标量 reward 反推伪造。
 
 `methodology_status`：`official_compatible` 仅表示 runner/scorer/协议均按上游执行；
@@ -133,9 +135,12 @@ LLM。先从 `logs/bench/*.json` 生成归一化事实层，再从该层绘图�
 三臂 compare 只有同时满足以下条件才写 publication paired delta：dataset version
 与 hash 相同、sample IDs 完全同序、模型名和完整 `model_settings` 相同、seed 相同、
 single/agent 公平预算完全相等，且每臂 Git provenance 完整并满足
-`git_dirty=false`。否则 `publication_valid=false`，paired delta/CI/W-T-L 全部为
-null。旧 run 即使存在 `git_commit_sha` 也归入 `historical_incomplete_provenance`，
-不会进入 publication 聚合。
+`git_dirty=false`。compare 模式在产生任何结果文件之前捕获一次共享源码
+provenance 快照，三臂持久化完全相同的 `git_head_sha`/`git_tree_sha`/
+`git_dirty`（`git_provenance_source="compare_shared_source_snapshot"`）；基准自身
+写入 `logs/bench/` 的产物不会让后续臂变 dirty。否则 `publication_valid=false`，
+paired delta/CI/W-T-L 全部为 null。旧 run 即使存在 `git_commit_sha` 也归入
+`historical_incomplete_provenance`，不会进入 publication 聚合。
 配对 bootstrap 固定 seed；SecAlertBench 每次重采样后重新计算 macro-F1，其余支持
 逐任务原生 reward 的套件计算逐任务差值。
 
@@ -155,9 +160,12 @@ export CYBERORION_EXCYTIN_SQLITE_PATH=/absolute/path/to/telemetry.sqlite
 ~/cai_env/bin/python scripts/run_bench.py --suite cage2 --mode compare --n 9 --seed 42
 ```
 
-SecAlertBench 代表集使用 `label × alert_type × enterprise` 固定种子轮询分层，
-源数据或选中集缺任一 attack/benign 类即 fail closed；run 同时保存 class counts
-和精确 selected IDs。ExCyTIn run 保存 `official_harness_status` 和
+SecAlertBench 代表集按 gold 类平衡抽样：attack=floor(n/2)、benign=n-attack
+（奇数 n 固定把多出的 1 条给 benign），类内再按 `alert_type × enterprise` 固定
+种子轮询分层，输出顺序为确定性类交错；源数据缺任一 attack/benign 类或类容量
+不足配额时 fail closed，绝不静默改变类比例。run 保存 `sampling_policy`、
+`requested_class_counts`、`selected_class_counts` 和精确有序 selected IDs。
+ExCyTIn run 保存 `official_harness_status` 和
 `score_methodology_label`；当前 CyberOrion SQLite adapter 的 `native_reward` 是
 非官方 exact-match，`official_reward` 保持 null。官方 ACESEvals/ExCyTIn telemetry
 是 Inspect/SABER 管理的 MySQL Docker 服务，不是 SQLite；仓库中的

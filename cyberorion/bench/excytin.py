@@ -293,7 +293,7 @@ async def run_bench(n: int | None = None, mode: str = "base", seed: int = 42,
                     profile: str = "daily", dataset_version: str | None = None,
                     log_dir: str | Path = DEFAULT_LOG_DIR, concurrency: int = 4,
                     llm=None, on_progress=None, run_id: str | None = None,
-                    **_: Any) -> dict:
+                    source_provenance: dict | None = None, **_: Any) -> dict:
     if mode not in MODES:
         raise ValueError(f"excytin mode 必须是 {'/'.join(MODES)}")
     root, files = require_asset(SUITE)
@@ -405,4 +405,4 @@ async def run_bench(n: int | None = None, mode: str = "base", seed: int = 42,
         "telemetry_database_validation": database_validation,
         "score_methodology_label": "adapter_native_exact_match_non_official",
     }
-    return persist_run(run, log_dir)
+    return persist_run(run, log_dir, source_provenance=source_provenance)
