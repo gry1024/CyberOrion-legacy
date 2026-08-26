@@ -1,0 +1,17 @@
+{
+  "runner": "scripts/run_excytin_official.py",
+  "official_execution": true,
+  "sqlite_projection_involved": false,
+  "upstream": "microsoft/ACESEvals",
+  "upstream_commit_sha": "17135140d0fdf52c2264a1fc248cf01e16b23a79",
+  "cyberorion_commit_sha": "bba40adeceda1a0059a50918ea86a9e78236b51d",
+  "arm": "cyberorion_orchestrator_only",
+  "model": "openai/deepseek-v4-flash",
+  "judge_llm": "openai/deepseek-v4-flash",
+  "limit": 1,
+  "task_filter": "incident_134_latest_test_set_task_1",
+  "extra_task_args": {},
+  "started_at": 1787763048.868263,
+  "finished_at": 1787763358.85722,
+  "log_dir": "/tmp/cyberorion-smoke-0d36ef0/excytin-cyberorion_orchestrator_only-1"
+}

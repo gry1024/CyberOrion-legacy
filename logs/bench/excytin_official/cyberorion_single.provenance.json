@@ -1,0 +1,17 @@
+{
+  "runner": "scripts/run_excytin_official.py",
+  "official_execution": true,
+  "sqlite_projection_involved": false,
+  "upstream": "microsoft/ACESEvals",
+  "upstream_commit_sha": "17135140d0fdf52c2264a1fc248cf01e16b23a79",
+  "cyberorion_commit_sha": "bba40adeceda1a0059a50918ea86a9e78236b51d",
+  "arm": "cyberorion_single",
+  "model": "openai/deepseek-v4-flash",
+  "judge_llm": "openai/deepseek-v4-flash",
+  "limit": 1,
+  "task_filter": null,
+  "extra_task_args": {},
+  "started_at": 1787762507.4006455,
+  "finished_at": 1787762943.726272,
+  "log_dir": "/tmp/cyberorion-smoke-0d36ef0/excytin-cyberorion-single-5"
+}
