@@ -72,13 +72,11 @@ def create_agent(*, arm: str = "single", **_factory_kwargs: Any):
 
             cfg = RuntimeConfig(max_steps=min(int(max_steps), 30), max_llm_calls=min(int(max_steps), 30),
                                 max_tool_calls=min(int(max_steps), 30), max_dispatches=8, max_role_steps=6)
-            runners = {"single": (run_reference, "reference"),
-                       "orchestrator_only": (run_orchestrator_only, "orchestrator_only"),
-                       "full": (run_superagent, "superagent")}
-            runner, runtime_mode = runners[arm]
-            kwargs = {"task": str(visible), "llm": llm, "tools": official_tools,
-                      "config": cfg, "mode": runtime_mode}
-            result = await runner(**kwargs)
+            runners = {"single": run_reference,
+                       "orchestrator_only": run_orchestrator_only,
+                       "full": run_superagent}
+            result = await runners[arm](
+                task=str(visible), llm=llm, tools=official_tools, config=cfg)
             store().set("cyberorion_arm", arm)
             store().set("cyberorion_runtime_trace", result)
             from inspect_ai.model import ChatMessageAssistant
