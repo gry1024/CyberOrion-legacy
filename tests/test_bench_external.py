@@ -550,6 +550,88 @@ def test_excytin_rejects_dockerfile_dot_db_before_llm(tmp_path: Path,
     assert calls == 0
 
 
+def test_excytin_official_mode_does_not_require_sqlite(
+        tmp_path: Path, monkeypatch) -> None:
+    """official 模式绝不能走 SQLite 选择路径（即使资产缺失）。"""
+    import cyberorion.bench.excytin as module
+    data_dir = tmp_path / "excytin_official"
+    data_dir.mkdir()
+    (data_dir / "questions.json").write_text("[]", encoding="utf-8")
+    monkeypatch.setenv("CYBERORION_EXCYTIN_DIR", str(data_dir))
+    selected: list[bool] = []
+    monkeypatch.setattr(module, "select_telemetry_database",
+                        lambda files: (selected.append(True), None)[1]
+                        or (_ for _ in ()).throw(AssertionError("must not run")))
+    with pytest.raises(module.BenchmarkAssetMissing, match="Inspect/SABER"):
+        asyncio.run(module.run_bench(
+            n=1, mode="base", log_dir=tmp_path / "logs",
+            execution_mode="official"))
+    assert selected == []
+
+
+def test_excytin_invalid_execution_mode_fails_closed(tmp_path: Path) -> None:
+    with pytest.raises(ValueError, match="execution_mode"):
+        asyncio.run(excytin.run_bench(
+            n=1, mode="base", log_dir=tmp_path / "logs",
+            execution_mode="nonsense"))
+
+
+def test_excytin_official_agent_bridge_factory_shape() -> None:
+    """桥接工厂必须符合 SABER 两级工厂契约：create_agent() ->
+    create_with_prompts(instruction_prompt, assistant_prompt, tools,
+    max_steps) -> async solve(state, generate)。"""
+    from cyberorion.bench.excytin_official_agent import create_agent
+    for arm in ("single", "orchestrator_only", "full"):
+        # create_agent(...) 返回中间层 create_with_prompts；
+        # create_with_prompts(...) 返回 async solve(state, generate)。
+        create_with_prompts = create_agent(arm=arm)
+        solver = create_with_prompts(
+            instruction_prompt="instr", assistant_prompt="assist",
+            tools=[], max_steps=5)
+        assert callable(solver)
+        import inspect
+        assert inspect.iscoroutinefunction(solver)
+
+
+def test_excytin_official_agent_tool_spec_prefers_attributes() -> None:
+    from cyberorion.bench.excytin_official_agent import _tool_spec
+
+    async def official_call(x: str) -> str:
+        """query telemetry"""
+        return x
+
+    official_call.name = "run_query"  # type: ignore[attr-defined]
+    official_call.description = "Run a read-only SQL query"  # type: ignore[attr-defined]
+    official_call.input = {"type": "object",  # type: ignore[attr-defined]
+                           "properties": {"x": {"type": "string"}},
+                           "required": ["x"]}
+    spec = _tool_spec(official_call)
+    assert spec.name == "run_query"
+    assert spec.description == "Run a read-only SQL query"
+    assert spec.input_schema["required"] == ["x"]
+    # 无属性回退到签名/docstring 自省
+    async def plain(y: str) -> str:
+        """plain tool"""
+        return y
+
+    spec2 = _tool_spec(plain)
+    assert spec2.name == "plain"
+    assert spec2.input_schema["required"] == ["y"]
+
+
+def test_official_runner_provenance_is_explicit(tmp_path: Path) -> None:
+    from scripts.run_excytin_official import build_provenance
+    provenance = build_provenance(
+        upstream=tmp_path, repo=tmp_path, arm="cyberorion_single",
+        model="openai/m", judge_llm="openai/m", limit=2, task_filter=None,
+        extra_task_args={}, started=1.0, finished=2.0, log_dir=tmp_path / "logs")
+    assert provenance["official_execution"] is True
+    assert provenance["sqlite_projection_involved"] is False
+    assert provenance["upstream"] == "microsoft/ACESEvals"
+    assert provenance["arm"] == "cyberorion_single"
+    assert provenance["limit"] == 2
+
+
 def test_excytin_sql_tools_have_explicit_required_schemas(tmp_path: Path) -> None:
     db = tmp_path / "telemetry.sqlite"
     with sqlite3.connect(db) as conn:
