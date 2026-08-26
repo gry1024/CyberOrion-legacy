@@ -833,10 +833,13 @@ def make_llm(timeout: float = LLM_TIMEOUT,
              temperature: "float | None" = None):
     """返回 async callable(system, user) -> str（单次对话补全）。
 
-    temperature 为 None 时不下发该参数（沿用 endpoint 默认，保持
-    base/rag 的历史行为不变）；sc 模式传 0.7 以获得多样采样。
+    temperature 显式传入时以其为准（sc 模式传 0.7 以获得多样采样）；
+    否则回落到 CO_BENCH_TEMPERATURE 环境配置；都没有时才不下发该参数
+    （沿用 endpoint 默认）。下发显式 temperature 不代表确定性解码——
+    provider 可能忽略该参数，实际确定性由 temperature_status 记录。
     """
     from openai import AsyncOpenAI
+    from .external_common import env_temperature
 
     kwargs = {"api_key": os.getenv("OPENAI_API_KEY", "missing-key"),
               "timeout": timeout, "max_retries": 1}
@@ -847,9 +850,12 @@ def make_llm(timeout: float = LLM_TIMEOUT,
     model = _model_name()
     # 模块加载时快照一次（CO_BENCH_THINKING），避免多次构造不一致。
     thinking = _THINKING
+    effective_temperature = (temperature if temperature is not None
+                             else env_temperature())
 
     async def call(system: str, user: str) -> str:
-        extra = {"temperature": temperature} if temperature is not None else {}
+        extra = ({"temperature": effective_temperature}
+                 if effective_temperature is not None else {})
         if thinking:
             extra["extra_body"] = {"thinking": {"type": thinking}}
         resp = await client.chat.completions.create(
@@ -1232,7 +1238,8 @@ async def run_bench(n: int = 100, mode: str = "base", seed: int = 42,
 
     from .external_common import git_commit_sha, model_metadata
     run["git_commit_sha"] = git_commit_sha()
-    run["model_settings"] = model_metadata(run.get("model"))
+    run["model_settings"] = model_metadata(
+        run.get("model"), temperature=(sc_temperature if is_sc else None))
 
     log_dir = Path(log_dir)
     log_dir.mkdir(parents=True, exist_ok=True)

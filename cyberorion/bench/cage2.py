@@ -165,7 +165,8 @@ async def run_bench(n: int | None = None, mode: str = "base", seed: int = 42,
             # 同时 meter 记账可能已超过 token 硬上限（after-response 超限），
             # 这属于实际违规，与"达到上限后走文档化 fallback"必须区分。
             output_text = str(runtime.get("output") or "")
-            if "LLMBudgetExceeded" in output_text:
+            budget_exhausted_this_step = "LLMBudgetExceeded" in output_text
+            if budget_exhausted_this_step:
                 reason = ("token_budget" if "token" in output_text.lower()
                           else "llm_calls")
                 state["budget_exhausted_reason"] = reason
@@ -174,6 +175,17 @@ async def run_bench(n: int | None = None, mode: str = "base", seed: int = 42,
                 state["budget_exhausted_reason"] = "token_budget"
                 state["budget_exhaustion_reasons"].add("token_budget")
                 state["budget_limit_violations"].add("estimated_tokens")
+                budget_exhausted_this_step = True
+            if budget_exhausted_this_step and not selected:
+                # CASE A：本步没有产生任何有效选择且 runtime 表明预算耗尽——
+                # 本步本身就是一个预算 fallback Sleep，必须计入
+                # budget_exhausted_steps；后续步由顶部 gate 直接 fallback。
+                state["budget_exhausted_steps"] += 1
+                audit_traces.append(fallback_trace(
+                    state["budget_exhausted_reason"] or "budget"))
+                return {"action_id": sleep_id()}
+            # CASE B：本步已选择有效动作（后续完成调用才耗尽预算）——
+            # 保留本步的有效选择，只从下一步起 fallback。
             action = selected[-1] if selected else {"action_id": sleep_id()}
             state["history"].append(action)
             state["tool_calls"] += int(runtime["budget"].get("tool_calls", 0))

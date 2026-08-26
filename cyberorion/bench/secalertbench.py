@@ -253,10 +253,13 @@ def compute_scores(rows: list[dict]) -> dict:
             confidence = statistics.fmean(float(r.get("confidence", 0.0)) for r in bucket)
             ece += len(bucket) / len(rows) * abs(accuracy - confidence)
     cost = fp + 5 * fn
+    # FPR 分母必须是全部 gold-benign 行：gold-benign + pred unknown 的
+    # 解析失败行不是真阴性，但仍是实际阴性样本，必须计入分母。
+    benign_total = sum(r["gold"] == "benign" for r in rows)
     return {
         "n": len(rows), "macro_f1": round((f1_attack + f1_benign) / 2, 4),
         "attack_recall": round(recall, 4),
-        "false_positive_rate": round(fp / (fp + tn), 4) if fp + tn else 0.0,
+        "false_positive_rate": round(fp / benign_total, 4) if benign_total else 0.0,
         "tp": tp, "fp": fp, "fn": fn, "tn": tn,
         "pr_auc": round(pr_auc, 4), "brier_score": round(brier, 4),
         "expected_calibration_error_10bin": round(ece, 4),

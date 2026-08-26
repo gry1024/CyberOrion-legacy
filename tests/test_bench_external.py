@@ -290,6 +290,67 @@ def test_secalert_verdict_never_inferred_from_prose() -> None:
     assert verdict == "unknown"
 
 
+def _fake_openai(monkeypatch, captured: dict) -> None:
+    import openai
+
+    class FakeCompletions:
+        async def create(self, **kwargs):
+            captured.update(kwargs)
+
+            class _Message:
+                content = "{}"
+
+            class _Choice:
+                message = _Message()
+
+            class _Response:
+                choices = [_Choice()]
+
+            return _Response()
+
+    class FakeChat:
+        completions = FakeCompletions()
+
+    class FakeClient:
+        def __init__(self, **kwargs):
+            captured["init_kwargs"] = kwargs
+
+        chat = FakeChat()
+
+    monkeypatch.setattr(openai, "AsyncOpenAI", FakeClient)
+
+
+def test_explicit_temperature_zero_is_passed_to_llm_client(
+        monkeypatch) -> None:
+    captured: dict = {}
+    _fake_openai(monkeypatch, captured)
+    monkeypatch.setenv("CO_BENCH_TEMPERATURE", "0")
+    llm = cybersoceval.make_llm()
+    asyncio.run(llm("system", "user"))
+    assert captured["temperature"] == 0.0
+
+
+def test_model_metadata_persists_explicit_temperature(monkeypatch) -> None:
+    from cyberorion.bench.external_common import model_metadata
+    monkeypatch.setenv("CO_BENCH_TEMPERATURE", "0")
+    meta = model_metadata("openai/x")
+    assert meta["temperature"] == 0.0
+    assert meta["temperature_status"] == "explicit"
+    monkeypatch.delenv("CO_BENCH_TEMPERATURE", raising=False)
+    meta = model_metadata("openai/x")
+    assert meta["temperature"] is None
+    assert meta["temperature_status"] == "provider_default"
+
+
+def test_absent_temperature_preserves_provider_default(monkeypatch) -> None:
+    captured: dict = {}
+    _fake_openai(monkeypatch, captured)
+    monkeypatch.delenv("CO_BENCH_TEMPERATURE", raising=False)
+    llm = cybersoceval.make_llm()
+    asyncio.run(llm("system", "user"))
+    assert "temperature" not in captured
+
+
 def test_compare_parent_keeps_three_arms_under_one_run(tmp_path: Path,
                                                        monkeypatch) -> None:
     data_dir = tmp_path / "alerts_compare"

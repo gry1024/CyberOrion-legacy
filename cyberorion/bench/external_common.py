@@ -103,10 +103,29 @@ def git_provenance() -> dict[str, Any]:
         }
 
 
-def model_metadata(model: str | None = None) -> dict:
-    """持久化非敏感模型设置；不记录 API key 或完整私有端点。"""
+def env_temperature() -> float | None:
+    """读取 CO_BENCH_TEMPERATURE；未设置返回 None（provider 默认行为）。"""
+    raw = os.getenv("CO_BENCH_TEMPERATURE")
+    if raw is None or raw == "":
+        return None
+    try:
+        return float(raw)
+    except ValueError as exc:
+        raise ValueError(
+            f"CO_BENCH_TEMPERATURE 必须是数字，收到 {raw!r}") from exc
+
+
+def model_metadata(model: str | None = None,
+                   temperature: float | None = None) -> dict:
+    """持久化非敏感模型设置；不记录 API key 或完整私有端点。
+
+    temperature 显式传入时以其为准（如 sc 模式的 0.7）；否则回落到
+    CO_BENCH_TEMPERATURE 环境配置；都没有时记录 provider 默认行为
+    （temperature_status=provider_default），绝不声称确定性解码。
+    """
     configured = os.getenv("CAI_MODEL") or model or _model_name()
     provider, sep, name = str(configured).partition("/")
+    effective = temperature if temperature is not None else env_temperature()
     return {
         "provider": provider if sep else None,
         "model": name if sep else str(configured),
@@ -114,7 +133,9 @@ def model_metadata(model: str | None = None) -> dict:
         "thinking": ("enabled" if os.getenv("CO_BENCH_THINKING") == "enabled"
                      else "disabled"),
         "max_output_tokens": int(os.getenv("CO_BENCH_MAX_TOKENS", "4096")),
-        "temperature": None,
+        "temperature": effective,
+        "temperature_status": ("explicit" if effective is not None
+                               else "provider_default"),
         "usage_accounting": "provider_or_estimated_per_task",
     }
 

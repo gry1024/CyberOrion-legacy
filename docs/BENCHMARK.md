@@ -73,18 +73,27 @@ Arena 从 `metrics_version=3` 起：
 - 蓝队仍严禁读取 attacks 表、场景 ground truth 或 `cyberorion.eval`。
 
 SecAlertBench 额外计算 PR-AUC、Brier、10-bin ECE 和 FN=5/FP=1 的显式成本；
-模型可见告警在 base prompt 和 `get_alert` 共用同一递归过滤出口，删除用于 gold
-的 `Label/label/ground_truth/verdict/class` 及其它 evaluation-only aliases。当前固定
-上游 schema 的 19 个字段中只有 `Label` 是评估字段，其余 18 个是遥测特征。
+FPR 的分母是全部 gold-benign 行（含预测 unknown 的解析失败行——unknown 不是
+真阴性，但仍是实际阴性样本）。模型可见告警在 base prompt 和 `get_alert` 共用
+同一递归过滤出口，删除用于 gold 的 `Label/label/ground_truth/verdict/class` 及其它
+evaluation-only aliases。当前固定上游 schema 的 19 个字段中只有 `Label` 是评估
+字段，其余 18 个是遥测特征。解码温度可通过 `CO_BENCH_TEMPERATURE` 显式配置
+（如 `0`），`model_settings` 持久化 `temperature` 与 `temperature_status`
+（explicit/provider_default）；未配置时保持 provider 默认行为，绝不声称确定性
+解码——样本 seed 与生成设置是两个独立概念。
 ExCyTIn 记录证据数、SQL 查询数/成本和 adapter `native_reward`；CAGE-2 记录
 Restore 次数、CyberOrion 自定义的非原生 `restore_cost_proxy`（−Restore 次数代理，
 `restore_cost_proxy_status="non_native_proxy"`，不是官方 CAGE availability 组件）
 与非法动作。CAGE-2 预算耗尽记账：token/调用预算一旦耗尽，后续环境步直接执行
 文档化 fallback Sleep（不再反复调用 runtime 制造重复的 LLMBudgetExceeded 无效
-决策），逐 episode 持久化 `budget_exhausted_steps`/`budget_exhaustion_reasons`/
+决策）；当前步本身若无有效选择且 runtime 表明耗尽，该步即计为 fallback
+（CASE A），若已选出有效动作则保留该步动作、只从下一步起 fallback（CASE B）。
+逐 episode 持久化 `budget_exhausted_steps`/`budget_exhaustion_reasons`/
 `token_budget_exhausted`；实际记账超过声明硬上限（如 after-response token 超限）
-记 `budget_limit_violation=true` 与违规维度。ChallengeWrapper 不公开主机失陷
-事件数时该字段为 `null` 并附状态，不从标量 reward 反推伪造。
+记 `budget_limit_violation=true` 与违规维度。episode 全局 18/12/32768 预算已被
+证明不适合 30/50/100 步 episode，按环境步预算的方法学提案见
+`docs/CAGE_BUDGET_PROPOSAL.md`（待批准，未实施）。ChallengeWrapper 不公开主机
+失陷事件数时该字段为 `null` 并附状态，不从标量 reward 反推伪造。
 
 `methodology_status`：`official_compatible` 仅表示 runner/scorer/协议均按上游执行；
 `external_track` 表示真实外部数据的适配/代表集；`engineering_only` 表示内部工程
