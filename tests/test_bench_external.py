@@ -62,6 +62,31 @@ def test_oversize_asset_forces_daily_representative_set(tmp_path: Path) -> None:
     assert decision["reason"] == "single_asset_over_1GiB"
 
 
+def test_forced_size_policy_honors_explicit_smoke_n(tmp_path: Path) -> None:
+    """强制代表集模式不得把显式 smoke n 静默扩大到 daily 默认值。"""
+    huge = tmp_path / "huge.jsonl"
+    with huge.open("wb") as stream:
+        stream.truncate(1024 ** 3 + 1)
+    expectations = [(30, 30), (600, 600), (1000, 600), (None, 600)]
+    for requested, expected in expectations:
+        count, decision = apply_size_policy(
+            "secalertbench", "publication", requested, 8322, [huge])
+        assert count == expected, f"requested={requested}"
+        assert decision["forced_subset"] is True
+        assert decision["requested_n"] == requested
+        assert decision["n_capped_to_daily_default"] is (requested is not None
+                                                         and requested > 600)
+
+
+def test_size_policy_not_forced_preserves_requested(tmp_path: Path) -> None:
+    small = tmp_path / "small.jsonl"
+    small.write_text("[]\n", encoding="utf-8")
+    count, decision = apply_size_policy(
+        "secalertbench", "publication", 30, 8322, [small])
+    assert count == 30
+    assert decision["forced_subset"] is False
+
+
 def test_secalertbench_fixture_run(tmp_path: Path, monkeypatch) -> None:
     data_dir = tmp_path / "alerts"
     data_dir.mkdir()
@@ -84,6 +109,84 @@ def test_secalertbench_fixture_run(tmp_path: Path, monkeypatch) -> None:
     assert run["scores"]["pr_auc"] == 1.0
     assert "brier_score" in run["scores"]
     assert Path(run["sample_manifest_path"]).is_file()
+
+
+def _imbalanced_alerts_fixture(tmp_path: Path, monkeypatch,
+                               n_attack: int = 6, n_benign: int = 2) -> None:
+    data_dir = tmp_path / "alerts_imbalanced"
+    data_dir.mkdir()
+    rows = [{"id": f"a{i}", "alert": f"malware {i}", "label": "Attack",
+             "alert_type": "edr"} for i in range(n_attack)]
+    rows += [{"id": f"b{i}", "alert": f"backup {i}", "label": "Non-Attack",
+              "alert_type": "backup"} for i in range(n_benign)]
+    (data_dir / "secalertbench.json").write_text(json.dumps(rows), encoding="utf-8")
+    monkeypatch.setenv("CYBERORION_SECALERTBENCH_DIR", str(data_dir))
+
+
+def test_secalert_full_upstream_preserves_natural_prevalence(
+        tmp_path: Path, monkeypatch) -> None:
+    """真正的全量上游评估（count 覆盖全部可用行）选择所有行、不做类
+    重采样，天然不平衡的上游数据不会因 50/50 配额失败。"""
+    _imbalanced_alerts_fixture(tmp_path, monkeypatch)
+
+    async def llm(_system: str, _user: str) -> str:
+        return json.dumps({"verdict": "attack", "confidence": 0.5})
+
+    run = asyncio.run(secalertbench.run_bench(
+        n=8, mode="base", log_dir=tmp_path / "logs", llm=llm))
+    manifest = run["selection_manifest"]
+    assert manifest["selection_policy"] == "full_upstream_no_resampling"
+    assert manifest["algorithm"] == "full_upstream_no_resampling"
+    assert manifest["resampling"] == "none"
+    assert manifest["requested_class_counts"] is None
+    assert manifest["selected_class_counts"] == {"attack": 6, "benign": 2}
+    assert len(manifest["selected_ids"]) == 8
+    assert run["n"] == 8
+
+
+def test_secalert_imbalanced_dataset_subset_is_class_balanced(
+        tmp_path: Path, monkeypatch) -> None:
+    """同一不平衡数据集取子集时仍执行类平衡抽样。"""
+    _imbalanced_alerts_fixture(tmp_path, monkeypatch)
+
+    async def llm(_system: str, _user: str) -> str:
+        return json.dumps({"verdict": "benign", "confidence": 0.5})
+
+    run = asyncio.run(secalertbench.run_bench(
+        n=4, mode="base", log_dir=tmp_path / "logs", llm=llm))
+    manifest = run["selection_manifest"]
+    assert manifest["selection_policy"] == "class_balanced_representative_subset"
+    assert manifest["requested_class_counts"] == {"attack": 2, "benign": 2}
+    assert manifest["selected_class_counts"] == {"attack": 2, "benign": 2}
+
+
+def test_forced_representative_directory_stays_subset_mode(
+        tmp_path: Path, monkeypatch) -> None:
+    """强制代表目录即使 count 等于其行数也仍是代表子集，不误判为全量
+    上游评估。"""
+    root = tmp_path / "asset_root"
+    rep = root / "representative"
+    rep.mkdir(parents=True)
+    huge = root / "secalertbench.json"
+    with huge.open("wb") as stream:
+        stream.truncate(1024 ** 3 + 1)  # sparse，强制代表集模式
+    rows = [{"id": f"a{i}", "alert": f"malware {i}", "label": "Attack",
+             "alert_type": "edr"} for i in range(5)]
+    rows += [{"id": f"b{i}", "alert": f"backup {i}", "label": "Non-Attack",
+              "alert_type": "backup"} for i in range(5)]
+    (rep / "rep.json").write_text(json.dumps(rows), encoding="utf-8")
+    monkeypatch.setenv("CYBERORION_SECALERTBENCH_DIR", str(root))
+
+    async def llm(_system: str, _user: str) -> str:
+        return json.dumps({"verdict": "benign", "confidence": 0.5})
+
+    run = asyncio.run(secalertbench.run_bench(
+        n=10, mode="base", log_dir=tmp_path / "logs", llm=llm))
+    assert run["representative_asset_decision"]["forced_subset"] is True
+    manifest = run["selection_manifest"]
+    assert manifest["selection_policy"] == "class_balanced_representative_subset"
+    assert manifest["selected_class_counts"] == {"attack": 5, "benign": 5}
+    assert run["n"] == 10
 
 
 def test_secalertbench_official_label_schema_and_split_dedup(tmp_path: Path) -> None:

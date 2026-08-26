@@ -177,20 +177,33 @@ def profile_n(suite: str, profile: str, requested: int | None,
 
 def apply_size_policy(suite: str, profile: str, requested: int | None,
                       available: int, files: list[Path]) -> tuple[int, dict]:
-    """超过 1GiB/文件或 5GiB/总量时强制使用固定代表集。"""
+    """超过 1GiB/文件或 5GiB/总量时强制使用固定代表集。
+
+    强制代表集模式不静默吞掉显式 n：显式 n 小于 daily 默认值时按显式
+    执行（smoke 不得被扩大到默认规模），超过默认值时封顶到默认值；
+    未指定（None）才回落到 daily 默认值。
+    """
     sizes = [p.stat().st_size for p in files if p.is_file()]
     oversized = any(size > SIZE_LIMIT_BYTES for size in sizes)
     over_total = sum(sizes) > TOTAL_CACHE_LIMIT_BYTES
     forced = oversized or over_total
     effective_profile = "daily" if forced else profile
-    count = profile_n(suite, effective_profile, requested if not forced else None,
-                      available)
+    original_requested = requested
+    n_capped_to_daily = False
+    if forced and requested is not None:
+        daily_default = int(PROFILE_DEFAULTS[suite]["daily"])
+        if int(requested) > daily_default:
+            requested = daily_default
+            n_capped_to_daily = True
+    count = profile_n(suite, effective_profile, requested, available)
     return count, {
         "forced_subset": forced,
         "reason": ("single_asset_over_1GiB" if oversized else
                    "cache_over_5GiB" if over_total else None),
         "requested_profile": profile, "effective_profile": effective_profile,
         "observed_bytes": sum(sizes),
+        "requested_n": original_requested,
+        "n_capped_to_daily_default": n_capped_to_daily,
     }
 
 

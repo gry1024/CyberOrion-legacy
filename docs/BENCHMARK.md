@@ -47,6 +47,8 @@ SUPER-AGENT 的核心结论来自同模型、同样本、同总预算的 `agent 
 - 单个官方资产超过 1GiB，或已选资产总和超过 5GiB 时，解析前即 fail-closed：
   只读取管理员放在资产根 `representative/` 下的固定种子无损任务子集；没有代表集
   就返回 `benchmark_asset_missing`，不会先把超大 JSON 读进内存，也不会自动下载、裁剪或删除；
+- 强制代表集模式下显式 n 不被静默扩大到 daily 默认值：显式 n 小于默认时按
+  显式执行（smoke 不会变成默认规模），超过默认时封顶到默认；未指定才用默认；
 - 每次运行保存上游 URL、版本、文件 SHA256、完整/子集状态、抽样算法和全部
   样本 ID，以及 `git_head_sha`、提交树 `git_tree_sha`、`git_dirty`；脏树另存
   `git_diff_sha256`。代表集成绩不得标记为官方全量成绩；
@@ -163,7 +165,10 @@ export CYBERORION_EXCYTIN_SQLITE_PATH=/absolute/path/to/telemetry.sqlite
 SecAlertBench 代表集按 gold 类平衡抽样：attack=floor(n/2)、benign=n-attack
 （奇数 n 固定把多出的 1 条给 benign），类内再按 `alert_type × enterprise` 固定
 种子轮询分层，输出顺序为确定性类交错；源数据缺任一 attack/benign 类或类容量
-不足配额时 fail closed，绝不静默改变类比例。run 保存 `sampling_policy`、
+不足配额时 fail closed，绝不静默改变类比例。真正的全量上游评估（官方资产且
+count 覆盖全部可用行）选择全部行、不做类重采样、保留自然类分布，
+`selection_policy="full_upstream_no_resampling"`；强制代表目录即使 count 等于
+其行数也仍按代表子集类平衡处理。run 保存 `sampling_policy`、
 `requested_class_counts`、`selected_class_counts` 和精确有序 selected IDs。
 ExCyTIn run 保存 `official_harness_status` 和
 `score_methodology_label`；当前 CyberOrion SQLite adapter 的 `native_reward` 是

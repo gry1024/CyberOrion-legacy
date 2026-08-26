@@ -292,8 +292,16 @@ async def run_bench(n: int | None = None, mode: str = "base", seed: int = 42,
         raise BenchmarkAssetMissing(SUITE, "未识别出带 label 与 alert/text 的记录")
     count, size_decision = apply_size_policy(
         SUITE, profile, n, len(all_rows), files)
-    attack_quota, benign_quota = class_balanced_quotas(count)
-    selected = select_representative_alerts(all_rows, count, seed)
+    # 只有真正的全量上游评估才允许不做类重采样：必须是官方资产（非强制
+    # 代表目录）且 count 覆盖全部可用行，保留自然类分布。强制代表目录
+    # 即使 count 等于其行数也仍是代表子集，继续类平衡策略。
+    full_upstream = (not representative_decision["forced_subset"]
+                     and count == len(all_rows))
+    if full_upstream:
+        selected = list(all_rows)
+    else:
+        attack_quota, benign_quota = class_balanced_quotas(count)
+        selected = select_representative_alerts(all_rows, count, seed)
     llm = llm or make_llm(timeout=LLM_TIMEOUT)
     sem = asyncio.Semaphore(max(1, concurrency))
     results: list[dict | None] = [None] * len(selected)
@@ -354,6 +362,31 @@ async def run_bench(n: int | None = None, mode: str = "base", seed: int = 42,
             1.0 if r["pred"] == "attack" else 0.0
             for r in rows if r["gold"] == "attack"], seed + 1),
     }
+    selected_class_counts = dict(
+        sorted(Counter(r["label"] for r in selected).items()))
+    selection_manifest = {
+        "selection_policy": ("full_upstream_no_resampling" if full_upstream
+                             else "class_balanced_representative_subset"),
+        "requested_class_counts": (
+            None if full_upstream
+            else {"attack": attack_quota, "benign": benign_quota}),
+        "selected_class_counts": selected_class_counts,
+        "class_counts": selected_class_counts,
+        "selected_ids": [r["id"] for r in selected],
+    }
+    if full_upstream:
+        selection_manifest["algorithm"] = "full_upstream_no_resampling"
+        selection_manifest["resampling"] = "none"
+    else:
+        selection_manifest["algorithm"] = "class_balanced_seeded_stratified_v1"
+        selection_manifest["sampling_policy"] = {
+            "top_level": "balanced_by_gold_class",
+            "within_class": "deterministic_stratified",
+            "within_class_fields": ["alert_type", "enterprise"],
+            "odd_n_rule": "attack=floor(n/2), benign=n-attack",
+            "seed": seed,
+            "output_order": "deterministic_class_interleave",
+        }
     run = {
         "schema_version": 3, "run_id": run_id or new_run_id(SUITE, mode, len(rows)),
         "suite": SUITE, "mode": mode, "arm": ARM_OF_MODE[mode], "profile": profile,
@@ -387,23 +420,6 @@ async def run_bench(n: int | None = None, mode: str = "base", seed: int = 42,
             "model_visible_upstream_fields": sorted(UPSTREAM_MODEL_VISIBLE_FIELDS),
             "recursive_denied_key_canonical_forms": sorted(EVALUATION_ONLY_KEYS),
         },
-        "selection_manifest": {
-            "algorithm": "class_balanced_seeded_stratified_v1",
-            "sampling_policy": {
-                "top_level": "balanced_by_gold_class",
-                "within_class": "deterministic_stratified",
-                "within_class_fields": ["alert_type", "enterprise"],
-                "odd_n_rule": "attack=floor(n/2), benign=n-attack",
-                "seed": seed,
-                "output_order": "deterministic_class_interleave",
-            },
-            "requested_class_counts": {
-                "attack": attack_quota, "benign": benign_quota,
-            },
-            "selected_class_counts": dict(
-                sorted(Counter(r["label"] for r in selected).items())),
-            "class_counts": dict(sorted(Counter(r["label"] for r in selected).items())),
-            "selected_ids": [r["id"] for r in selected],
-        },
+        "selection_manifest": selection_manifest,
     }
     return persist_run(run, log_dir, source_provenance=source_provenance)
