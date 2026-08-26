@@ -81,8 +81,9 @@ def create_agent(*, arm: str = "single", **_factory_kwargs: Any):
                 task=str(visible), llm=llm, tools=official_tools, config=cfg)
             store().set("cyberorion_arm", arm)
             store().set("cyberorion_runtime_trace", result)
-            from inspect_ai.model import ChatMessageAssistant
-            state.output = ChatMessageAssistant(content=str(result.get("output") or ""))
+            from inspect_ai.model import ModelOutput
+            state.output = ModelOutput.from_content(
+                get_model().name, str(result.get("output") or ""))
             return state
         return solve
     return create_with_prompts
