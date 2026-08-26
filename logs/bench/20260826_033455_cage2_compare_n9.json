@@ -1,0 +1,213 @@
+{
+  "schema_version": 3,
+  "run_id": "20260826_033455_cage2_compare_n9",
+  "suite": "cage2",
+  "mode": "compare",
+  "arm": null,
+  "profile": "daily",
+  "n": 9,
+  "seed": 42,
+  "model": "deepseek-v4-flash",
+  "started_at": 1787740495.2063098,
+  "finished_at": 1787741059.0799408,
+  "elapsed_sec": 563.87,
+  "scores": {
+    "n": 9,
+    "mean_reward": -361.8667,
+    "reward_std": 420.3091,
+    "correct_mc_pct": 0.0,
+    "avg_score": -361.8667,
+    "parse_fail": 0,
+    "llm_errors": 0,
+    "by_difficulty": {},
+    "by_topic": {},
+    "confidence_intervals": {
+      "mean_reward": [
+        -649.911111,
+        -115.566667
+      ]
+    },
+    "host_compromise_events": null,
+    "host_compromise_metric_status": "not_exposed_by_official_ChallengeWrapper",
+    "restore_cost_proxy": 0.0,
+    "restore_cost_proxy_status": "non_native_proxy",
+    "restore_actions": 0,
+    "illegal_actions": 0
+  },
+  "results": [],
+  "status": "done",
+  "llm_errors": 0,
+  "error": null,
+  "methodology_status": "external_track",
+  "benchmark_provenance": {
+    "name": "CybORG CAGE Challenge 2",
+    "upstream_url": "https://github.com/cage-challenge/cage-challenge-2",
+    "dataset_version": "challenge-2",
+    "dataset_files": [
+      {
+        "name": "evaluation.py",
+        "sha256": "e4980dea8f1243ffda44bbae92521fc79ce89e74183623cce4d21715b940d51c",
+        "hash_status": "computed",
+        "bytes": 4059
+      },
+      {
+        "name": "Scenario2.yaml",
+        "sha256": "c2f15ec1bd9ab94d2a44acadf6cb9a71acdcb4cbb8fc946129c832139b155b1b",
+        "hash_status": "computed",
+        "bytes": 9304
+      }
+    ],
+    "protocol": "Scenario2 official 3x3 evaluation matrix",
+    "comparable_to_upstream": false,
+    "sample_scope": "subset",
+    "upstream_n": 900,
+    "selected_n": 9,
+    "sample_manifest": [
+      "B_lineAgent:30:episode-1",
+      "RedMeanderAgent:30:episode-1",
+      "SleepAgent:30:episode-1",
+      "B_lineAgent:50:episode-1",
+      "RedMeanderAgent:50:episode-1",
+      "SleepAgent:50:episode-1",
+      "B_lineAgent:100:episode-1",
+      "RedMeanderAgent:100:episode-1",
+      "SleepAgent:100:episode-1"
+    ],
+    "sample_manifest_sha256": "47dcd637f72d6f09c5af615d3d7d0c5dc88acdea06b9a12f24e313db42726184",
+    "selection": "seeded_stratified",
+    "size_policy": {
+      "single_asset_max_bytes": 1073741824,
+      "total_cache_max_bytes": 5368709120
+    }
+  },
+  "model_settings": {
+    "provider": "openai",
+    "model": "deepseek-v4-flash",
+    "configured_model": "openai/deepseek-v4-flash",
+    "thinking": "disabled",
+    "max_output_tokens": 4096,
+    "temperature": null,
+    "usage_accounting": "provider_or_estimated_per_task"
+  },
+  "git_head_sha": "0d36ef0f5a40ca47df6959d759a1a82e5e2e3645",
+  "git_tree_sha": "9ec50eaf1da78102e9dc474801d595b26feff49e",
+  "git_dirty": false,
+  "git_diff_sha256": null,
+  "git_commit_sha": "0d36ef0f5a40ca47df6959d759a1a82e5e2e3645",
+  "git_provenance_source": "compare_shared_source_snapshot",
+  "comparison": {
+    "arms": [
+      {
+        "run_id": "20260826_033455_cage2_compare_n9_base",
+        "mode": "base",
+        "scores": {
+          "n": 9,
+          "mean_reward": -361.8778,
+          "reward_std": 420.094,
+          "correct_mc_pct": 0.0,
+          "avg_score": -361.8778,
+          "parse_fail": 0,
+          "llm_errors": 0,
+          "by_difficulty": {},
+          "by_topic": {},
+          "confidence_intervals": {
+            "mean_reward": [
+              -649.688889,
+              -115.688889
+            ]
+          },
+          "host_compromise_events": null,
+          "host_compromise_metric_status": "not_exposed_by_official_ChallengeWrapper",
+          "restore_cost_proxy": 0.0,
+          "restore_cost_proxy_status": "non_native_proxy",
+          "restore_actions": 0,
+          "illegal_actions": 0
+        }
+      },
+      {
+        "run_id": "20260826_033455_cage2_compare_n9_single",
+        "mode": "single",
+        "scores": {
+          "n": 9,
+          "mean_reward": -361.8778,
+          "reward_std": 420.094,
+          "correct_mc_pct": 0.0,
+          "avg_score": -361.8778,
+          "parse_fail": 0,
+          "llm_errors": 0,
+          "by_difficulty": {},
+          "by_topic": {},
+          "confidence_intervals": {
+            "mean_reward": [
+              -649.688889,
+              -115.688889
+            ]
+          },
+          "host_compromise_events": null,
+          "host_compromise_metric_status": "not_exposed_by_official_ChallengeWrapper",
+          "restore_cost_proxy": 0.0,
+          "restore_cost_proxy_status": "non_native_proxy",
+          "restore_actions": 0,
+          "illegal_actions": 0
+        }
+      },
+      {
+        "run_id": "20260826_033455_cage2_compare_n9_agent",
+        "mode": "agent",
+        "scores": {
+          "n": 9,
+          "mean_reward": -361.8667,
+          "reward_std": 420.3091,
+          "correct_mc_pct": 0.0,
+          "avg_score": -361.8667,
+          "parse_fail": 0,
+          "llm_errors": 0,
+          "by_difficulty": {},
+          "by_topic": {},
+          "confidence_intervals": {
+            "mean_reward": [
+              -649.911111,
+              -115.566667
+            ]
+          },
+          "host_compromise_events": null,
+          "host_compromise_metric_status": "not_exposed_by_official_ChallengeWrapper",
+          "restore_cost_proxy": 0.0,
+          "restore_cost_proxy_status": "non_native_proxy",
+          "restore_actions": 0,
+          "illegal_actions": 0
+        }
+      }
+    ],
+    "primary_metric": "mean_reward",
+    "publication_valid": true,
+    "validation": {
+      "runs_done": true,
+      "real_model_runs": true,
+      "required_arms": true,
+      "dataset_version_identical": true,
+      "dataset_hash_identical": true,
+      "sample_ids_identical": true,
+      "model_identical": true,
+      "model_settings_identical": true,
+      "seed_identical": true,
+      "clean_complete_provenance": true,
+      "single_agent_budgets_identical": true
+    },
+    "invalid_reasons": [],
+    "agent_minus_reference": 0.011111,
+    "paired_n": 9,
+    "paired_delta_ci": [
+      -0.333333,
+      0.366667
+    ],
+    "wins": 1,
+    "ties": 7,
+    "losses": 1,
+    "shared": {
+      "n": 9,
+      "seed": 42,
+      "model": "deepseek-v4-flash"
+    }
+  }
+}

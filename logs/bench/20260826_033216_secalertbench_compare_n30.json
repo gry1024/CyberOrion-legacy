@@ -1,0 +1,390 @@
+{
+  "schema_version": 3,
+  "run_id": "20260826_033216_secalertbench_compare_n30",
+  "suite": "secalertbench",
+  "mode": "compare",
+  "arm": null,
+  "profile": "daily",
+  "n": 30,
+  "seed": 42,
+  "model": "deepseek-v4-flash",
+  "started_at": 1787740336.5993967,
+  "finished_at": 1787740411.3497794,
+  "elapsed_sec": 74.75,
+  "scores": {
+    "n": 30,
+    "macro_f1": 0.5359,
+    "attack_recall": 0.5333,
+    "false_positive_rate": 0.5,
+    "tp": 8,
+    "fp": 7,
+    "fn": 7,
+    "tn": 7,
+    "pr_auc": 0.6324,
+    "brier_score": 0.3051,
+    "expected_calibration_error_10bin": 0.3527,
+    "triage_cost": 42,
+    "triage_cost_per_alert": 1.4,
+    "cost_model": {
+      "false_negative": 5.0,
+      "false_positive": 1.0
+    },
+    "correct_mc_pct": 0.5,
+    "avg_score": 0.5359,
+    "parse_fail": 4,
+    "llm_errors": 0,
+    "by_difficulty": {},
+    "by_topic": {},
+    "confidence_intervals": {
+      "accuracy": [
+        0.333333,
+        0.7
+      ],
+      "attack_recall": [
+        0.266667,
+        0.8
+      ]
+    }
+  },
+  "results": [],
+  "status": "done",
+  "llm_errors": 0,
+  "error": null,
+  "methodology_status": "external_track",
+  "benchmark_provenance": {
+    "name": "SecAlertBench",
+    "upstream_url": "https://github.com/Dxsssu/SecAlertBench",
+    "dataset_version": "upstream-pinned",
+    "dataset_files": [
+      {
+        "name": "enterprise_a_examples.json",
+        "sha256": "87c81af210d4cdbc4ffaf971c1f096afdccee3306af6179e0524a2805a4e3ccb",
+        "hash_status": "computed",
+        "bytes": 11193
+      },
+      {
+        "name": "enterprise_b_examples.json",
+        "sha256": "79147b6f8a04062a6616a44561601ddbda2283bb0175b61154e1ceac1fdb0e28",
+        "hash_status": "computed",
+        "bytes": 4467
+      },
+      {
+        "name": "enterprise_c_examples.json",
+        "sha256": "6dd662386c3ef4d456961c6248ae372a332f83d55bf9109bea300c2584206ae9",
+        "hash_status": "computed",
+        "bytes": 4816
+      },
+      {
+        "name": "secalertbench.json",
+        "sha256": "33f95305d1c42f8e615e4f94066119570859dee7eb086dff7c2273536c932ea3",
+        "hash_status": "computed",
+        "bytes": 21719558
+      },
+      {
+        "name": "secalertbench_attack.json",
+        "sha256": "4ce14a3439746d53f2634f90bff176ec904d91c3c7f5de5b9edcc53043eaab61",
+        "hash_status": "computed",
+        "bytes": 3877335
+      },
+      {
+        "name": "secalertbench_non_attack.json",
+        "sha256": "8fc6301c1915524d0c1eaa0f84e49cc600daf413edfe0ea0c61897d71496da27",
+        "hash_status": "computed",
+        "bytes": 17842225
+      },
+      {
+        "name": "Foundation-Sec-8B-Instruct.json",
+        "sha256": "515494c1a5de9f102b029d835d7edc309df9754d59358f2be1b1781a6f315cfb",
+        "hash_status": "computed",
+        "bytes": 5418296
+      },
+      {
+        "name": "SecGPT-14B.json",
+        "sha256": "e2d716d376d1f2542a7952bb2c461bde6df7b0a5e8319c8981904b1e9a01eb66",
+        "hash_status": "computed",
+        "bytes": 5410656
+      },
+      {
+        "name": "SecGPT-7B.json",
+        "sha256": "65a9cc94b26e9bb33e074f8abbc52835196126097f504f558a9a41cd880cf093",
+        "hash_status": "computed",
+        "bytes": 5445699
+      },
+      {
+        "name": "claude-sonnet-4-5-20250929.json",
+        "sha256": "f39bd587b2510d19a5e30b8562c9d1c08fbee397fb1c9170c8a9a8d3d1edc209",
+        "hash_status": "computed",
+        "bytes": 5468635
+      },
+      {
+        "name": "deepseek-v3.1.json",
+        "sha256": "6c4c363c0540ef8f558619b8553763fe5b9798cf85da75132b894b1bb1789f79",
+        "hash_status": "computed",
+        "bytes": 5585284
+      },
+      {
+        "name": "gemini-3-flash-preview.json",
+        "sha256": "4aae603a7f3f1b62dd991274aa2f7f9bcb326a3573016bfcd31f0aa3fc881c56",
+        "hash_status": "computed",
+        "bytes": 5544345
+      },
+      {
+        "name": "glm-4.7.json",
+        "sha256": "d10637bbebd883f44f17985d9bfef2e8463528c13b2b42d079ececa58e5d71eb",
+        "hash_status": "computed",
+        "bytes": 5480740
+      },
+      {
+        "name": "gpt-5.1-chat.json",
+        "sha256": "31d2743a8ff931359da1cdbc9fd4552cf297ce6865c6cadc903e0cb215da1468",
+        "hash_status": "computed",
+        "bytes": 5531927
+      },
+      {
+        "name": "kimi-k2-instruct-0905.json",
+        "sha256": "17afc98884479a419ce76c4debd0d1c13e20d47dbc673d9ed48a92a5598fa80d",
+        "hash_status": "computed",
+        "bytes": 5473747
+      },
+      {
+        "name": "llama-3.1-405b-instruct.json",
+        "sha256": "53f9e36e91c38000ca610d50612352d7dc0ac5e1063fa00525d927d676712db4",
+        "hash_status": "computed",
+        "bytes": 5591725
+      },
+      {
+        "name": "llama-3.1-70b-instruct.json",
+        "sha256": "a03533c269422a7dd6f9d6f9c28f963d974bbdafa4f9b6719f2c0a004e1c9434",
+        "hash_status": "computed",
+        "bytes": 5501719
+      },
+      {
+        "name": "llama-3.1-8b-instruct.json",
+        "sha256": "c116ca693a865d8f7b24ec3fa46e9b9e75e3a87dcd741b5edda526744067dddb",
+        "hash_status": "computed",
+        "bytes": 5609277
+      },
+      {
+        "name": "qwen3-14b.json",
+        "sha256": "51e4fa33828cafcc4ae27637db7e7e8df48532b78aa57485b8f0782a7e6d2610",
+        "hash_status": "computed",
+        "bytes": 5488763
+      },
+      {
+        "name": "qwen3-235b-a22b-instruct-2507.json",
+        "sha256": "0627ecfd93bb986c1c998135f2054ac4a50a78538022b33e524489e79cbb24d0",
+        "hash_status": "computed",
+        "bytes": 5461925
+      }
+    ],
+    "protocol": "binary_soc_alert_triage",
+    "comparable_to_upstream": false,
+    "sample_scope": "subset",
+    "upstream_n": 8322,
+    "selected_n": 30,
+    "sample_manifest": [
+      "sha256:60bcad669578fe2d5b6e",
+      "sha256:89700238579bfcfc30ed",
+      "sha256:f9b580a931d924873da0",
+      "sha256:cb8a54076261d81fa054",
+      "sha256:42085e478035717fac88",
+      "sha256:849188ed6f2ac567cc39",
+      "sha256:1c38034e76ba44833ad2",
+      "sha256:201136f4f2d4a53e4a86",
+      "sha256:49d8db99186818daaf0a",
+      "sha256:6f01de18b1977f99a5a5",
+      "sha256:f38a288a60d5b7e96304",
+      "sha256:39e1c5f619e8fdb46ec8",
+      "sha256:807d0eaa21d1b087b3b5",
+      "sha256:05d45cfd15f1aa105905",
+      "sha256:1aaf95c81be8885a6055",
+      "sha256:c912b6a0f4458a8e939e",
+      "sha256:2dc9fbbd9ee09a18fb20",
+      "sha256:a24289920ef5e419e4e2",
+      "sha256:89977d1f2a40086134b0",
+      "sha256:f8516d17f81addd6a740",
+      "sha256:a350fe25bbef99e0606f",
+      "sha256:446cab050191bd992b7c",
+      "sha256:cb820a8f32741ccec8ea",
+      "sha256:74d85594dafcd2de89b9",
+      "sha256:a0f297e8fc306b38d448",
+      "sha256:684b0e11c37c5fb0514b",
+      "sha256:7297ba42f896f42f3368",
+      "sha256:003059caceed2b94c34e",
+      "sha256:b2829d5d979f3056e903",
+      "sha256:43f8f0f0431be5956ba3"
+    ],
+    "sample_manifest_sha256": "56a378cc1710f84543f7128a9bab04e1e64a31c240d707719187ff4ad424b97a",
+    "selection": "seeded_stratified",
+    "size_policy": {
+      "single_asset_max_bytes": 1073741824,
+      "total_cache_max_bytes": 5368709120
+    }
+  },
+  "model_settings": {
+    "provider": "openai",
+    "model": "deepseek-v4-flash",
+    "configured_model": "openai/deepseek-v4-flash",
+    "thinking": "disabled",
+    "max_output_tokens": 4096,
+    "temperature": null,
+    "usage_accounting": "provider_or_estimated_per_task"
+  },
+  "git_head_sha": "0d36ef0f5a40ca47df6959d759a1a82e5e2e3645",
+  "git_tree_sha": "9ec50eaf1da78102e9dc474801d595b26feff49e",
+  "git_dirty": false,
+  "git_diff_sha256": null,
+  "git_commit_sha": "0d36ef0f5a40ca47df6959d759a1a82e5e2e3645",
+  "git_provenance_source": "compare_shared_source_snapshot",
+  "comparison": {
+    "arms": [
+      {
+        "run_id": "20260826_033216_secalertbench_compare_n30_base",
+        "mode": "base",
+        "scores": {
+          "n": 30,
+          "macro_f1": 0.6652,
+          "attack_recall": 0.6,
+          "false_positive_rate": 0.2667,
+          "tp": 9,
+          "fp": 4,
+          "fn": 6,
+          "tn": 11,
+          "pr_auc": 0.63,
+          "brier_score": 0.3174,
+          "expected_calibration_error_10bin": 0.3,
+          "triage_cost": 34,
+          "triage_cost_per_alert": 1.1333,
+          "cost_model": {
+            "false_negative": 5.0,
+            "false_positive": 1.0
+          },
+          "correct_mc_pct": 0.6667,
+          "avg_score": 0.6652,
+          "parse_fail": 0,
+          "llm_errors": 0,
+          "by_difficulty": {},
+          "by_topic": {},
+          "confidence_intervals": {
+            "accuracy": [
+              0.5,
+              0.833333
+            ],
+            "attack_recall": [
+              0.333333,
+              0.8
+            ]
+          }
+        }
+      },
+      {
+        "run_id": "20260826_033216_secalertbench_compare_n30_single",
+        "mode": "single",
+        "scores": {
+          "n": 30,
+          "macro_f1": 0.6795,
+          "attack_recall": 0.6667,
+          "false_positive_rate": 0.3571,
+          "tp": 10,
+          "fp": 5,
+          "fn": 5,
+          "tn": 9,
+          "pr_auc": 0.6721,
+          "brier_score": 0.2232,
+          "expected_calibration_error_10bin": 0.198,
+          "triage_cost": 30,
+          "triage_cost_per_alert": 1.0,
+          "cost_model": {
+            "false_negative": 5.0,
+            "false_positive": 1.0
+          },
+          "correct_mc_pct": 0.6333,
+          "avg_score": 0.6795,
+          "parse_fail": 4,
+          "llm_errors": 0,
+          "by_difficulty": {},
+          "by_topic": {},
+          "confidence_intervals": {
+            "accuracy": [
+              0.466667,
+              0.8
+            ],
+            "attack_recall": [
+              0.4,
+              0.866667
+            ]
+          }
+        }
+      },
+      {
+        "run_id": "20260826_033216_secalertbench_compare_n30_agent",
+        "mode": "agent",
+        "scores": {
+          "n": 30,
+          "macro_f1": 0.5359,
+          "attack_recall": 0.5333,
+          "false_positive_rate": 0.5,
+          "tp": 8,
+          "fp": 7,
+          "fn": 7,
+          "tn": 7,
+          "pr_auc": 0.6324,
+          "brier_score": 0.3051,
+          "expected_calibration_error_10bin": 0.3527,
+          "triage_cost": 42,
+          "triage_cost_per_alert": 1.4,
+          "cost_model": {
+            "false_negative": 5.0,
+            "false_positive": 1.0
+          },
+          "correct_mc_pct": 0.5,
+          "avg_score": 0.5359,
+          "parse_fail": 4,
+          "llm_errors": 0,
+          "by_difficulty": {},
+          "by_topic": {},
+          "confidence_intervals": {
+            "accuracy": [
+              0.333333,
+              0.7
+            ],
+            "attack_recall": [
+              0.266667,
+              0.8
+            ]
+          }
+        }
+      }
+    ],
+    "primary_metric": "macro_f1",
+    "publication_valid": true,
+    "validation": {
+      "runs_done": true,
+      "real_model_runs": true,
+      "required_arms": true,
+      "dataset_version_identical": true,
+      "dataset_hash_identical": true,
+      "sample_ids_identical": true,
+      "model_identical": true,
+      "model_settings_identical": true,
+      "seed_identical": true,
+      "clean_complete_provenance": true,
+      "single_agent_budgets_identical": true
+    },
+    "invalid_reasons": [],
+    "agent_minus_reference": -0.14359,
+    "paired_n": 30,
+    "paired_delta_ci": [
+      -0.347432,
+      0.040476
+    ],
+    "wins": 3,
+    "ties": 20,
+    "losses": 7,
+    "shared": {
+      "n": 30,
+      "seed": 42,
+      "model": "deepseek-v4-flash"
+    }
+  }
+}
