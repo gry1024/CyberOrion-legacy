@@ -37,7 +37,7 @@ _SQLITE_HEADER = b"SQLite format 3\x00"
 _SQLITE_ENV = "CYBERORION_EXCYTIN_SQLITE_PATH"
 
 
-def official_harness_status(root: Path) -> dict:
+def official_harness_status(root: Path, *, selected: bool = False) -> dict:
     """只读探测官方 Inspect/Docker/scorer 组件，不尝试安装或替代。"""
     task_module = root / "domains" / "excytin" / "excytin.py"
     scorer_files = [p for p in root.rglob("*.py")
@@ -60,10 +60,11 @@ def official_harness_status(root: Path) -> dict:
         "official_task_module_present": task_module.is_file(),
         "official_scorer_files_present": bool(scorer_files),
         "components_present": components_present,
-        "official_execution_selected": False,
+        "official_execution_selected": bool(selected and components_present and docker_daemon),
         "official_telemetry_backend": "MySQL containers via Inspect/SABER Docker harness",
         "sqlite_projection_is_official": False,
-        "status": "adapter_selected_non_official",
+        "status": "official_selected" if selected and components_present and docker_daemon
+        else "adapter_selected_non_official",
     }
 
 
@@ -293,11 +294,25 @@ async def run_bench(n: int | None = None, mode: str = "base", seed: int = 42,
                     profile: str = "daily", dataset_version: str | None = None,
                     log_dir: str | Path = DEFAULT_LOG_DIR, concurrency: int = 4,
                     llm=None, on_progress=None, run_id: str | None = None,
-                    source_provenance: dict | None = None, **_: Any) -> dict:
+                    source_provenance: dict | None = None,
+                    execution_mode: str = "sqlite_adapter", **_: Any) -> dict:
+    """Run the legacy SQLite adapter; official execution is Inspect CLI based.
+
+    ``execution_mode='official'`` is intentionally fail-closed here: callers
+    must invoke the pinned ACESEvals task with ``excytin_official_agent`` and
+    persist its native log, rather than silently falling back to SQLite.
+    """
+    if execution_mode not in {"sqlite_adapter", "official"}:
+        raise ValueError("execution_mode must be sqlite_adapter or official")
+    if execution_mode == "official":
+        raise BenchmarkAssetMissing(
+            SUITE,
+            "official mode requires the pinned ACESEvals Inspect/SABER runner; "
+            "use inspect eval with cyberorion_single/full, never SQLite adapter")
     if mode not in MODES:
         raise ValueError(f"excytin mode 必须是 {'/'.join(MODES)}")
     root, files = require_asset(SUITE)
-    harness_status = official_harness_status(root)
+    harness_status = official_harness_status(root, selected=False)
     data_files, representative_decision = resolve_representative_files(SUITE, files)
     # Validate before question sampling, LLM construction, or any model call.
     database, database_validation = select_telemetry_database(data_files)
@@ -404,5 +419,6 @@ async def run_bench(n: int | None = None, mode: str = "base", seed: int = 42,
         "official_harness_status": harness_status,
         "telemetry_database_validation": database_validation,
         "score_methodology_label": "adapter_native_exact_match_non_official",
+        "execution_mode": "sqlite_adapter",
     }
     return persist_run(run, log_dir, source_provenance=source_provenance)
