@@ -176,7 +176,7 @@ export CYBERORION_EXCYTIN_SQLITE_PATH=/absolute/path/to/telemetry.sqlite
 # n=3 telemetry/trace 全部有效后，至多再跑 n=8；本轮禁止 n=64
 
 # CAGE-2：每个环境步重置同一公平预算；compare 含 Single、
-# Orchestrator-only、Full，正式 pilot 上限须先由独立校准冻结
+# Orchestrator-only、Full；默认使用已预注册的 pilot_v1 逐步上限
 CO_BENCH_TEMPERATURE=0 CO_BENCH_MAX_TOKENS=8192 \
   ~/cai_env/bin/python scripts/run_bench.py --suite cage2 --mode compare --n 9 --seed 42
 ```

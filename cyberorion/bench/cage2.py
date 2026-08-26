@@ -55,6 +55,17 @@ CAGE_STEP_BUDGETS: dict[str, dict[str, int | float]] = {
         "token_budget": 32_768,
         "wall_clock_sec": 300.0,
     },
+    # 由 20260826 三种 30-step 条件的真实诊断校准冻结；不得按 pilot
+    # performance 差异调整。决策证据见 logs/bench/...calibration_n3.md。
+    "pilot_v1": {
+        "max_steps": 6,
+        "max_llm_calls": 4,
+        "max_tool_calls": 3,
+        "max_dispatches": 2,
+        "max_role_steps": 4,
+        "token_budget": 16_384,
+        "wall_clock_sec": 60.0,
+    },
 }
 
 
@@ -157,7 +168,8 @@ def _episode_safety_ceiling(horizon: int,
                             step_budget: dict[str, int | float]) -> dict[str, int | float]:
     factor = CAGE_EPISODE_SAFETY_MULTIPLIER
     return {
-        "estimated_tokens": int(horizon * int(step_budget["token_budget"]) * factor),
+        "budget_accounted_tokens": int(
+            horizon * int(step_budget["token_budget"]) * factor),
         "llm_calls": int(horizon * int(step_budget["max_llm_calls"]) * factor),
         "tool_calls": int(horizon * int(step_budget["max_tool_calls"]) * factor),
         "wall_clock_sec": float(horizon * float(step_budget["wall_clock_sec"]) * factor),
@@ -170,7 +182,7 @@ async def run_bench(
         log_dir: str | Path = DEFAULT_LOG_DIR, llm=None,
         on_progress=None, run_id: str | None = None,
         source_provenance: dict | None = None,
-        cage_budget_profile: str = "diagnostic",
+        cage_budget_profile: str = "pilot_v1",
         cage_step_budget: dict[str, int | float] | None = None,
         condition_steps: tuple[int, ...] | None = None,
         red_agents: tuple[str, ...] | None = None,
@@ -249,6 +261,10 @@ async def run_bench(
                     "llm_calls": meter.calls if meter else 0,
                     "tool_calls": int(runtime["budget"].get("tool_calls", 0)),
                     "estimated_tokens": meter.estimated_tokens if meter else 0,
+                    "budget_accounted_tokens": (
+                        meter.budget_accounted_tokens if meter else 0),
+                    "budget_accounting_source": (
+                        meter.budget_accounting_source if meter else "none"),
                     "wall_clock_sec": round(wall_clock_sec, 4),
                     "provider_prompt_tokens": int(provider.get("prompt_tokens", 0))
                     if provider else None,
@@ -284,6 +300,7 @@ async def run_bench(
                 state["totals"].update({
                     "llm_calls": used["llm_calls"], "tool_calls": used["tool_calls"],
                     "estimated_tokens": used["estimated_tokens"],
+                    "budget_accounted_tokens": used["budget_accounted_tokens"],
                     "wall_clock_sec": used["wall_clock_sec"],
                     "dispatches": used["dispatches"],
                 })
@@ -404,9 +421,9 @@ async def run_bench(
                 else:
                     budget_status = "no_valid_selection"
                     failure_reason = "no_valid_selection"
-            if meter.estimated_tokens > int(step_budget["token_budget"]):
+            if meter.budget_accounted_tokens > int(step_budget["token_budget"]):
                 budget_status = "violation"
-                state["budget_limit_violations"].add("estimated_tokens")
+                state["budget_limit_violations"].add("budget_accounted_tokens")
             append_trace(runtime=runtime, action=action, fallback=fallback,
                          fallback_reason=failure_reason, budget_status=budget_status,
                          meter=meter, wall_clock_sec=wall)
@@ -453,6 +470,8 @@ async def run_bench(
                         "llm_calls": int(state["totals"]["llm_calls"]),
                         "tool_calls": int(state["totals"]["tool_calls"]),
                         "estimated_tokens": int(state["totals"]["estimated_tokens"]),
+                        "budget_accounted_tokens": int(
+                            state["totals"]["budget_accounted_tokens"]),
                         "wall_clock_sec": round(
                             float(state["totals"]["wall_clock_sec"]), 4),
                         "provider_prompt_tokens": int(

@@ -39,7 +39,7 @@ class LLMBudgetExceeded(RuntimeError):
 
 
 class MeteredLLM:
-    """用可复现字符估算在 provider usage 缺失时 fail-closed 限制 token。"""
+    """优先按 provider usage、缺失时按字符估算 fail-closed 限制 token。"""
 
     def __init__(self, target: Any, budget: dict | None = None) -> None:
         self.target = target
@@ -51,11 +51,23 @@ class MeteredLLM:
         self.provider_total_tokens = 0
         self.provider_usage_calls = 0
 
+    @property
+    def budget_accounted_tokens(self) -> int:
+        if self.calls and self.provider_usage_calls == self.calls:
+            return self.provider_total_tokens
+        return self.estimated_tokens
+
+    @property
+    def budget_accounting_source(self) -> str:
+        return ("provider" if self.calls and self.provider_usage_calls == self.calls
+                else "estimated")
+
     async def __call__(self, system: str, user: str) -> Any:
         prompt_tokens = max(1, (len(system) + len(user)) // 4)
         if self.calls >= int(self.limits["max_llm_calls"]):
             raise LLMBudgetExceeded("LLM call budget exhausted")
-        if self.estimated_tokens + prompt_tokens > int(self.limits["token_budget"]):
+        if self.budget_accounted_tokens + prompt_tokens > int(
+                self.limits["token_budget"]):
             raise LLMBudgetExceeded("estimated token budget exhausted before request")
         self.calls += 1
         self.estimated_tokens += prompt_tokens
@@ -67,8 +79,9 @@ class MeteredLLM:
             self.provider_total_tokens += int(usage.get("total_tokens", 0))
             self.provider_usage_calls += 1
         self.estimated_tokens += max(1, len(str(result)) // 4)
-        if self.estimated_tokens > int(self.limits["token_budget"]):
-            raise LLMBudgetExceeded("estimated token budget exhausted after response")
+        if self.budget_accounted_tokens > int(self.limits["token_budget"]):
+            raise LLMBudgetExceeded(
+                f"{self.budget_accounting_source} token budget exhausted after response")
         return result
 
     def usage(self) -> dict[str, Any]:
@@ -85,6 +98,8 @@ class MeteredLLM:
             "provider": provider,
             "provider_status": ("available" if provider else "unavailable"),
             "estimated_tokens": self.estimated_tokens,
+            "budget_accounted_tokens": self.budget_accounted_tokens,
+            "budget_accounting_source": self.budget_accounting_source,
             "llm_calls": self.calls,
         }
 

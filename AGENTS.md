@@ -23,6 +23,7 @@
 - **操作系统是 WSL2**（Windows 宿主的 Linux 子系统）。仓库在 `<cai-repo>/cyberorion`。
 - **Python 环境在仓库外**：`~/cai_env` 是 Python venv。**不要**在仓库里建 venv，**不要**用系统 python 跑项目代码。统一用 `~/cai_env/bin/python`。
 - **LLM 配置在 `<cai-repo>/cyberorion/../.env`**（即 `<cai-repo>/.env`，CAI 仓库根，不在本仓库内）。关键变量：`CAI_MODEL`（带 provider 前缀，如 `openai/MiniMax-M3`）、`OPENAI_API_KEY`、`OPENAI_API_BASE` / `OPENAI_BASE_URL`（BASE 优先）。模板见本仓库 `.env.example`。`server.py` 启动时自动加载该 `.env`（setdefault 语义）。
+- **外部网络**：连外部 LLM 服务（`OPENAI_API_BASE` 的 OpenAI 兼容端点）或 GitHub 的命令必须在**外部网络**下执行——受限（沙箱）网络会拦截这类请求导致长时间卡顿；卡住先怀疑网络权限再怀疑端点，详见"已知坑"第 13 条。
 - **Docker = Windows 上的 Docker Desktop**（`E:\Program Files\Docker\Docker Desktop.exe`，WSL 里路径 `/mnt/e/Program Files/Docker/Docker Desktop.exe`）。WSL 里的 `docker` CLI 只是它的壳。**`docker` 命令挂了一般是 Desktop 没起**——启动 Desktop 后 `/var/run/docker.sock` 才存在。改镜像加速器要改 Windows 侧 `C:\Users\<user>\.docker\daemon.json` 再重启 Desktop。
 - **靶机容器**（`docker compose up -d` 起 3 台）：`cyberorion_dvwa`（172.29.0.10，宿主 28080→80）、`cyberorion_weak_ssh`（.12，22222→22）、`cyberorion_log4j`（.20，8983）。红方攻击一律走 **127.0.0.1 + 宿主端口**（见"已知坑"）。
 - **外部基准在 `<cai-repo>/benchmarks/`**：
@@ -43,7 +44,7 @@
 - **后端单文件部署**：本地测试通过 → `ssh treehole 'cp /opt/cyberorion/<file> /tmp/cyberorion_deploy_backups/<file>.before_<stamp>'` → `scp <file> treehole:/opt/cyberorion/<file>` → 远端 `py_compile` → `systemctl restart cyberorion.service` → `systemctl is-active cyberorion.service` → 查 `journalctl -u cyberorion.service -n 80 --no-pager`。
 - **前端部署**：本地 `cd web && npm run build` 通过 → 打包 `web/dist` → 生产备份 `/opt/cyberorion/web/dist` → 替换 dist → 验证 `https://corleone.xin/cyberorion/` 加载的是新 hash 资源。
 - **Benchmark 验证**：生产 Benchmark 结果必须查 `https://corleone.xin/cyberorion/api/bench/runs` 和 `/opt/cyberorion/logs/bench/*.json`；CyberGym Lite 至少确认 agent/base 两臂都有 `scores.avg_score`，不能只看本地文件。
-- **GitHub 规则**：默认只改工作区，不 `git commit`、不 `git push`。只有用户明确要求“提交/推到 GitHub”时才执行；执行前必须 `git status`、跑相关测试、确认没有 `.env`/密钥/生产私有文件进入暂存区。
+- **GitHub 规则**：默认只改工作区，不 `git commit`、不 `git push`。只有用户明确要求“提交/推到 GitHub”时才执行；执行前必须 `git status`、跑相关测试、确认没有 `.env`/密钥/生产私有文件进入暂存区。**提交/推送优先走 SSH**（`git@github.com:owner/repo.git`），不要用 HTTPS remote——SSH 免交互认证、不受 HTTPS 凭据/代理问题影响；本地 `~/.ssh/config` 已配好 github.com（ed25519 密钥）。例如 CyberOrion-legacy 的 bench-eval 分支用 `GIT_SSH_COMMAND="ssh -o BatchMode=yes" git push git@github.com:gry1024/CyberOrion-legacy.git bench-eval:bench-eval` 推送。
 
 ---
 
@@ -195,6 +196,7 @@ cd <cai-repo>/cyberorion && python server.py   # → http://localhost:8000
     ③ 同文件 `_fetch_response`/`get_response`：`message_history` 只在 `isinstance(input, str)` 时前置（run-item list 已含全量对话；否则并行工具调用的历史被复制成"每个 call 一条 assistant + 孤儿 tool 消息"，DeepSeek 直接 400）；
     ④ `cai/util.py::fix_message_list` 第二遍：前一条是同一 assistant 的兄弟 tool 消息也算合法序列（原逻辑在两个并行 tool 响应间**乒乓死循环**，CPU 占满、事件循环冻结）。
 12. **DeepSeek 推理轮很慢（单轮 30-120s）**：四个 `_model()` 的 `AsyncOpenAI(timeout=300.0)` 不能降回 60；子代理墙钟 `_SUBAGENT_TIMEOUT=420`、指挥官 900、红方 600。超时判死必须用 `asyncio.wait` + 显式 cancel（`core/agent_runner.py::run_with_timeout`）——**`asyncio.wait_for` 无效**：SDK `result.py::stream_events` 会吞 `CancelledError`，wait_for 拿到部分结果正常返回，超时分支是死代码。
+13. **受限环境（沙箱）网络连外部 LLM 服务会长时间卡顿**：AI agent 在受限网络环境（sandbox）里执行需要访问外部 LLM 端点（`OPENAI_API_BASE` 的 OpenAI 兼容 API、`curl .../models` 检查模型）或 GitHub 的 Bash 命令时，请求被沙箱网络策略拦下/挂起，表现为长时间无响应甚至"卡死"。解决：这类命令必须**直接请求外部网络**执行（在 Claude Code 中即允许 Bash 绕过网络沙箱/`dangerouslyDisableSandbox`，或先向用户请求网络权限），不要反复重试或加长 timeout 硬等。凡跑真实 LLM 的 bench（`scripts/run_bench.py` 等）、`server.py` 端到端、`curl` 探测端点的命令都属于此类；纯本地命令（pytest、本地文件操作）才可以在沙箱里跑。
 
 ---
 

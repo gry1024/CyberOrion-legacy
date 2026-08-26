@@ -12,7 +12,9 @@ import pytest
 
 from cyberorion.bench import cage2, secalertbench
 from cyberorion.bench.assets import BenchmarkAssetMissing
-from cyberorion.bench.external_common import FAIR_ARM_BUDGET
+from cyberorion.bench.external_common import (
+    FAIR_ARM_BUDGET, LLMBudgetExceeded, MeteredLLM,
+)
 from cyberorion.bench.result_export import (
     export_results, normalize_run, paired_statistics, validate_compare_runs,
 )
@@ -221,6 +223,23 @@ def test_cage_step_budget_resets_across_environment_steps(
                for trace in run["agent_traces"])
 
 
+def test_metered_llm_enforces_provider_tokens_when_available() -> None:
+    class ProviderText(str):
+        usage = {"prompt_tokens": 80, "completion_tokens": 21,
+                 "total_tokens": 101}
+
+    async def target(_system: str, _user: str) -> str:
+        return ProviderText("short")
+
+    meter = MeteredLLM(target, budget={
+        "max_llm_calls": 2, "token_budget": 100,
+    })
+    with pytest.raises(LLMBudgetExceeded, match="provider token budget"):
+        asyncio.run(meter("s", "u"))
+    assert meter.budget_accounted_tokens == 101
+    assert meter.budget_accounting_source == "provider"
+
+
 def _cage_asset(tmp_path: Path, monkeypatch) -> None:
     asset = tmp_path / "cage"
     asset.mkdir()
@@ -232,7 +251,6 @@ def _cage_asset(tmp_path: Path, monkeypatch) -> None:
 def test_cage_step_exhaustion_does_not_disable_next_step(
         tmp_path: Path, monkeypatch) -> None:
     """某一步耗尽后只 fallback 当前步；下一环境步必须获得新 meter。"""
-    from cyberorion.bench.external_common import LLMBudgetExceeded
     _cage_asset(tmp_path, monkeypatch)
     calls = {"llm": 0, "runtime": 0}
 
@@ -305,9 +323,9 @@ def test_cage_token_budget_after_response_overrun_is_violation(
     assert calls["runtime"] == 2
     row = run["episode_resource_usage"][0]
     assert row["fallback_count"] == 2
-    assert row["budget_limit_violations"] == ["estimated_tokens"]
+    assert row["budget_limit_violations"] == ["budget_accounted_tokens"]
     assert run["budget_limit_violation"] is True
-    assert run["budget_limit_violation_dimensions"] == ["estimated_tokens"]
+    assert run["budget_limit_violation_dimensions"] == ["budget_accounted_tokens"]
 
 
 def test_resource_limit_violation_makes_publication_invalid() -> None:

@@ -1,8 +1,7 @@
 # CAGE-2 逐步预算协议与校准计划
 
-状态：**IMPLEMENTED_DIAGNOSTIC / PILOT_BUDGET_NOT_YET_FROZEN**。旧的 episode
-全局预算已退出 CAGE 执行路径；当前仅冻结了宽松的诊断校准上限，正式 pilot
-上限必须由真实校准的成本分布确定并在查看 arm 性能差异前提交。
+状态：**PILOT_V1_FROZEN**。旧的 episode 全局预算已退出 CAGE 执行路径；
+真实诊断校准及原始 artifact 已提交，`pilot_v1` 在查看任何 pilot 性能差异前冻结。
 
 ## 1. 证据：现有 episode 全局预算在结构上不适用
 
@@ -211,5 +210,6 @@ scorer/evaluator feedback 只留在评分 artifact，绝不进入 memory 或 pro
 - [x] 1.25×线性 episode runaway ceiling（不是公平性预算）
 - [x] Single / Orchestrator-only / Full 三种架构臂
 - [x] 每步 provider/估算 token、calls/tools/wall、dispatch、memory 与 fallback 审计
-- [ ] 用三种 30-step 条件做真实诊断校准并冻结 pilot 上限
+- [x] 用三种 30-step 条件做真实诊断校准并冻结 `pilot_v1` 上限：
+      16384 tokens / 4 LLM calls / 3 tools / 2 dispatches / 60s per step
 - [ ] 在冻结上限下运行 9 条 canonical condition 的 Single / Full pilot

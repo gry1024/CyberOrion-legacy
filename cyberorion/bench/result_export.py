@@ -142,8 +142,10 @@ def _limit_violations(raw: dict) -> list[str]:
                 and int(used.get("tool_calls", 0)) > int(limits["max_tool_calls"])):
             violated.add("tool_calls")
         if ("token_budget" in limits
-                and int(used.get("estimated_tokens", 0)) > int(limits["token_budget"])):
-            violated.add("estimated_tokens")
+                and int(used.get("budget_accounted_tokens",
+                                 used.get("estimated_tokens", 0)))
+                > int(limits["token_budget"])):
+            violated.add("budget_accounted_tokens")
     return sorted(violated)
 
 
