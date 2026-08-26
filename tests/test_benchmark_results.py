@@ -177,7 +177,7 @@ def test_plotting_survives_optional_metrics_missing(tmp_path: Path) -> None:
     assert all(path.is_file() for path in outputs)
 
 
-def test_cage_episode_budget_is_global_across_environment_steps(
+def test_cage_step_budget_resets_across_environment_steps(
         tmp_path: Path, monkeypatch) -> None:
     asset = tmp_path / "cage"; asset.mkdir()
     (asset / "Scenario2.yaml").write_text("Hosts: {}\n", encoding="utf-8")
@@ -189,7 +189,7 @@ def test_cage_episode_budget_is_global_across_environment_steps(
         actions = [{"action_id": 0, "action_type": "Sleep", "display": "Sleep"},
                    {"action_id": 2, "action_type": "Analyse", "display": "Analyse Host"}]
         for episode in range(1, episodes + 1):
-            for step in range(1, 21):
+            for step in range(1, 4):
                 await policy({}, episode=episode, step=step, available_actions=actions)
             rows.append({"episode": episode, "reward": 0.0, "illegal_actions": 0,
                          "restore_actions": 0, "restore_cost_proxy": 0.0})
@@ -204,15 +204,21 @@ def test_cage_episode_budget_is_global_across_environment_steps(
     async def llm(_system, _user): return '{"action":"sleep"}'
     monkeypatch.setattr("cyberorion.eval.benchmarks.run_cage2_async", fake_run)
     monkeypatch.setattr(cage2, "run_reference", fake_runtime)
+    step_budget = {
+        "max_steps": 1, "max_llm_calls": 1, "max_tool_calls": 1,
+        "max_dispatches": 1, "max_role_steps": 1,
+        "token_budget": 1000, "wall_clock_sec": 5,
+    }
     run = asyncio.run(cage2.run_bench(
-        n=9, mode="single", llm=llm, log_dir=tmp_path / "logs"))
-    assert len(run["episode_resource_usage"]) == 9
-    assert all(row["used"]["llm_calls"] <= FAIR_ARM_BUDGET["max_llm_calls"]
+        n=3, mode="single", llm=llm, log_dir=tmp_path / "logs",
+        condition_steps=(30,), cage_step_budget=step_budget))
+    assert len(run["episode_resource_usage"]) == 3
+    assert all(row["used"]["llm_calls"] == 3
                for row in run["episode_resource_usage"])
-    assert all(row["used"]["tool_calls"] <= FAIR_ARM_BUDGET["max_tool_calls"]
+    assert all(row["fallback_count"] == 0
                for row in run["episode_resource_usage"])
-    assert all(row["budget_exhausted_steps"] == 8
-               for row in run["episode_resource_usage"])
+    assert all(trace["step_resource_usage"]["llm_calls"] == 1
+               for trace in run["agent_traces"])
 
 
 def _cage_asset(tmp_path: Path, monkeypatch) -> None:
@@ -223,10 +229,9 @@ def _cage_asset(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.setenv("CYBERORION_CAGE2_DIR", str(asset))
 
 
-def test_cage_token_budget_exhaustion_falls_back_without_repeated_llm(
+def test_cage_step_exhaustion_does_not_disable_next_step(
         tmp_path: Path, monkeypatch) -> None:
-    """token 预算耗尽后，后续环境步必须直接执行文档化 fallback Sleep，
-    而不是反复调用 runtime 制造大量相同的 LLMBudgetExceeded 无效决策。"""
+    """某一步耗尽后只 fallback 当前步；下一环境步必须获得新 meter。"""
     from cyberorion.bench.external_common import LLMBudgetExceeded
     _cage_asset(tmp_path, monkeypatch)
     calls = {"llm": 0, "runtime": 0}
@@ -245,7 +250,7 @@ def test_cage_token_budget_exhaustion_falls_back_without_repeated_llm(
         actions = [{"action_id": 0, "action_type": "Sleep", "display": "Sleep"},
                    {"action_id": 2, "action_type": "Analyse", "display": "Analyse Host"}]
         for episode in range(1, episodes + 1):
-            for step in range(1, 21):
+            for step in range(1, 3):
                 await policy({}, episode=episode, step=step, available_actions=actions)
         return {"episodes": [{"episode": episode, "reward": 0.0, "illegal_actions": 0,
                               "restore_actions": 0, "restore_cost_proxy": 0.0}
@@ -254,24 +259,21 @@ def test_cage_token_budget_exhaustion_falls_back_without_repeated_llm(
     monkeypatch.setattr("cyberorion.eval.benchmarks.run_cage2_async", fake_run)
     monkeypatch.setattr(cage2, "run_reference", fake_runtime)
     run = asyncio.run(cage2.run_bench(
-        n=9, mode="single", llm=fake_llm, log_dir=tmp_path / "logs"))
-    # 每个 condition 各 1 个 episode，每 episode 只在第一步触发一次 LLM；
-    # 触发异常的那一步与后续所有步都是预算耗尽 fallback（共 20 步）。
-    assert calls["llm"] == 9
-    assert calls["runtime"] == 9
-    assert len(run["episode_resource_usage"]) == 9
-    for row in run["episode_resource_usage"]:
-        assert row["budget_exhausted_steps"] == 20
-        assert row["token_budget_exhausted"] is True
-        assert row["budget_exhaustion_reasons"] == ["token_budget"]
-        assert row["budget_limit_violations"] == []
+        n=1, mode="single", llm=fake_llm, log_dir=tmp_path / "logs",
+        condition_steps=(30,), red_agents=("B_lineAgent",)))
+    assert calls["llm"] == 2
+    assert calls["runtime"] == 2
+    assert len(run["episode_resource_usage"]) == 1
+    row = run["episode_resource_usage"][0]
+    assert row["fallback_count"] == 2
+    assert row["budget_exhaustion_count"] == 2
+    assert row["budget_limit_violations"] == []
     assert run["budget_limit_violation"] is False
 
 
 def test_cage_token_budget_after_response_overrun_is_violation(
         tmp_path: Path, monkeypatch) -> None:
-    """after-response 超限：响应已被记账、实际消耗超过硬上限 →
-    budget_limit_violation=true，且后续步走 fallback。"""
+    """after-response 超限如实记为逐步 violation，下一步仍重新调用。"""
     _cage_asset(tmp_path, monkeypatch)
     calls = {"runtime": 0}
 
@@ -289,7 +291,7 @@ def test_cage_token_budget_after_response_overrun_is_violation(
         actions = [{"action_id": 0, "action_type": "Sleep", "display": "Sleep"},
                    {"action_id": 2, "action_type": "Analyse", "display": "Analyse Host"}]
         for episode in range(1, episodes + 1):
-            for step in range(1, 21):
+            for step in range(1, 3):
                 await policy({}, episode=episode, step=step, available_actions=actions)
         return {"episodes": [{"episode": episode, "reward": 0.0, "illegal_actions": 0,
                               "restore_actions": 0, "restore_cost_proxy": 0.0}
@@ -298,11 +300,12 @@ def test_cage_token_budget_after_response_overrun_is_violation(
     monkeypatch.setattr("cyberorion.eval.benchmarks.run_cage2_async", fake_run)
     monkeypatch.setattr(cage2, "run_reference", fake_runtime)
     run = asyncio.run(cage2.run_bench(
-        n=9, mode="single", llm=fake_llm, log_dir=tmp_path / "logs"))
-    assert calls["runtime"] == 9
-    for row in run["episode_resource_usage"]:
-        assert row["token_budget_exhausted"] is True
-        assert row["budget_limit_violations"] == ["estimated_tokens"]
+        n=1, mode="single", llm=fake_llm, log_dir=tmp_path / "logs",
+        condition_steps=(30,), red_agents=("B_lineAgent",)))
+    assert calls["runtime"] == 2
+    row = run["episode_resource_usage"][0]
+    assert row["fallback_count"] == 2
+    assert row["budget_limit_violations"] == ["estimated_tokens"]
     assert run["budget_limit_violation"] is True
     assert run["budget_limit_violation_dimensions"] == ["estimated_tokens"]
 
@@ -329,93 +332,119 @@ def test_budget_exhaustion_without_violation_keeps_publication_valid() -> None:
     assert audit["publication_valid"] is True
 
 
-def test_cage_current_step_exhaustion_without_selection_is_fallback(
+def test_cage_memory_is_deterministic_and_excludes_evaluator_fields() -> None:
+    """上游误把 evaluator 字段嵌进 observation 时也不得进入 prompt memory。"""
+    transitions = [{
+        "step": 1,
+        "observation_before": {
+            "visible": "host-a",
+            "nested": {"reward": "LEAK_SENTINEL", "signal": "scan"},
+            "score": "LEAK_SENTINEL",
+        },
+        "requested_blue_action": {"action_id": 2},
+        "executed_blue_action": {"action_id": 2, "action_type": "Analyse"},
+        "controller_status": "selected", "valid": True, "done": False,
+        "reward": "LEAK_SENTINEL", "cumulative_reward": "LEAK_SENTINEL",
+        "scorer_feedback": "LEAK_SENTINEL",
+    }]
+    first = cage2.build_episode_memory(
+        episode=1, step=2, horizon=30, transitions=transitions)
+    second = cage2.build_episode_memory(
+        episode=1, step=2, horizon=30, transitions=transitions)
+    assert first == second
+    memory, serialized, digest = first
+    assert "LEAK_SENTINEL" not in serialized
+    assert "reward" not in serialized
+    assert memory["schema_version"] == cage2.CAGE_MEMORY_SCHEMA
+    assert len(digest) == 64
+
+
+def test_cage_invalid_selection_can_be_corrected_within_same_step(
         tmp_path: Path, monkeypatch) -> None:
-    """CASE A：runtime 吞掉异常并返回 INVALID_LLM_DECISION[LLMBudgetExceeded]
-    且无有效选择时，当前步本身就是预算 fallback Sleep 并计入
-    budget_exhausted_steps（不是从下一步才开始计数）。"""
+    """非法选择不终止；同一步剩余预算可纠正，最终只执行一个有效动作。"""
     _cage_asset(tmp_path, monkeypatch)
-    calls = {"runtime": 0}
 
     async def fake_llm(_system: str, _user: str) -> str:
-        return '{"action":"sleep"}'
+        return '{"action":"ignored"}'
 
     async def fake_runtime(*, llm, tools, **kwargs):
-        calls["runtime"] += 1
         await llm("system", "user")
-        return {"output": "INVALID_LLM_DECISION[LLMBudgetExceeded]: "
-                          "estimated token budget exhausted before request",
-                "decision_trace": [], "tool_calls": [], "role_events": [],
-                "budget": {"llm_calls": 1, "tool_calls": 0}}
-
-    async def fake_run(episodes, steps, policy, scenario, red_agent, seed, wrapper):
-        actions = [{"action_id": 0, "action_type": "Sleep", "display": "Sleep"},
-                   {"action_id": 2, "action_type": "Analyse", "display": "Analyse Host"}]
-        for episode in range(1, episodes + 1):
-            for step in range(1, 6):
-                await policy({}, episode=episode, step=step, available_actions=actions)
-        return {"episodes": [{"episode": episode, "reward": 0.0, "illegal_actions": 0,
-                              "restore_actions": 0, "restore_cost_proxy": 0.0}
-                             for episode in range(1, episodes + 1)]}
-
-    monkeypatch.setattr("cyberorion.eval.benchmarks.run_cage2_async", fake_run)
-    monkeypatch.setattr(cage2, "run_reference", fake_runtime)
-    run = asyncio.run(cage2.run_bench(
-        n=9, mode="single", llm=fake_llm, log_dir=tmp_path / "logs"))
-    assert calls["runtime"] == 9
-    for row in run["episode_resource_usage"]:
-        # 第一步已耗尽：5 步全部是 fallback。
-        assert row["budget_exhausted_steps"] == 5
-        assert row["token_budget_exhausted"] is True
-    first_trace = run["agent_traces"][0]
-    assert first_trace["budget_exhausted"] is True
-    assert first_trace["budget_exhaustion_reason"] == "token_budget"
-
-
-def test_cage_current_step_exhaustion_preserves_valid_selection(
-        tmp_path: Path, monkeypatch) -> None:
-    """CASE B：本步已选出有效动作、随后的完成调用才耗尽预算 →
-    保留本步有效选择，只从下一步起 fallback，本步不计为 fallback。"""
-    _cage_asset(tmp_path, monkeypatch)
-    calls = {"runtime": 0}
-
-    async def fake_llm(_system: str, _user: str) -> str:
-        return '{"action":"sleep"}'
-
-    async def fake_runtime(*, llm, tools, **kwargs):
-        calls["runtime"] += 1
-        await llm("system", "user")
-        tools["select_blue_action"].handler(action_id=2)  # Analyse，有效选择
-        return {"output": "INVALID_LLM_DECISION[LLMBudgetExceeded]: "
-                          "estimated token budget exhausted after response",
-                "decision_trace": [],
-                "tool_calls": [{"tool": "select_blue_action"}],
+        with pytest.raises(ValueError, match="canonical safe set"):
+            tools["select_blue_action"].handler(action_id=999)
+        await llm("system", "correct")
+        tools["select_blue_action"].handler(action_id=2)
+        return {"output": "selected", "decision_trace": [],
+                "tool_calls": [
+                    {"tool": "select_blue_action", "status": "error"},
+                    {"tool": "select_blue_action", "status": "ok"}],
                 "role_events": [],
-                "budget": {"llm_calls": 2, "tool_calls": 1}}
+                "budget": {"llm_calls": 2, "tool_calls": 2, "dispatches": 0}}
 
     async def fake_run(episodes, steps, policy, scenario, red_agent, seed, wrapper):
         actions = [{"action_id": 0, "action_type": "Sleep", "display": "Sleep"},
                    {"action_id": 2, "action_type": "Analyse", "display": "Analyse Host"}]
-        for episode in range(1, episodes + 1):
-            for step in range(1, 6):
-                await policy({}, episode=episode, step=step, available_actions=actions)
-        return {"episodes": [{"episode": episode, "reward": 0.0, "illegal_actions": 0,
-                              "restore_actions": 0, "restore_cost_proxy": 0.0}
-                             for episode in range(1, episodes + 1)]}
+        action = await policy({}, episode=1, step=1, horizon=30,
+                              available_actions=actions)
+        return {"episodes": [{"episode": 1, "reward": 0.0,
+                              "illegal_actions": 0, "restore_actions": 0,
+                              "restore_cost_proxy": 0.0,
+                              "executed_action": action["action_id"]}]}
 
     monkeypatch.setattr("cyberorion.eval.benchmarks.run_cage2_async", fake_run)
     monkeypatch.setattr(cage2, "run_reference", fake_runtime)
     run = asyncio.run(cage2.run_bench(
-        n=9, mode="single", llm=fake_llm, log_dir=tmp_path / "logs"))
-    assert calls["runtime"] == 9
-    for row in run["episode_resource_usage"]:
-        # 第 1 步保留有效选择（不计 fallback），第 2-5 步 fallback。
-        assert row["budget_exhausted_steps"] == 4
-        assert row["token_budget_exhausted"] is True
-    first_trace = run["agent_traces"][0]
-    assert "budget_exhausted" not in first_trace
-    assert first_trace["requested_blue_action"] == {"action_id": 2}
-    assert first_trace["action"] == {"action_id": 2}
+        n=1, mode="single", llm=fake_llm, log_dir=tmp_path / "logs",
+        condition_steps=(30,), red_agents=("B_lineAgent",)))
+    assert run["results"][0]["executed_action"] == 2
+    assert run["agent_traces"][0]["selected_or_fallback"] == "selected"
+    assert run["agent_traces"][0]["step_resource_usage"]["llm_calls"] == 2
+
+
+def test_cage_comparable_arms_receive_byte_identical_memory(
+        tmp_path: Path, monkeypatch) -> None:
+    """相同可观测 history 下 Single/Full 的 model-visible memory 字节相同。"""
+    _cage_asset(tmp_path, monkeypatch)
+
+    async def fake_llm(_system: str, _user: str) -> str:
+        return '{"action_id":0}'
+
+    async def fake_runtime(*, llm, tools, **kwargs):
+        await llm("system", "user")
+        tools["select_blue_action"].handler(action_id=0)
+        return {"output": "selected", "decision_trace": [],
+                "tool_calls": [{"tool": "select_blue_action", "status": "ok"}],
+                "role_events": [],
+                "budget": {"llm_calls": 1, "tool_calls": 1, "dispatches": 0}}
+
+    async def fake_run(episodes, steps, policy, scenario, red_agent, seed, wrapper):
+        actions = [{"action_id": 0, "action_type": "Sleep", "display": "Sleep"}]
+        previous = None
+        for step in (1, 2):
+            await policy({"host": "a", "step": step}, episode=1, step=step,
+                         horizon=30, available_actions=actions,
+                         previous_transition=previous)
+            previous = {
+                "step": step, "observation_before": {"host": "a", "step": step},
+                "requested_blue_action": {"action_id": 0},
+                "executed_blue_action": {"action_id": 0, "action_type": "Sleep"},
+                "controller_status": "selected", "valid": True, "done": False,
+                "reward": 999,
+            }
+        return {"episodes": [{"episode": 1, "reward": 0.0,
+                              "illegal_actions": 0, "restore_actions": 0,
+                              "restore_cost_proxy": 0.0}]}
+
+    monkeypatch.setattr("cyberorion.eval.benchmarks.run_cage2_async", fake_run)
+    monkeypatch.setattr(cage2, "run_reference", fake_runtime)
+    monkeypatch.setattr(cage2, "run_superagent", fake_runtime)
+    runs = [asyncio.run(cage2.run_bench(
+        n=1, mode=mode, llm=fake_llm, log_dir=tmp_path / mode,
+        condition_steps=(30,), red_agents=("B_lineAgent",)))
+        for mode in ("single", "agent")]
+    memories = [[trace["model_visible_memory"] for trace in run["agent_traces"]]
+                for run in runs]
+    assert memories[0] == memories[1]
+    assert "999" not in memories[0][1]
 
 
 # --------------------------------------------------------------------------- #

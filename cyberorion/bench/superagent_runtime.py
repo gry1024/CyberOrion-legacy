@@ -37,6 +37,7 @@ class ToolSpec:
     input_schema: Mapping[str, Any] = field(
         default_factory=lambda: {"type": "object", "properties": {}}
     )
+    terminal: bool = False
 
 
 @dataclass(frozen=True)
@@ -126,7 +127,8 @@ def _normalise_tools(tools: Mapping[str, Any]) -> dict[str, ToolSpec]:
         name = str(key)
         if isinstance(raw, ToolSpec):
             out[name] = raw if raw.name == name else ToolSpec(
-                name, raw.handler, raw.description, raw.input_schema)
+                name, raw.handler, raw.description, raw.input_schema,
+                raw.terminal)
         elif callable(raw):
             out[name] = ToolSpec(
                 name=name,
@@ -157,6 +159,7 @@ def _normalise_tools(tools: Mapping[str, Any]) -> dict[str, ToolSpec]:
                 description=str(raw.get("description") or ""),
                 input_schema=raw.get("input_schema") or raw.get("parameters")
                 or {"type": "object", "properties": {}},
+                terminal=bool(raw.get("terminal", False)),
             )
         else:
             raise TypeError(f"tool {name!r} is not callable")
@@ -467,6 +470,8 @@ async def _run_role(state: _State, *, role: str, task: str,
             }
             state.tool_calls.append(call)
             state.trace(role, "tool", decision, observation)
+            if status == "ok" and tools[name].terminal:
+                return "complete", observation
             messages.append({"role": "assistant", "content": json.dumps(decision, ensure_ascii=False)})
             messages.append({"role": "tool", "name": name, "content": observation})
             continue
@@ -517,8 +522,8 @@ async def run_arm(
     config: RuntimeConfig | None = None,
     role_tools: Mapping[str, list[str] | tuple[str, ...] | set[str]] | None = None,
 ) -> dict[str, Any]:
-    if mode not in {"reference", "superagent"}:
-        raise ValueError("mode must be reference or superagent")
+    if mode not in {"reference", "orchestrator_only", "superagent"}:
+        raise ValueError("mode must be reference, orchestrator_only or superagent")
     config = config or RuntimeConfig()
     specs = _normalise_tools(tools)
     state = _State(llm, specs, config, _Budget(config), _role_access(specs, role_tools))
@@ -546,7 +551,11 @@ async def run_superagent(**kwargs: Any) -> dict[str, Any]:
     return await run_arm("superagent", **kwargs)
 
 
+async def run_orchestrator_only(**kwargs: Any) -> dict[str, Any]:
+    return await run_arm("orchestrator_only", **kwargs)
+
+
 __all__ = [
     "AsyncLLM", "ROLES", "RuntimeConfig", "ToolHandler", "ToolSpec",
-    "run_arm", "run_reference", "run_superagent",
+    "run_arm", "run_orchestrator_only", "run_reference", "run_superagent",
 ]

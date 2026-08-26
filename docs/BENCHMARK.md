@@ -175,8 +175,10 @@ export CYBERORION_EXCYTIN_SQLITE_PATH=/absolute/path/to/telemetry.sqlite
 ~/cai_env/bin/python scripts/run_bench.py --suite excytin --mode compare --n 3 --seed 42
 # n=3 telemetry/trace 全部有效后，至多再跑 n=8；本轮禁止 n=64
 
-# CAGE-2：LLM/工具预算按 episode 全局共享；策略只选择当前 canonical action ID
-~/cai_env/bin/python scripts/run_bench.py --suite cage2 --mode compare --n 9 --seed 42
+# CAGE-2：每个环境步重置同一公平预算；compare 含 Single、
+# Orchestrator-only、Full，正式 pilot 上限须先由独立校准冻结
+CO_BENCH_TEMPERATURE=0 CO_BENCH_MAX_TOKENS=8192 \
+  ~/cai_env/bin/python scripts/run_bench.py --suite cage2 --mode compare --n 9 --seed 42
 ```
 
 SecAlertBench 显式 verdict 值按首个词前缀归一化（attack/malicious → attack，
@@ -202,7 +204,17 @@ ExCyTIn run 保存 `official_harness_status` 和
 CAGE-2 每步从实际 `ChallengeWrapper` / `EnumActionWrapper.possible_actions` 读取
 Sleep/Monitor/Analyse/Remove/Restore 的安全 action ID，模型选择 `action_id` 后原样
 执行该 index；非法 ID 显式降级到真实 Sleep，并在逐步记录同时保存
-`requested_blue_action` 与 `executed_blue_action`。
+`requested_blue_action` 与 `executed_blue_action`。CAGE 的 terminal
+`select_blue_action` 只授权 Single reference 或 Full commander；specialist 只返回
+分析。第一次有效选择立即结束当前环境步，非法选择可在剩余逐步预算内纠正，零次
+有效选择才执行一次 Sleep fallback。
+
+Single、Orchestrator-only、Full 使用相同的确定性 bounded episode memory：只保存
+已对策略可见的 observation transition、请求/执行动作与 controller 状态；不保存
+reward、累计 reward、score、scorer feedback 或隐藏 chain-of-thought。逐步 artifact
+保存 exact memory 序列化/hash、provider token（可用时）、估算 token、LLM/tool calls、
+wall time、dispatch/roles、预算状态和 fallback；episode 只累计成本并设置线性 runaway
+safety ceiling。当前 `diagnostic` profile 是校准上限，不是 publication budget。
 
 Live paired 只允许显式本地 runner 和注入的审计 harness：
 

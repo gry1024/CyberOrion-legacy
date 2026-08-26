@@ -112,18 +112,27 @@ def _limit_violations(raw: dict) -> list[str]:
     达到上限后走文档化 fallback（budget exhausted）不算违规；只有记账的
     实际消耗严格大于上限（如 after-response 的 token 超限）才算。
     """
-    limits = ((raw.get("methodology") or {}).get("arm_budget")
+    methodology = raw.get("methodology") or {}
+    limits = (methodology.get("arm_budget")
+              or methodology.get("step_budget")
               or (raw.get("resource_usage") or {}).get("limits"))
     if not limits:
         return []
     units: list[dict] = []
+    if methodology.get("fairness_scope") == "per_environment_step":
+        units.extend({"used": trace.get("step_resource_usage") or {}}
+                     for trace in (raw.get("agent_traces") or [])
+                     if isinstance(trace, dict))
+        violated = set(raw.get("budget_limit_violation_dimensions") or [])
+    else:
+        violated = set()
     rows = raw.get("results")
     if isinstance(rows, list):
         units.extend(r.get("resource_usage") for r in rows
                      if isinstance(r, dict) and isinstance(r.get("resource_usage"), dict))
-    units.extend(resource for resource in (raw.get("episode_resource_usage") or [])
-                 if isinstance(resource, dict))
-    violated: set[str] = set()
+    if methodology.get("fairness_scope") != "per_environment_step":
+        units.extend(resource for resource in (raw.get("episode_resource_usage") or [])
+                     if isinstance(resource, dict))
     for unit in units:
         used = unit.get("used") or {}
         if ("max_llm_calls" in limits
@@ -180,7 +189,8 @@ def normalize_run(raw: dict, source: Path, export_sha: str | None) -> dict:
         "model": str(model).split("/", 1)[-1] if model is not None else None,
         "settings_status": "not_persisted_in_legacy_run",
     }
-    budget = ((raw.get("methodology") or {}).get("arm_budget")
+    methodology = raw.get("methodology") or {}
+    budget = (methodology.get("arm_budget") or methodology.get("step_budget")
               or (raw.get("resource_usage") or {}).get("limits"))
     normalized_rows = []
     for index, row in enumerate(rows):

@@ -36,6 +36,7 @@ import random
 import re
 import time
 from pathlib import Path
+from typing import Any
 
 from .model_config import max_output_tokens
 
@@ -856,6 +857,28 @@ def make_llm(timeout: float = LLM_TIMEOUT,
                              else env_temperature())
     effective_max_tokens = max_output_tokens()
 
+    class ModelText(str):
+        """保持字符串兼容，同时携带 provider 返回的非敏感 usage。"""
+
+        usage: dict[str, int] | None
+
+        def __new__(cls, value: str, usage: dict[str, int] | None = None):
+            instance = super().__new__(cls, value)
+            instance.usage = usage
+            return instance
+
+    def usage_dict(raw: Any) -> dict[str, int] | None:
+        if raw is None:
+            return None
+        values = {
+            "prompt_tokens": getattr(raw, "prompt_tokens", None),
+            "completion_tokens": getattr(raw, "completion_tokens", None),
+            "total_tokens": getattr(raw, "total_tokens", None),
+        }
+        parsed = {key: int(value) for key, value in values.items()
+                  if isinstance(value, (int, float))}
+        return parsed or None
+
     async def call(system: str, user: str) -> str:
         extra = ({"temperature": effective_temperature}
                  if effective_temperature is not None else {})
@@ -867,7 +890,9 @@ def make_llm(timeout: float = LLM_TIMEOUT,
                       {"role": "user", "content": user}],
             max_tokens=effective_max_tokens,
             **extra)
-        return (resp.choices[0].message.content or "").strip()
+        return ModelText(
+            (resp.choices[0].message.content or "").strip(),
+            usage_dict(getattr(resp, "usage", None)))
 
     return call
 
@@ -908,7 +933,9 @@ async def run_bench(n: int = 100, mode: str = "base", seed: int = 42,
     if mode == "compare":
         # 同一父 run 下固定相同数据、模型和 seed。交互套件比较三臂；
         # QA 套件只比较有意义的 base/rag 两臂。
-        if suite in ("secalertbench", "excytin", "cage2"):
+        if suite == "cage2":
+            arm_modes = ["base", "single", "orchestrator_only", "agent"]
+        elif suite in ("secalertbench", "excytin"):
             arm_modes = ["base", "single", "agent"]
         elif suite == "soc_contract":
             arm_modes = ["base", "single", "agent"]

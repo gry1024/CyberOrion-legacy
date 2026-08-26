@@ -170,13 +170,20 @@ def _selected_action(spec: Any, available: list[dict[str, Any]]) -> tuple[int, d
 
 async def _invoke_async_policy(policy: Callable[..., Awaitable[dict]], observation: Any,
                                available: list[dict[str, Any]], episode: int,
-                               step: int) -> Any:
+                               step: int, horizon: int,
+                               previous_transition: dict[str, Any] | None) -> Any:
     try:
         params = inspect.signature(policy).parameters
     except (TypeError, ValueError):
         params = {}
     accepts_kwargs = any(p.kind is inspect.Parameter.VAR_KEYWORD for p in params.values())
-    kwargs = {"episode": episode, "step": step, "available_actions": available}
+    kwargs = {
+        "episode": episode,
+        "step": step,
+        "horizon": horizon,
+        "available_actions": available,
+        "previous_transition": previous_transition,
+    }
     selected = kwargs if accepts_kwargs else {key: value for key, value in kwargs.items()
                                                if key in params}
     return await policy(observation, **selected)
@@ -391,10 +398,13 @@ async def run_cage2_async(episodes: int = 3, steps: int = 100,
         total = 0.0
         restore_actions = illegal_actions = 0
         actions = []
+        previous_transition = None
         for step_index in range(int(steps)):
             available = canonical_safe_blue_actions(wrapped) if official_wrapper else []
+            observation_before = _json_safe(obs)
             spec = await _invoke_async_policy(
-                policy, obs, available, ep + 1, step_index + 1)
+                policy, obs, available, ep + 1, step_index + 1, int(steps),
+                previous_transition)
             if official_wrapper:
                 action_index, executed_blue_action, valid, invalid_reason = _selected_action(
                     spec, available)
@@ -423,6 +433,23 @@ async def run_cage2_async(episodes: int = 3, steps: int = 100,
                             "red": str(env.get_last_action("Red")),
                             "valid": valid, "invalid_reason": invalid_reason,
                             "reward": float(reward or 0.0)})
+            controller = (spec.get("_cyberorion")
+                          if isinstance(spec, dict)
+                          and isinstance(spec.get("_cyberorion"), dict) else {})
+            previous_transition = {
+                "step": step_index + 1,
+                "observation_before": observation_before,
+                "requested_blue_action": {
+                    "action_id": spec.get("action_id")
+                } if isinstance(spec, dict) else None,
+                "executed_blue_action": _json_safe(executed_blue_action),
+                "controller_status": str(
+                    controller.get("status") or ("selected" if valid else "invalid")),
+                "fallback_reason": controller.get("fallback_reason"),
+                "valid": bool(valid),
+                "invalid_reason": invalid_reason,
+                "done": bool(done),
+            }
             if done:
                 break
         rewards.append({

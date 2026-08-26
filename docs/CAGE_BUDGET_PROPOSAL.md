@@ -1,8 +1,8 @@
-# CAGE-2 预算方法学提案（待批准，尚未实现）
+# CAGE-2 逐步预算协议与校准计划
 
-状态：**PROPOSAL_ONLY** —— 本文件只提出设计；在得到批准前不修改任何预算数值，
-不重跑 CAGE。当前代码仍使用旧的 episode 全局 FAIR_ARM_BUDGET
-（18 LLM calls / 12 tool calls / 32768 tokens），并已如实记录其不足。
+状态：**IMPLEMENTED_DIAGNOSTIC / PILOT_BUDGET_NOT_YET_FROZEN**。旧的 episode
+全局预算已退出 CAGE 执行路径；当前仅冻结了宽松的诊断校准上限，正式 pilot
+上限必须由真实校准的成本分布确定并在查看 arm 性能差异前提交。
 
 ## 1. 证据：现有 episode 全局预算在结构上不适用
 
@@ -80,7 +80,7 @@ episode_wall_time_ceiling = environment_steps × per_step_wall_ceiling
 触发安全上限时 episode 以明确的 `episode_safety_ceiling_reached` 状态终止
 并记账，不与正常 fallback 混淆。
 
-## 5. 数值校准边界（本轮不定数值）
+## 5. 数值校准边界
 
 旧轨迹混入了两个尚未修正的结构性成本：成功选择动作后的冗余
 `task_complete` 调用，以及每步重建 runtime 且缺少完整 episode memory。
@@ -107,12 +107,12 @@ episode 累计）。新 CAGE 实现必须：
 3. 每步持久化 `step_budget`（本步上限）、`step_budget_status`
    （ok / exhausted / violation）与 fallback 原因。
 
-## 7. 终端 select_blue_action 语义（推荐 B，尚未实现）
+## 7. 终端 select_blue_action 语义（已实现 B）
 
 现状：runtime 在 `select_blue_action` 成功后通常还会再发一次 LLM 调用
 输出 `task_complete` —— 对环境而言是冗余的（环境此刻已拿到动作）。
 
-需要在递归派发语义下比较两种方案：
+实现前比较过两种方案：
 
 - **A：任一授权角色调用即终止整个环境步。** 这要求 specialist 深层调用能
   设置全局选中动作并跨 `_run_role` 递归栈向上短路；否则它只会完成 specialist，
@@ -123,11 +123,11 @@ episode 累计）。新 CAGE 实现必须：
   返回 orchestrator。reference 或 orchestrator 对当前 canonical action table
   成功调用 terminal `select_blue_action` 后，顶层 runtime 立即结束本环境步。
 
-**推荐 B。** 权限边界与控制流一致：reference 是 Single 的唯一决策者，
+**采用 B。** 权限边界与控制流一致：reference 是 Single 的唯一决策者，
 orchestrator 是 Agent 的唯一决策者；specialist 只提供建议。这样无需跨递归栈的
 全局终止信号，也能明确保证每步至多一次成功选择。
 
-最小实现影响（后续实现轮次）：
+实现边界：
 
 1. `ToolSpec` 增加 `terminal: bool = False`；CAGE 的
    `select_blue_action` 标为 terminal，其它套件行为不变；
@@ -142,7 +142,7 @@ orchestrator 是 Agent 的唯一决策者；specialist 只提供建议。这样�
 “成功 terminal 调用立即结束”给出 exactly-one：第一次成功写入唯一动作槽后不再
 进入任何 LLM/工具轮；失败调用不写槽；零次成功则由适配器恰好执行一次 fallback。
 
-## 8. Episode 状态与公平记忆（需要，尚未实现）
+## 8. Episode 状态与公平记忆（已实现）
 
 当前 `cage2.choose()` 每个环境步都调用全新的 `run_reference` / `run_superagent`；
 runtime 消息历史不会跨步保留。传入的 `recent_actions` 只含最近最多 8 个**请求**
@@ -156,7 +156,6 @@ Restore/Remove 改写），但 Activity 来自当前步相对 baseline 的异常
 - 当前 step index 与剩余 horizon；
 - 上一步模型请求了什么、环境实际执行了什么；
 - 非法动作与 fallback 原因；
-- 上一步 reward/outcome；
 - 已不再出现在当前向量中的早期 Activity/observation 变化。
 
 因此 Single 当前不是预期的有状态 ReAct baseline，两个 LLM 臂都需要同一份共享、
@@ -173,22 +172,26 @@ Restore/Remove 改写），但 Activity 来自当前步相对 baseline 的异常
     "observation_before": "<确定性截断/编码的公开向量>",
     "requested_blue_action": {},
     "executed_blue_action": {},
-    "reward": -0.1,
+    "controller_status": "selected",
+    "fallback_reason": null,
     "valid": false,
     "invalid_reason": "...",
     "done": false
   }],
-  "cumulative": {"reward": -1.2, "invalid_actions": 1},
-  "omitted_transition_count": 0,
+  "omitted_prefix_count": 0,
   "omitted_prefix_sha256": null
 }
 ```
 
-窗口长度/字符上限留待实现前预注册，不在本轮选数值。超过窗口时只保留确定性累计
-统计与被省略前缀 hash，不用 LLM 生成摘要，避免引入 arm-specific 信息或隐藏推理。
-同一序列化字节必须同时传给 Single 与 Agent，并随逐步 artifact 持久化；可保留
-模型输出的公开 hypothesis/summary 作 trace，但绝不把隐藏 chain-of-thought 写入
-episode memory。当前 observation 与 canonical safe action table 仍每步单独提供。
+窗口固定为最近 12 条 transition，单条 observation 12000 字符、完整 memory
+32000 字符，均采用确定性截断；超过窗口/字符上限时记录 omitted-prefix count/hash，
+不用 LLM 生成摘要。每步 artifact 保存 exact serialized memory、schema 和 hash。
+Single、Orchestrator-only 与 Full 对相同 history 接收字节一致的 memory。
+
+模型可见内容只含 step/horizon、旧的模型可见 observation、requested/executed action、
+controller fallback/invalid 状态和 done。**reward、cumulative reward、final score、
+scorer/evaluator feedback 只留在评分 artifact，绝不进入 memory 或 prompt**；递归净化
+还会剥离意外嵌入 observation 的 evaluator-only 字段。隐藏 chain-of-thought 不持久化。
 
 ## 9. 成本报告计划
 
@@ -202,11 +205,11 @@ episode memory。当前 observation 与 canonical safe action table 仍每步单
 
 ## 10. 状态
 
-- [ ] 待批准：per-step 预算模型；最终数值须在语义实现后的独立校准中预注册
-- [ ] 待批准：B 方案终端 select_blue_action 语义
-- [ ] 待批准：共享 observable-transition episode memory
-- [ ] 待批准：episode 线性安全上限
-- [x] 已实现：预算耗尽/违规的如实记账与 publication 校验
-      （`budget_exhausted_steps`、`budget_exhaustion_reasons`、
-      `token_budget_exhausted`、`budget_limit_violation`、
-      `resource_limits_respected`）
+- [x] per-environment-step 公平预算；每步独立 meter，耗尽仅 fallback 当前步
+- [x] B 方案 terminal selector；成功选择后不再调用 `task_complete`
+- [x] 共享 observable-transition memory；无 evaluator reward/score
+- [x] 1.25×线性 episode runaway ceiling（不是公平性预算）
+- [x] Single / Orchestrator-only / Full 三种架构臂
+- [x] 每步 provider/估算 token、calls/tools/wall、dispatch、memory 与 fallback 审计
+- [ ] 用三种 30-step 条件做真实诊断校准并冻结 pilot 上限
+- [ ] 在冻结上限下运行 9 条 canonical condition 的 Single / Full pilot

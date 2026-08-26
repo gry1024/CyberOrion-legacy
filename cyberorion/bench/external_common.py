@@ -46,6 +46,10 @@ class MeteredLLM:
         self.limits = dict(budget or FAIR_ARM_BUDGET)
         self.calls = 0
         self.estimated_tokens = 0
+        self.provider_prompt_tokens = 0
+        self.provider_completion_tokens = 0
+        self.provider_total_tokens = 0
+        self.provider_usage_calls = 0
 
     async def __call__(self, system: str, user: str) -> Any:
         prompt_tokens = max(1, (len(system) + len(user)) // 4)
@@ -56,10 +60,33 @@ class MeteredLLM:
         self.calls += 1
         self.estimated_tokens += prompt_tokens
         result = await self.target(system, user)
+        usage = getattr(result, "usage", None)
+        if isinstance(usage, dict):
+            self.provider_prompt_tokens += int(usage.get("prompt_tokens", 0))
+            self.provider_completion_tokens += int(usage.get("completion_tokens", 0))
+            self.provider_total_tokens += int(usage.get("total_tokens", 0))
+            self.provider_usage_calls += 1
         self.estimated_tokens += max(1, len(str(result)) // 4)
         if self.estimated_tokens > int(self.limits["token_budget"]):
             raise LLMBudgetExceeded("estimated token budget exhausted after response")
         return result
+
+    def usage(self) -> dict[str, Any]:
+        """返回 provider usage（可用时）与始终存在的字符估算。"""
+        provider = None
+        if self.provider_usage_calls:
+            provider = {
+                "prompt_tokens": self.provider_prompt_tokens,
+                "completion_tokens": self.provider_completion_tokens,
+                "total_tokens": self.provider_total_tokens,
+                "calls_with_usage": self.provider_usage_calls,
+            }
+        return {
+            "provider": provider,
+            "provider_status": ("available" if provider else "unavailable"),
+            "estimated_tokens": self.estimated_tokens,
+            "llm_calls": self.calls,
+        }
 
 
 def git_commit_sha() -> str | None:
