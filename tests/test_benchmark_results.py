@@ -202,6 +202,120 @@ def test_cage_episode_budget_is_global_across_environment_steps(
                for row in run["episode_resource_usage"])
 
 
+def _cage_asset(tmp_path: Path, monkeypatch) -> None:
+    asset = tmp_path / "cage"
+    asset.mkdir()
+    (asset / "Scenario2.yaml").write_text("Hosts: {}\n", encoding="utf-8")
+    (asset / "evaluation.py").write_text("# fixture\n", encoding="utf-8")
+    monkeypatch.setenv("CYBERORION_CAGE2_DIR", str(asset))
+
+
+def test_cage_token_budget_exhaustion_falls_back_without_repeated_llm(
+        tmp_path: Path, monkeypatch) -> None:
+    """token 预算耗尽后，后续环境步必须直接执行文档化 fallback Sleep，
+    而不是反复调用 runtime 制造大量相同的 LLMBudgetExceeded 无效决策。"""
+    from cyberorion.bench.external_common import LLMBudgetExceeded
+    _cage_asset(tmp_path, monkeypatch)
+    calls = {"llm": 0, "runtime": 0}
+
+    async def fake_llm(_system: str, _user: str) -> str:
+        calls["llm"] += 1
+        raise LLMBudgetExceeded("estimated token budget exhausted before request")
+
+    async def fake_runtime(*, llm, tools, **kwargs):
+        calls["runtime"] += 1
+        await llm("system", "user")
+        return {"output": "", "decision_trace": [], "tool_calls": [],
+                "role_events": [], "budget": {"llm_calls": 1, "tool_calls": 0}}
+
+    async def fake_run(episodes, steps, policy, scenario, red_agent, seed, wrapper):
+        actions = [{"action_id": 0, "action_type": "Sleep", "display": "Sleep"},
+                   {"action_id": 2, "action_type": "Analyse", "display": "Analyse Host"}]
+        for episode in range(1, episodes + 1):
+            for step in range(1, 21):
+                await policy({}, episode=episode, step=step, available_actions=actions)
+        return {"episodes": [{"episode": episode, "reward": 0.0, "illegal_actions": 0,
+                              "restore_actions": 0, "restore_cost_proxy": 0.0}
+                             for episode in range(1, episodes + 1)]}
+
+    monkeypatch.setattr("cyberorion.eval.benchmarks.run_cage2_async", fake_run)
+    monkeypatch.setattr(cage2, "run_reference", fake_runtime)
+    run = asyncio.run(cage2.run_bench(
+        n=9, mode="single", llm=fake_llm, log_dir=tmp_path / "logs"))
+    # 每个 condition 各 1 个 episode，每 episode 只在第一步触发一次 LLM；
+    # 触发异常的那一步与后续所有步都是预算耗尽 fallback（共 20 步）。
+    assert calls["llm"] == 9
+    assert calls["runtime"] == 9
+    assert len(run["episode_resource_usage"]) == 9
+    for row in run["episode_resource_usage"]:
+        assert row["budget_exhausted_steps"] == 20
+        assert row["token_budget_exhausted"] is True
+        assert row["budget_exhaustion_reasons"] == ["token_budget"]
+        assert row["budget_limit_violations"] == []
+    assert run["budget_limit_violation"] is False
+
+
+def test_cage_token_budget_after_response_overrun_is_violation(
+        tmp_path: Path, monkeypatch) -> None:
+    """after-response 超限：响应已被记账、实际消耗超过硬上限 →
+    budget_limit_violation=true，且后续步走 fallback。"""
+    _cage_asset(tmp_path, monkeypatch)
+    calls = {"runtime": 0}
+
+    async def fake_llm(_system: str, _user: str) -> str:
+        # 35000 估算 token（>32768），meter 在响应后记账并抛 LLMBudgetExceeded。
+        return "x" * 140000
+
+    async def fake_runtime(*, llm, tools, **kwargs):
+        calls["runtime"] += 1
+        await llm("system", "user")
+        return {"output": "", "decision_trace": [], "tool_calls": [],
+                "role_events": [], "budget": {"llm_calls": 1, "tool_calls": 0}}
+
+    async def fake_run(episodes, steps, policy, scenario, red_agent, seed, wrapper):
+        actions = [{"action_id": 0, "action_type": "Sleep", "display": "Sleep"},
+                   {"action_id": 2, "action_type": "Analyse", "display": "Analyse Host"}]
+        for episode in range(1, episodes + 1):
+            for step in range(1, 21):
+                await policy({}, episode=episode, step=step, available_actions=actions)
+        return {"episodes": [{"episode": episode, "reward": 0.0, "illegal_actions": 0,
+                              "restore_actions": 0, "restore_cost_proxy": 0.0}
+                             for episode in range(1, episodes + 1)]}
+
+    monkeypatch.setattr("cyberorion.eval.benchmarks.run_cage2_async", fake_run)
+    monkeypatch.setattr(cage2, "run_reference", fake_runtime)
+    run = asyncio.run(cage2.run_bench(
+        n=9, mode="single", llm=fake_llm, log_dir=tmp_path / "logs"))
+    assert calls["runtime"] == 9
+    for row in run["episode_resource_usage"]:
+        assert row["token_budget_exhausted"] is True
+        assert row["budget_limit_violations"] == ["estimated_tokens"]
+    assert run["budget_limit_violation"] is True
+    assert run["budget_limit_violation_dimensions"] == ["estimated_tokens"]
+
+
+def test_resource_limit_violation_makes_publication_invalid() -> None:
+    """实际记账超过声明硬上限（如 tokens）必须使 publication 失效。"""
+    runs = [_run(mode) for mode in ("base", "single", "agent")]
+    for run in runs:
+        run["episode_resource_usage"] = [
+            {"used": {"llm_calls": 1, "tool_calls": 0, "estimated_tokens": 40000}}]
+    audit = validate_compare_runs([_normal(run) for run in runs])
+    assert audit["checks"]["resource_limits_respected"] is False
+    assert audit["publication_valid"] is False
+
+
+def test_budget_exhaustion_without_violation_keeps_publication_valid() -> None:
+    """预算耗尽（达到上限但未超过）本身不使 publication 失效。"""
+    runs = [_run(mode) for mode in ("base", "single", "agent")]
+    for run in runs:
+        run["episode_resource_usage"] = [
+            {"used": {"llm_calls": 18, "tool_calls": 12, "estimated_tokens": 30000}}]
+    audit = validate_compare_runs([_normal(run) for run in runs])
+    assert audit["checks"]["resource_limits_respected"] is True
+    assert audit["publication_valid"] is True
+
+
 # --------------------------------------------------------------------------- #
 # SecAlertBench 代表集类平衡抽样（P0 #2 回归）
 # --------------------------------------------------------------------------- #

@@ -79,8 +79,12 @@ SecAlertBench 额外计算 PR-AUC、Brier、10-bin ECE 和 FN=5/FP=1 的显式�
 ExCyTIn 记录证据数、SQL 查询数/成本和 adapter `native_reward`；CAGE-2 记录
 Restore 次数、CyberOrion 自定义的非原生 `restore_cost_proxy`（−Restore 次数代理，
 `restore_cost_proxy_status="non_native_proxy"`，不是官方 CAGE availability 组件）
-与非法动作。ChallengeWrapper 不公开主机失陷事件数时该字段为
-`null` 并附状态，不从标量 reward 反推伪造。
+与非法动作。CAGE-2 预算耗尽记账：token/调用预算一旦耗尽，后续环境步直接执行
+文档化 fallback Sleep（不再反复调用 runtime 制造重复的 LLMBudgetExceeded 无效
+决策），逐 episode 持久化 `budget_exhausted_steps`/`budget_exhaustion_reasons`/
+`token_budget_exhausted`；实际记账超过声明硬上限（如 after-response token 超限）
+记 `budget_limit_violation=true` 与违规维度。ChallengeWrapper 不公开主机失陷
+事件数时该字段为 `null` 并附状态，不从标量 reward 反推伪造。
 
 `methodology_status`：`official_compatible` 仅表示 runner/scorer/协议均按上游执行；
 `external_track` 表示真实外部数据的适配/代表集；`engineering_only` 表示内部工程
@@ -136,8 +140,10 @@ LLM。先从 `logs/bench/*.json` 生成归一化事实层，再从该层绘图�
 
 三臂 compare 只有同时满足以下条件才写 publication paired delta：dataset version
 与 hash 相同、sample IDs 完全同序、模型名和完整 `model_settings` 相同、seed 相同、
-single/agent 公平预算完全相等，且每臂 Git provenance 完整并满足
-`git_dirty=false`。compare 模式在产生任何结果文件之前捕获一次共享源码
+single/agent 公平预算完全相等、每臂 Git provenance 完整并满足
+`git_dirty=false`，且各臂实际记账未超过声明的硬上限
+（`resource_limits_respected`；预算耗尽并走文档化 fallback 不算违规）。
+compare 模式在产生任何结果文件之前捕获一次共享源码
 provenance 快照，三臂持久化完全相同的 `git_head_sha`/`git_tree_sha`/
 `git_dirty`（`git_provenance_source="compare_shared_source_snapshot"`）；基准自身
 写入 `logs/bench/` 的产物不会让后续臂变 dirty。否则 `publication_valid=false`，
@@ -162,6 +168,10 @@ export CYBERORION_EXCYTIN_SQLITE_PATH=/absolute/path/to/telemetry.sqlite
 ~/cai_env/bin/python scripts/run_bench.py --suite cage2 --mode compare --n 9 --seed 42
 ```
 
+SecAlertBench 显式 verdict 值按首个词前缀归一化（attack/malicious → attack，
+benign/non-* → benign，允许解释性后缀，如 `attack (attempted but failed, ...)`、
+`attack_attempt_unsuccessful`；`non-attack`/`non_attack` 恒为 benign）；绝不从
+任意说明文字推断 verdict，畸形 JSON/空输出仍记 parse_fail。
 SecAlertBench 代表集按 gold 类平衡抽样：attack=floor(n/2)、benign=n-attack
 （奇数 n 固定把多出的 1 条给 benign），类内再按 `alert_type × enterprise` 固定
 种子轮询分层，输出顺序为确定性类交错；源数据缺任一 attack/benign 类或类容量

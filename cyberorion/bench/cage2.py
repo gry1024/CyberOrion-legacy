@@ -11,8 +11,8 @@ from typing import Any
 
 from .assets import ASSETS, BenchmarkAssetMissing, require_asset
 from .external_common import (
-    DEFAULT_LOG_DIR, FAIR_ARM_BUDGET, MeteredLLM, _model_name, bootstrap_ci, make_llm,
-    new_run_id, persist_run, provenance,
+    DEFAULT_LOG_DIR, FAIR_ARM_BUDGET, LLMBudgetExceeded, MeteredLLM, _model_name,
+    bootstrap_ci, make_llm, new_run_id, persist_run, provenance,
 )
 from .superagent_runtime import RuntimeConfig, ToolSpec, run_reference, run_superagent
 
@@ -60,28 +60,46 @@ async def run_bench(n: int | None = None, mode: str = "base", seed: int = 42,
                 "meter": MeteredLLM(llm), "tool_calls": 0,
                 "history": [], "started": time.perf_counter(),
                 "budget_exhausted_steps": 0,
+                "budget_exhausted_reason": None,
+                "budget_exhaustion_reasons": set(),
+                "budget_limit_violations": set(),
             })
             meter: MeteredLLM = state["meter"]
-            remaining_llm = FAIR_ARM_BUDGET["max_llm_calls"] - meter.calls
-            remaining_tools = FAIR_ARM_BUDGET["max_tool_calls"] - state["tool_calls"]
-            if remaining_llm <= 0 or remaining_tools <= 0:
-                state["budget_exhausted_steps"] += 1
-                audit_traces.append({
+
+            def sleep_id() -> int:
+                return next((row["action_id"] for row in (available_actions or [])
+                             if row.get("action_type") == "Sleep"), -1)
+
+            def fallback_trace(reason: str) -> dict:
+                return {
                     "condition": current_condition, "episode": episode, "step": step,
                     "requested_blue_action": None,
-                    "action": {"action_id": next(
-                        (row["action_id"] for row in (available_actions or [])
-                         if row.get("action_type") == "Sleep"), -1)},
+                    "action": {"action_id": sleep_id()},
                     "decision_trace": [],
                     "tool_calls": [], "role_events": [], "trace_source": "runtime",
                     "budget_exhausted": True,
+                    "budget_exhaustion_reason": reason,
                     "episode_budget_used": {"llm_calls": meter.calls,
                                             "tool_calls": state["tool_calls"],
                                             "estimated_tokens": meter.estimated_tokens},
-                })
-                return {"action_id": next(
-                    (row["action_id"] for row in (available_actions or [])
-                     if row.get("action_type") == "Sleep"), -1)}
+                }
+
+            # 预算一旦被判定耗尽（token/调用数），后续环境步直接执行文档化
+            # fallback Sleep，不再反复调用 runtime 制造大量相同的
+            # LLMBudgetExceeded 无效决策。
+            if state["budget_exhausted_reason"]:
+                state["budget_exhausted_steps"] += 1
+                audit_traces.append(fallback_trace(state["budget_exhausted_reason"]))
+                return {"action_id": sleep_id()}
+            remaining_llm = FAIR_ARM_BUDGET["max_llm_calls"] - meter.calls
+            remaining_tools = FAIR_ARM_BUDGET["max_tool_calls"] - state["tool_calls"]
+            if remaining_llm <= 0 or remaining_tools <= 0:
+                reason = "llm_calls" if remaining_llm <= 0 else "tool_calls"
+                state["budget_exhausted_reason"] = reason
+                state["budget_exhaustion_reasons"].add(reason)
+                state["budget_exhausted_steps"] += 1
+                audit_traces.append(fallback_trace(reason))
+                return {"action_id": sleep_id()}
             selected: list[dict] = []
 
             safe_actions = list(available_actions or [])
@@ -122,17 +140,41 @@ async def run_bench(n: int | None = None, mode: str = "base", seed: int = 42,
                                    max_llm_calls=max(1, remaining_llm),
                                    max_tool_calls=max(1, remaining_tools),
                                    max_dispatches=3, max_role_steps=3)
-            runtime = await (run_superagent if mode == "agent" else run_reference)(
-                task=task, llm=wrapped, tools=tools, config=config,
-                role_tools={
-                    "watcher": ("select_blue_action",),
-                    "analyst": ("select_blue_action",),
-                    "responder": ("select_blue_action",),
-                    "hunter": ("select_blue_action",),
-                })
-            action = selected[-1] if selected else {"action_id": next(
-                (row["action_id"] for row in safe_actions
-                 if row.get("action_type") == "Sleep"), -1)}
+            try:
+                runtime = await (run_superagent if mode == "agent" else run_reference)(
+                    task=task, llm=wrapped, tools=tools, config=config,
+                    role_tools={
+                        "watcher": ("select_blue_action",),
+                        "analyst": ("select_blue_action",),
+                        "responder": ("select_blue_action",),
+                        "hunter": ("select_blue_action",),
+                    })
+            except LLMBudgetExceeded as exc:
+                # meter 抛出的预算超限（token 或调用数）直接传播到这里。
+                reason = ("token_budget" if "token" in str(exc).lower()
+                          else "llm_calls")
+                state["budget_exhausted_reason"] = reason
+                state["budget_exhaustion_reasons"].add(reason)
+                if meter.estimated_tokens > int(FAIR_ARM_BUDGET["token_budget"]):
+                    # after-response 超限：响应已被记账，实际消耗超过硬上限。
+                    state["budget_limit_violations"].add("estimated_tokens")
+                state["budget_exhausted_steps"] += 1
+                audit_traces.append(fallback_trace(reason))
+                return {"action_id": sleep_id()}
+            # runtime 捕获 meter 异常时会输出 INVALID_LLM_DECISION[...]；
+            # 同时 meter 记账可能已超过 token 硬上限（after-response 超限），
+            # 这属于实际违规，与"达到上限后走文档化 fallback"必须区分。
+            output_text = str(runtime.get("output") or "")
+            if "LLMBudgetExceeded" in output_text:
+                reason = ("token_budget" if "token" in output_text.lower()
+                          else "llm_calls")
+                state["budget_exhausted_reason"] = reason
+                state["budget_exhaustion_reasons"].add(reason)
+            if meter.estimated_tokens > int(FAIR_ARM_BUDGET["token_budget"]):
+                state["budget_exhausted_reason"] = "token_budget"
+                state["budget_exhaustion_reasons"].add("token_budget")
+                state["budget_limit_violations"].add("estimated_tokens")
+            action = selected[-1] if selected else {"action_id": sleep_id()}
             state["history"].append(action)
             state["tool_calls"] += int(runtime["budget"].get("tool_calls", 0))
             audit_traces.append({
@@ -180,6 +222,12 @@ async def run_bench(n: int | None = None, mode: str = "base", seed: int = 42,
                              "estimated_tokens": meter.estimated_tokens,
                              "wall_clock_sec": round(time.perf_counter() - state["started"], 4)},
                     "budget_exhausted_steps": state["budget_exhausted_steps"],
+                    "budget_exhaustion_reasons": sorted(
+                        state["budget_exhaustion_reasons"]),
+                    "token_budget_exhausted": "token_budget" in
+                        state["budget_exhaustion_reasons"],
+                    "budget_limit_violations": sorted(
+                        state["budget_limit_violations"]),
                 })
         rewards_for_condition = [float(row.get("reward", 0.0)) for row in rows]
         conditions.append({
@@ -242,4 +290,13 @@ async def run_bench(n: int | None = None, mode: str = "base", seed: int = 42,
     if mode != "base":
         run["agent_traces"] = audit_traces
         run["episode_resource_usage"] = episode_resources
+        run["budget_limit_violation_dimensions"] = sorted({
+            dim for resource in episode_resources
+            for dim in resource.get("budget_limit_violations", [])})
+        run["budget_limit_violation"] = bool(
+            run["budget_limit_violation_dimensions"])
+    else:
+        # 启发式基线不经过 LLM/工具预算，不存在预算违规。
+        run["budget_limit_violation"] = False
+        run["budget_limit_violation_dimensions"] = []
     return persist_run(run, log_dir, source_provenance=source_provenance)

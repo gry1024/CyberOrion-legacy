@@ -262,6 +262,34 @@ def test_secalertbench_accepts_explicit_runtime_text_verdict() -> None:
     assert confidence == 0.5  # 未给可解析概率时保持中性，不伪造确定性。
 
 
+def test_secalert_verdict_prefix_canonicalization_real_smoke_strings() -> None:
+    """真实冒烟中出现的显式 verdict 变体必须按前缀归一化，而不是 unknown。"""
+    cases = [
+        (json.dumps({"verdict": "attack (attempted but failed, no successful compromise)",
+                     "attack_probability": 0.5}), "attack"),
+        (json.dumps({"verdict": "attack_attempt_unsuccessful"}), "attack"),
+        (json.dumps({"verdict": "malicious (confirmed by signature)"}), "attack"),
+        (json.dumps({"verdict": "non-attack"}), "benign"),
+        (json.dumps({"verdict": "non_attack"}), "benign"),
+        (json.dumps({"verdict": "benign (routine backup activity)"}), "benign"),
+        ("INVALID JSON {", "unknown"),
+        ("", "unknown"),
+    ]
+    for raw, expected in cases:
+        verdict, _ = secalertbench._parse_verdict(raw)
+        assert verdict == expected, raw
+
+
+def test_secalert_verdict_never_inferred_from_prose() -> None:
+    """无显式 verdict/label 字段的说明文字绝不推断 verdict。"""
+    verdict, _ = secalertbench._parse_verdict(
+        "The alert shows attack behavior clearly.")
+    assert verdict == "unknown"
+    verdict, _ = secalertbench._parse_verdict(
+        '{"assessment": "attack-like activity was observed"}')
+    assert verdict == "unknown"
+
+
 def test_compare_parent_keeps_three_arms_under_one_run(tmp_path: Path,
                                                        monkeypatch) -> None:
     data_dir = tmp_path / "alerts_compare"

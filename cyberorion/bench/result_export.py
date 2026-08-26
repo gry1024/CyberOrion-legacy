@@ -106,6 +106,38 @@ def _usage(rows: list[dict], elapsed: Any,
     }
 
 
+def _limit_violations(raw: dict) -> list[str]:
+    """记录实际使用【超过】声明硬上限的维度。
+
+    达到上限后走文档化 fallback（budget exhausted）不算违规；只有记账的
+    实际消耗严格大于上限（如 after-response 的 token 超限）才算。
+    """
+    limits = ((raw.get("methodology") or {}).get("arm_budget")
+              or (raw.get("resource_usage") or {}).get("limits"))
+    if not limits:
+        return []
+    units: list[dict] = []
+    rows = raw.get("results")
+    if isinstance(rows, list):
+        units.extend(r.get("resource_usage") for r in rows
+                     if isinstance(r, dict) and isinstance(r.get("resource_usage"), dict))
+    units.extend(resource for resource in (raw.get("episode_resource_usage") or [])
+                 if isinstance(resource, dict))
+    violated: set[str] = set()
+    for unit in units:
+        used = unit.get("used") or {}
+        if ("max_llm_calls" in limits
+                and int(used.get("llm_calls", 0)) > int(limits["max_llm_calls"])):
+            violated.add("llm_calls")
+        if ("max_tool_calls" in limits
+                and int(used.get("tool_calls", 0)) > int(limits["max_tool_calls"])):
+            violated.add("tool_calls")
+        if ("token_budget" in limits
+                and int(used.get("estimated_tokens", 0)) > int(limits["token_budget"])):
+            violated.add("estimated_tokens")
+    return sorted(violated)
+
+
 def _failure_tags(row: dict) -> list[str]:
     tags = {str(tag) for tag in (row.get("failure_tags") or [])}
     pred, gold = row.get("pred"), row.get("gold")
@@ -211,6 +243,7 @@ def normalize_run(raw: dict, source: Path, export_sha: str | None) -> dict:
         "conditions": raw.get("conditions") or [],
         "errors": errors, "started_at": raw.get("started_at"),
         "finished_at": raw.get("finished_at"), "elapsed_sec": raw.get("elapsed_sec"),
+        "budget_limit_violations": _limit_violations(raw),
         "provenance_complete": provenance_complete,
         "artifact_class": ("publication_candidate" if provenance_complete and git_dirty is False
                            else "historical_incomplete_provenance"),
@@ -253,6 +286,10 @@ def validate_compare_runs(runs: list[dict]) -> dict:
             for r in relevant),
         "single_agent_budgets_identical": bool(single and agent and
             _same(single.get("fair_arm_budgets"), agent.get("fair_arm_budgets"))),
+        # 预算【耗尽】并走文档化 fallback 是允许的；实际记账超过声明硬上限
+        # 才算违规并使 publication 失效。
+        "resource_limits_respected": bool(relevant) and all(
+            not r.get("budget_limit_violations") for r in relevant),
     }
     return {"publication_valid": all(checks.values()), "checks": checks,
             "invalid_reasons": [name for name, ok in checks.items() if not ok]}

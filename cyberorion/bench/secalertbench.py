@@ -143,6 +143,26 @@ def select_representative_alerts(rows: list[dict], n: int, seed: int) -> list[di
     return selected
 
 
+def _canonical_verdict_prefix(verdict: str) -> str | None:
+    """对显式 verdict/label 值做前缀归一化，允许无害的解释性后缀。
+
+    只看首个词（"_"/"-"/标点都按分隔处理）：attack/malicious 开头即
+    attack（如 "attack (attempted but failed, ...)"、
+    "attack_attempt_unsuccessful"）；benign/non 等开头即 benign
+    （"non-attack"/"non_attack" 首词是 non，绝不会被 contains-attack
+    误判）。其它一律 None——绝不从任意说明文字推断。
+    """
+    tokens = re.sub(r"[^a-z0-9]+", " ", str(verdict).lower()).split()
+    if not tokens:
+        return None
+    first = tokens[0]
+    if first in {"attack", "malicious"}:
+        return "attack"
+    if first in {"benign", "non", "negative", "false", "no"}:
+        return "benign"
+    return None
+
+
 def _parse_verdict(raw: Any) -> tuple[str, float]:
     try:
         value = json.loads(str(raw)) if not isinstance(raw, dict) else raw
@@ -152,15 +172,17 @@ def _parse_verdict(raw: Any) -> tuple[str, float]:
     if verdict == "unknown" and isinstance(raw, str):
         # runtime complete 摘要可为自然语言；只接受显式 verdict/label 字段，
         # 避免从含糊描述中推断分数。
-        match = re.search(r"\b(?:verdict|label)\s*[:=]\s*"
-                          r"(attack|benign|malicious|non[- ]?attack)\b",
-                          raw, flags=re.I)
+        match = re.search(r"\b(?:verdict|label)\s*[:=]\s*[\"']?"
+                          r"(attack(?:[_\s]\w+)*|malicious|benign|"
+                          r"non[-_ ]?attack)[\"']?", raw, flags=re.I)
         if match:
             verdict = match.group(1).lower()
     if verdict in {"malicious", "attack", "positive", "true", "1"}:
         verdict = "attack"
     elif verdict in {"benign", "non-attack", "non_attack", "negative", "false", "0"}:
         verdict = "benign"
+    elif (canonical := _canonical_verdict_prefix(verdict)) is not None:
+        verdict = canonical
     else:
         verdict = "unknown"
     try:
