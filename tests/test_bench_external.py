@@ -623,13 +623,19 @@ def test_official_runner_provenance_is_explicit(tmp_path: Path) -> None:
     from scripts.run_excytin_official import build_provenance
     provenance = build_provenance(
         upstream=tmp_path, repo=tmp_path, arm="cyberorion_single",
-        model="openai/m", judge_llm="openai/m", limit=2, task_filter=None,
+        model="openai/m", judge_llm="openai/j", task_ids=["task-1", "task-2"],
+        manifest_sha256="a" * 64,
         extra_task_args={}, started=1.0, finished=2.0, log_dir=tmp_path / "logs")
     assert provenance["official_execution"] is True
     assert provenance["sqlite_projection_involved"] is False
     assert provenance["upstream"] == "microsoft/ACESEvals"
     assert provenance["arm"] == "cyberorion_single"
-    assert provenance["limit"] == 2
+    assert provenance["task_ids"] == ["task-1", "task-2"]
+    assert provenance["task_manifest_sha256"] == "a" * 64
+    assert provenance["decoding_config"] == {"temperature": 0}
+    assert provenance["judge_config"] == {"model": "openai/j"}
+    assert set(provenance["cyberorion_source"]) == {
+        "git_head", "git_tree_sha", "git_dirty", "git_diff_sha256"}
 
 
 def test_excytin_sql_tools_have_explicit_required_schemas(tmp_path: Path) -> None:
@@ -795,3 +801,22 @@ def test_bench_suites_api_function_exposes_assets_without_testclient() -> None:
     assert rows["malware_analysis"]["asset"]["available"] is True
     assert rows["secalertbench"]["asset"]["suite"] == "secalertbench"
     assert "live_paired" in rows
+
+
+def test_excytin_official_context_preserves_all_saber_prompts_without_gold() -> None:
+    from cyberorion.bench.excytin_official_agent import build_official_context
+
+    serialized, audit = build_official_context(
+        instruction_prompt="official instruction sentinel",
+        assistant_prompt="official assistant sentinel",
+        task_input="official task sentinel",
+    )
+    assert json.loads(serialized) == {
+        "instruction_prompt": "official instruction sentinel",
+        "assistant_prompt": "official assistant sentinel",
+        "task_input": "official task sentinel",
+    }
+    assert all(audit[f"{name}_present"] for name in (
+        "instruction_prompt", "assistant_prompt", "task_input"))
+    assert audit["gold_or_scorer_context_added"] is False
+    assert len(audit["effective_context_sha256"]) == 64

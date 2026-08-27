@@ -6,12 +6,38 @@ replace the upstream task, sandbox, telemetry backend, or scorer.
 from __future__ import annotations
 
 import inspect
+import hashlib
 import json
 from typing import Any
 
 from .superagent_runtime import (
     RuntimeConfig, ToolSpec, run_orchestrator_only, run_reference, run_superagent,
 )
+
+
+def build_official_context(*, instruction_prompt: str, assistant_prompt: str,
+                           task_input: str) -> tuple[str, dict[str, Any]]:
+    """构造且审计 SABER 授权给模型的完整上下文，不加入评分答案。"""
+    context = {
+        "instruction_prompt": str(instruction_prompt),
+        "assistant_prompt": str(assistant_prompt),
+        "task_input": str(task_input),
+    }
+    serialized = json.dumps(context, ensure_ascii=False, sort_keys=True)
+    audit = {
+        "schema": "official_model_visible_context_v1",
+        "instruction_prompt_present": bool(instruction_prompt),
+        "assistant_prompt_present": bool(assistant_prompt),
+        "task_input_present": bool(task_input),
+        "instruction_prompt_sha256": hashlib.sha256(
+            str(instruction_prompt).encode()).hexdigest(),
+        "assistant_prompt_sha256": hashlib.sha256(
+            str(assistant_prompt).encode()).hexdigest(),
+        "task_input_sha256": hashlib.sha256(str(task_input).encode()).hexdigest(),
+        "effective_context_sha256": hashlib.sha256(serialized.encode()).hexdigest(),
+        "gold_or_scorer_context_added": False,
+    }
+    return serialized, audit
 
 
 def _tool_spec(tool: Any) -> ToolSpec:
@@ -55,12 +81,19 @@ def create_agent(*, arm: str = "single", **_factory_kwargs: Any):
                     messages.append({"role": getattr(message, "role", "user"),
                                      "content": str(content)[:12000]})
             visible = getattr(state, "input", "") or (messages[-1]["content"] if messages else "")
+            official_context_json, context_audit = build_official_context(
+                instruction_prompt=instruction_prompt,
+                assistant_prompt=assistant_prompt, task_input=str(visible))
             tools_json = [{"name": t.name, "description": t.description,
                            "input_schema": t.input_schema}
                           for t in official_tools.values()]
 
             async def llm(system: str, user: str) -> str:
-                prompt = (system + "\n\nOfficial task context:\n" + str(visible)[:12000]
+                prompt = (system + "\n\nOfficial SABER instruction:\n"
+                          + str(instruction_prompt)
+                          + "\n\nOfficial SABER assistant prompt:\n"
+                          + str(assistant_prompt)
+                          + "\n\nOfficial task context:\n" + str(visible)[:12000]
                           + "\nConversation:\n" + json.dumps(messages, ensure_ascii=False)
                           + "\nAvailable official tools:\n" + json.dumps(tools_json, ensure_ascii=False)
                           + "\nRuntime request:\n" + user)
@@ -78,9 +111,10 @@ def create_agent(*, arm: str = "single", **_factory_kwargs: Any):
                        "orchestrator_only": run_orchestrator_only,
                        "full": run_superagent}
             result = await runners[arm](
-                task=str(visible), llm=llm, tools=official_tools, config=cfg)
+                task=official_context_json, llm=llm, tools=official_tools, config=cfg)
             store().set("cyberorion_arm", arm)
             store().set("cyberorion_runtime_trace", result)
+            store().set("cyberorion_context_audit", context_audit)
             from inspect_ai.model import ModelOutput
             state.output = ModelOutput.from_content(
                 get_model().name, str(result.get("output") or ""))

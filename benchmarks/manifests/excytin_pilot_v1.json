@@ -1,0 +1,19 @@
+{
+  "schema": "excytin_exact_task_manifest_v1",
+  "selection_policy": "Pre-registered before comparative scores; eight incidents and checkpoint-count strata 1-5.",
+  "difficulty_proxy": "Number of official checkpoint_* scorers; diagnostic, not an upstream difficulty label.",
+  "task_ids": [
+    "incident_134_latest_cleaned_test_set_task_4",
+    "incident_166_latest_cleaned_test_set_task_20",
+    "incident_322_latest_cleaned_test_set_task_1",
+    "incident_34_latest_cleaned_test_set_task_43",
+    "incident_38_latest_cleaned_test_set_task_5",
+    "incident_39_latest_cleaned_test_set_task_19",
+    "incident_5_latest_cleaned_test_set_task_1",
+    "incident_55_latest_cleaned_test_set_task_13",
+    "incident_134_latest_cleaned_test_set_task_40",
+    "incident_322_latest_cleaned_test_set_task_20",
+    "incident_39_latest_cleaned_test_set_task_10",
+    "incident_55_latest_cleaned_test_set_task_10"
+  ]
+}
