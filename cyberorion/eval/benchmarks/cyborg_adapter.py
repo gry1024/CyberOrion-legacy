@@ -359,7 +359,8 @@ async def run_cage2_async(episodes: int = 3, steps: int = 100,
                           policy: "Callable[..., Awaitable[dict]] | None" = None,
                           scenario_path: "str | None" = None,
                           red_agent: str = "B_lineAgent", seed: int = 153,
-                          official_wrapper: bool = True) -> dict:
+                          official_wrapper: bool = True,
+                          on_step: "Callable[[dict], Any] | None" = None) -> dict:
     """异步策略版 CAGE-2 loop，避免同步环境线程反向调用事件循环死锁。"""
     if policy is None:
         return {"error": "async policy is required"}
@@ -450,6 +451,20 @@ async def run_cage2_async(episodes: int = 3, steps: int = 100,
                 "invalid_reason": invalid_reason,
                 "done": bool(done),
             }
+            if on_step is not None:
+                step_event = {
+                    "episode": ep + 1,
+                    "step": step_index + 1,
+                    "horizon": int(steps),
+                    "reward_delta": float(reward or 0.0),
+                    "cumulative_episode_reward": round(total, 6),
+                    "action": _json_safe(actions[-1]),
+                    "transition": _json_safe(previous_transition),
+                    "done": bool(done),
+                }
+                callback_result = on_step(step_event)
+                if inspect.isawaitable(callback_result):
+                    await callback_result
             if done:
                 break
         rewards.append({

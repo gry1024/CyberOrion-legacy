@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import inspect
 import json
 import statistics
 import time
@@ -197,6 +198,8 @@ async def run_bench(
         cage_step_budget: dict[str, int | float] | None = None,
         condition_steps: tuple[int, ...] | None = None,
         red_agents: tuple[str, ...] | None = None,
+        on_environment_step=None,
+        persist_result: bool = True,
         **_: Any) -> dict:
     if mode not in MODES:
         raise ValueError(f"cage2 mode 必须是 {'/'.join(MODES)}")
@@ -465,9 +468,27 @@ async def run_bench(
             result = run_cage2(allocations[condition_index], steps, False, None,
                                None, red_agent, seed + condition_index, True)
         else:
-            result = await run_cage2_async(
+            async def emit_step(event: dict[str, Any]) -> None:
+                if on_environment_step is None:
+                    return
+                trace = audit_traces[-1] if audit_traces else None
+                payload = {
+                    **event,
+                    "condition": current_condition,
+                    "condition_seed": seed + condition_index,
+                    "agent_trace": trace,
+                }
+                emitted = on_environment_step(payload)
+                if inspect.isawaitable(emitted):
+                    await emitted
+
+            adapter_args = (
                 allocations[condition_index], steps, choose, None,
                 red_agent, seed + condition_index, True)
+            if on_environment_step is None:
+                result = await run_cage2_async(*adapter_args)
+            else:
+                result = await run_cage2_async(*adapter_args, on_step=emit_step)
         if result.get("error"):
             raise BenchmarkAssetMissing(SUITE, str(result["error"]))
         rows = result.get("episodes") or []
@@ -593,4 +614,6 @@ async def run_bench(
     else:
         run["budget_limit_violation"] = False
         run["budget_limit_violation_dimensions"] = []
-    return persist_run(run, log_dir, source_provenance=source_provenance)
+    if persist_result:
+        return persist_run(run, log_dir, source_provenance=source_provenance)
+    return run

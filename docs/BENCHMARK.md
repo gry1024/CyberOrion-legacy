@@ -222,6 +222,28 @@ Full 的 `DispatchNotAllowed`/`InvalidRole`、额外调用、fallback 与 reward
 pre-contract-fix 审计和资源校准证据保留，不作为最终 Full 性能证据；原始 JSON 不作
 追溯修改。
 
+长时 CAGE 运行使用 `scripts/run_cage_segmented.py`，不再把多小时矩阵作为一个
+最终才落盘的结果单元。每个 episode 是独立 job，episode 内每 25 步即时写一个
+原子 JSON segment；`progress.json` 与 `interim_summary.json` 每段更新并明确标记
+`INTERIM / NOT FINAL`。CybORG 当前没有经过验证的安全 mid-episode 序列化契约，
+因此窗口在 episode 结束前是 provisional、不会进入统计；中断恢复只重跑当前未完成
+episode，已 committed 的 episode 永不重跑。最终 reducer 只从 manifest 与 segment
+文件重建结果，并拒绝重复 ID、缺失覆盖或 provenance 不一致。
+
+```bash
+# 新运行；正式 artifact 建议放在 worktree 外，避免运行自身污染 Git provenance
+~/cai_env/bin/python scripts/run_cage_segmented.py \
+  --run-dir /tmp/cyberorion_cage_runs/publication_v2 \
+  --arms single,orchestrator_only,full \
+  --red-agents B_lineAgent,RedMeanderAgent,SleepAgent \
+  --horizons 30,50,100 --seeds 101,102,103 \
+  --budget-profile publication_v2
+
+# Ctrl-C 或进程中断后的精确恢复入口
+~/cai_env/bin/python scripts/run_cage_segmented.py \
+  --resume /tmp/cyberorion_cage_runs/publication_v2
+```
+
 Live paired 只允许显式本地 runner 和注入的审计 harness：
 
 ```bash
