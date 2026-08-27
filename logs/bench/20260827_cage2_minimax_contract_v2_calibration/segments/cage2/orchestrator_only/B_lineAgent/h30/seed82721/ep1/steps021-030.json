@@ -1,0 +1,1751 @@
+{
+  "schema_version": 1,
+  "protocol_version": "cage2_segmented_v1",
+  "segment_id": "cage2/orchestrator_only/B_lineAgent/h30/seed82721/ep1/steps021-030",
+  "job_id": "cage2/orchestrator_only/B_lineAgent/h30/seed82721/ep1",
+  "arm": "orchestrator_only",
+  "mode": "orchestrator_only",
+  "red_agent": "B_lineAgent",
+  "horizon": 30,
+  "seed": 82721,
+  "episode": 1,
+  "planned_step_range": [
+    21,
+    30
+  ],
+  "observed_step_range": [
+    21,
+    30
+  ],
+  "source_provenance": {
+    "git_head_sha": "2a0c7063b5c4528213b95d061c7f5d41b3e61c68",
+    "git_tree_sha": "11cf66a80181efd77c9733b21aad13c0da808288",
+    "git_dirty": false,
+    "git_diff_sha256": null
+  },
+  "model_settings": {
+    "provider": "openai",
+    "model": "MiniMax-M3",
+    "configured_model": "openai/MiniMax-M3",
+    "thinking": "disabled",
+    "max_output_tokens": 8192,
+    "temperature": 0.0,
+    "temperature_status": "explicit",
+    "usage_accounting": "provider_or_estimated_per_task"
+  },
+  "budget_profile": "diagnostic",
+  "step_budget": {
+    "max_steps": 10,
+    "max_llm_calls": 10,
+    "max_tool_calls": 8,
+    "max_dispatches": 4,
+    "max_role_steps": 4,
+    "token_budget": 32768,
+    "wall_clock_sec": 300.0
+  },
+  "manifest_sha256": "8b4d0d16cc1d48b7fbd44ff625c6307fc26215dde1793863f8e04a78d3e9a7a6",
+  "raw_trace": [
+    {
+      "condition": "B_lineAgent:30",
+      "episode": 1,
+      "step": 21,
+      "horizon": 30,
+      "requested_blue_action": {
+        "action_id": 9
+      },
+      "action": {
+        "action_id": 9
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "event": "tool",
+          "hypothesis": "Hosts User1 (index 11) and Op_Server0 (index 15) remain compromised. Need to identify Op_Server0's activity vector before removing it.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 9
+            }
+          },
+          "observation": "selected canonical Blue action_id=9",
+          "replan_reason": "Re-analysing Op_Server0 to confirm compromise pattern before executing Remove."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 9
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=9"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 10,
+        "max_llm_calls": 10,
+        "max_tool_calls": 8,
+        "max_dispatches": 4,
+        "max_role_steps": 4,
+        "token_budget": 32768,
+        "wall_clock_sec": 300.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 3309,
+        "budget_accounted_tokens": 4427,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 2.5177,
+        "provider_prompt_tokens": 4340,
+        "provider_completion_tokens": 87,
+        "provider_total_tokens": 4427,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":21,\"episode\":1,\"horizon\":30,\"omitted_prefix_count\":8,\"omitted_prefix_sha256\":\"3f8a61a7948758b9a667019ed89ec919293279ab645885e9a5ea9024298ce3b6\",\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":11,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse User1\",\"hostname\":\"User1\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":11},\"step\":9,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":11,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse User1\",\"hostname\":\"User1\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":11},\"step\":10,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":11,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":24,\"action_type\":\"Remove\",\"agent\":\"Blue\",\"display\":\"Remove User1\",\"hostname\":\"User1\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":24},\"step\":12,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":13,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":14,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":15,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":16,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":17,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":3,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Enterprise0\",\"hostname\":\"Enterprise0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":3},\"step\":18,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":19,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":6,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Host0\",\"hostname\":\"Op_Host0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":6},\"step\":20,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "7b65ec6dd405666f922b6994bbe668258e9c745a2573f0ccccf699f2eaf476dc",
+      "memory_omitted_prefix_count": 8,
+      "memory_omitted_prefix_sha256": "3f8a61a7948758b9a667019ed89ec919293279ab645885e9a5ea9024298ce3b6"
+    },
+    {
+      "condition": "B_lineAgent:30",
+      "episode": 1,
+      "step": 22,
+      "horizon": 30,
+      "requested_blue_action": {
+        "action_id": 9
+      },
+      "action": {
+        "action_id": 9
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "event": "tool",
+          "hypothesis": "Op_Server0 keeps surfacing scanner activity (green bits at indices 30-31) and shows elevated isolated activity versus rest of fleet. With 8 steps remaining and an active alert pattern, re-scan Op_Server0 to confirm persistence before any restore/remove decision.",
+          "evidence_ids": [
+            "step21_executed_analyse_Op_Server0",
+            "step19_executed_analyse_Op_Server0",
+            "step17_executed_analyse_Op_Server0",
+            "observation_green_bits_indices_30_31"
+          ],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 9
+            }
+          },
+          "observation": "selected canonical Blue action_id=9",
+          "replan_reason": "Continuity of investigation on Op_Server0 pending confirmation that the recurring green bits represent a sustained compromise rather than transient scanner noise."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 9
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=9"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 10,
+        "max_llm_calls": 10,
+        "max_tool_calls": 8,
+        "max_dispatches": 4,
+        "max_role_steps": 4,
+        "token_budget": 32768,
+        "wall_clock_sec": 300.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 3401,
+        "budget_accounted_tokens": 4506,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 3.5643,
+        "provider_prompt_tokens": 4345,
+        "provider_completion_tokens": 161,
+        "provider_total_tokens": 4506,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":22,\"episode\":1,\"horizon\":30,\"omitted_prefix_count\":9,\"omitted_prefix_sha256\":\"cd922e79195d7603c9af5211661c5472c992f9028426caf03e0eadc8d183a8c8\",\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":11,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse User1\",\"hostname\":\"User1\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":11},\"step\":10,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":11,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":24,\"action_type\":\"Remove\",\"agent\":\"Blue\",\"display\":\"Remove User1\",\"hostname\":\"User1\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":24},\"step\":12,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":13,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":14,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":15,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":16,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":17,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":3,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Enterprise0\",\"hostname\":\"Enterprise0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":3},\"step\":18,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":19,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":6,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Host0\",\"hostname\":\"Op_Host0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":6},\"step\":20,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":21,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "b0fa374c84b463e7ea4222bb6d109e37b34e3daf9f16e7f2dbe4feb8a9745f3e",
+      "memory_omitted_prefix_count": 9,
+      "memory_omitted_prefix_sha256": "cd922e79195d7603c9af5211661c5472c992f9028426caf03e0eadc8d183a8c8"
+    },
+    {
+      "condition": "B_lineAgent:30",
+      "episode": 1,
+      "step": 23,
+      "horizon": 30,
+      "requested_blue_action": {
+        "action_id": 9
+      },
+      "action": {
+        "action_id": 9
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "event": "tool",
+          "hypothesis": "Current observation shows low overall activity with scattered 1s at positions 11, 15, 31, 32, 47. The recent pattern indicates Op_Server0 has been a repeated point of interest. Step 23 of 30 horizon—still time to investigate. Op_Server0 was last analysed at step 22; check it again to see if conditions changed.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 9
+            }
+          },
+          "observation": "selected canonical Blue action_id=9",
+          "replan_reason": "Continue monitoring Op_Server0 where recent activity has been detected."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 9
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=9"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 10,
+        "max_llm_calls": 10,
+        "max_tool_calls": 8,
+        "max_dispatches": 4,
+        "max_role_steps": 4,
+        "token_budget": 32768,
+        "wall_clock_sec": 300.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 3355,
+        "budget_accounted_tokens": 4478,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 3.5756,
+        "provider_prompt_tokens": 4351,
+        "provider_completion_tokens": 127,
+        "provider_total_tokens": 4478,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":23,\"episode\":1,\"horizon\":30,\"omitted_prefix_count\":10,\"omitted_prefix_sha256\":\"361aef8d6c418d544f9ff8d0691ee161689b38f170764b1c603b03debdb0b6c8\",\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":11,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":24,\"action_type\":\"Remove\",\"agent\":\"Blue\",\"display\":\"Remove User1\",\"hostname\":\"User1\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":24},\"step\":12,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":13,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":14,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":15,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":16,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":17,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":3,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Enterprise0\",\"hostname\":\"Enterprise0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":3},\"step\":18,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":19,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":6,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Host0\",\"hostname\":\"Op_Host0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":6},\"step\":20,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":21,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":22,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "605baf25d250cddd4f6478edb4b547115e0a1ed3acf1ff9167f171679fce3205",
+      "memory_omitted_prefix_count": 10,
+      "memory_omitted_prefix_sha256": "361aef8d6c418d544f9ff8d0691ee161689b38f170764b1c603b03debdb0b6c8"
+    },
+    {
+      "condition": "B_lineAgent:30",
+      "episode": 1,
+      "step": 24,
+      "horizon": 30,
+      "requested_blue_action": {
+        "action_id": 139
+      },
+      "action": {
+        "action_id": 139
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "event": "tool",
+          "hypothesis": "Op_Server0 remains compromised (activity indices 30,31=1) and continues to show suspicious state; persistent analysis is needed, but I have already analyzed it multiple times. Given recent memory shows removal/analysis cycles, re-analyzing Op_Server0 continues to confirm compromise without resolution. A Restore action on Op_Server0 may be required if it is compromised.",
+          "evidence_ids": [
+            "observation indices 30,31=1",
+            "repeated Analyse Op_Server0 steps 14-23",
+            "step 12 removed User1"
+          ],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 139
+            }
+          },
+          "observation": "selected canonical Blue action_id=139",
+          "replan_reason": "Op_Server0 has shown persistent compromise signals across many steps; attempting a Restore to recover it before further lateral movement."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 139
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=139"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 10,
+        "max_llm_calls": 10,
+        "max_tool_calls": 8,
+        "max_dispatches": 4,
+        "max_role_steps": 4,
+        "token_budget": 32768,
+        "wall_clock_sec": 300.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 3411,
+        "budget_accounted_tokens": 4511,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 2.81,
+        "provider_prompt_tokens": 4350,
+        "provider_completion_tokens": 161,
+        "provider_total_tokens": 4511,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":24,\"episode\":1,\"horizon\":30,\"omitted_prefix_count\":11,\"omitted_prefix_sha256\":\"7a3757919f8089a12b9bb0d30e1310966d26742ea714cde828e8ca744b426e7b\",\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":24,\"action_type\":\"Remove\",\"agent\":\"Blue\",\"display\":\"Remove User1\",\"hostname\":\"User1\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":24},\"step\":12,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":13,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":14,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":15,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":16,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":17,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":3,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Enterprise0\",\"hostname\":\"Enterprise0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":3},\"step\":18,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":19,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":6,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Host0\",\"hostname\":\"Op_Host0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":6},\"step\":20,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":21,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":22,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":23,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "827072f7c94a24119003586240aae8f9826d85769ba4ca9fa7f87e29604c74cb",
+      "memory_omitted_prefix_count": 11,
+      "memory_omitted_prefix_sha256": "7a3757919f8089a12b9bb0d30e1310966d26742ea714cde828e8ca744b426e7b"
+    },
+    {
+      "condition": "B_lineAgent:30",
+      "episode": 1,
+      "step": 25,
+      "horizon": 30,
+      "requested_blue_action": {
+        "action_id": 9
+      },
+      "action": {
+        "action_id": 9
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "event": "tool",
+          "hypothesis": "Op_Server0 was just restored (step 24) to clear its red presence. Current observation still shows Op_Server0 compromised (index 31=1, index 32=1) alongside the persistent Defender/User2 alerts (index 11, index 15). The restore outcome isn't yet reflected, but the red activity on Op_Server0 remains the most actionable threat. Continuing to re-analyse Op_Server0 confirms whether the restore took effect and whether attacker foothold persists, while we assess the Defender alert. Op_Host0 (index 29) also showed a transient blip earlier worth re-checking.",
+          "evidence_ids": [
+            "24",
+            "23",
+            "22",
+            "21",
+            "20",
+            "19",
+            "18",
+            "17",
+            "16"
+          ],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 9
+            }
+          },
+          "observation": "selected canonical Blue action_id=9",
+          "replan_reason": "Re-analyse Op_Server0 to verify whether the step-24 restore cleared the compromise (indices 29,31,32) or if the attacker foothold persists, before investing further defensive actions."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 9
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=9"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 10,
+        "max_llm_calls": 10,
+        "max_tool_calls": 8,
+        "max_dispatches": 4,
+        "max_role_steps": 4,
+        "token_budget": 32768,
+        "wall_clock_sec": 300.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 3454,
+        "budget_accounted_tokens": 4572,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 3.177,
+        "provider_prompt_tokens": 4355,
+        "provider_completion_tokens": 217,
+        "provider_total_tokens": 4572,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":25,\"episode\":1,\"horizon\":30,\"omitted_prefix_count\":12,\"omitted_prefix_sha256\":\"a127db703f0d4244270b1b5e6a49a6e731081b1035fbebe14a16a70e28a455dd\",\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":13,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":14,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":15,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":16,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":17,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":3,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Enterprise0\",\"hostname\":\"Enterprise0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":3},\"step\":18,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":19,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":6,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Host0\",\"hostname\":\"Op_Host0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":6},\"step\":20,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":21,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":22,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":23,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":139,\"action_type\":\"Restore\",\"agent\":\"Blue\",\"display\":\"Restore Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":139},\"step\":24,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "dbd2bd674ee4fda6dbdf139e104a91fc560784425648c7358e43e2c0d817003c",
+      "memory_omitted_prefix_count": 12,
+      "memory_omitted_prefix_sha256": "a127db703f0d4244270b1b5e6a49a6e731081b1035fbebe14a16a70e28a455dd"
+    },
+    {
+      "condition": "B_lineAgent:30",
+      "episode": 1,
+      "step": 26,
+      "horizon": 30,
+      "requested_blue_action": {
+        "action_id": 3
+      },
+      "action": {
+        "action_id": 3
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "event": "tool",
+          "hypothesis": "Scan remaining hosts to confirm only Op_Server0 (index 11) is still compromised; vector state shows Enterprise0 (15) also flagged previously but recent vectors are clean except Op_Server0.",
+          "evidence_ids": [
+            "11",
+            "15"
+          ],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 3
+            }
+          },
+          "observation": "selected canonical Blue action_id=3",
+          "replan_reason": "Verify whether Enterprise0 compromise is still active after Op_Server0 restoration."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 3
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=3"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 10,
+        "max_llm_calls": 10,
+        "max_tool_calls": 8,
+        "max_dispatches": 4,
+        "max_role_steps": 4,
+        "token_budget": 32768,
+        "wall_clock_sec": 300.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 3334,
+        "budget_accounted_tokens": 4454,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 4.5303,
+        "provider_prompt_tokens": 4360,
+        "provider_completion_tokens": 94,
+        "provider_total_tokens": 4454,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":26,\"episode\":1,\"horizon\":30,\"omitted_prefix_count\":13,\"omitted_prefix_sha256\":\"b10613b7123d5ce11db436fb23c80808f4779ede37236e2c0a04cbb74edc9b0a\",\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":14,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":15,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":16,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":17,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":3,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Enterprise0\",\"hostname\":\"Enterprise0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":3},\"step\":18,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":19,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":6,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Host0\",\"hostname\":\"Op_Host0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":6},\"step\":20,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":21,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":22,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":23,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":139,\"action_type\":\"Restore\",\"agent\":\"Blue\",\"display\":\"Restore Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":139},\"step\":24,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":25,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "6fa4688ab48df88419b4668223ab99fa934d9e3d94fa14a58f72bb83afefb745",
+      "memory_omitted_prefix_count": 13,
+      "memory_omitted_prefix_sha256": "b10613b7123d5ce11db436fb23c80808f4779ede37236e2c0a04cbb74edc9b0a"
+    },
+    {
+      "condition": "B_lineAgent:30",
+      "episode": 1,
+      "step": 27,
+      "horizon": 30,
+      "requested_blue_action": {
+        "action_id": 9
+      },
+      "action": {
+        "action_id": 9
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "event": "tool",
+          "hypothesis": "Current state shows activity at indices 11,15 (ongoing), 28-31 (recent scan/compromise region), and 37 (last row). Op_Server0 restored last step needs confirmation. Continue probing Op_Server0 to verify restoration held before exploring new hosts.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 9
+            }
+          },
+          "observation": "selected canonical Blue action_id=9",
+          "replan_reason": "Verify Op_Server0 restoration succeeded and watch for any activity change before committing to broader sweep."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 9
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=9"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 10,
+        "max_llm_calls": 10,
+        "max_tool_calls": 8,
+        "max_dispatches": 4,
+        "max_role_steps": 4,
+        "token_budget": 32768,
+        "wall_clock_sec": 300.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 3354,
+        "budget_accounted_tokens": 4470,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 2.0797,
+        "provider_prompt_tokens": 4357,
+        "provider_completion_tokens": 113,
+        "provider_total_tokens": 4470,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":27,\"episode\":1,\"horizon\":30,\"omitted_prefix_count\":14,\"omitted_prefix_sha256\":\"0faa58eec19c7d35c1d0ad773adf402de789c9a27b21b336f39535f486d24ab9\",\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":15,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":16,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":17,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":3,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Enterprise0\",\"hostname\":\"Enterprise0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":3},\"step\":18,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":19,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":6,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Host0\",\"hostname\":\"Op_Host0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":6},\"step\":20,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":21,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":22,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":23,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":139,\"action_type\":\"Restore\",\"agent\":\"Blue\",\"display\":\"Restore Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":139},\"step\":24,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":25,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":3,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Enterprise0\",\"hostname\":\"Enterprise0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":3},\"step\":26,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "bd3d7a73320fcd189ab8bfd821049d8d87b0a03af4df43aabab23c51067988f7",
+      "memory_omitted_prefix_count": 14,
+      "memory_omitted_prefix_sha256": "0faa58eec19c7d35c1d0ad773adf402de789c9a27b21b336f39535f486d24ab9"
+    },
+    {
+      "condition": "B_lineAgent:30",
+      "episode": 1,
+      "step": 28,
+      "horizon": 30,
+      "requested_blue_action": {
+        "action_id": 1
+      },
+      "action": {
+        "action_id": 1
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "event": "tool",
+          "hypothesis": "Observation state shows two activity hotspots — position 11 (likely Op_Host0) and position 31 (likely Op_Server0) — consistent with prior compromise indicators on Op_Server0. Both positions were active in the prior observation (positions 28,29,31). Step 27 still shows positions 28,29 active (compromised signals) and position 31 returning active. I need to monitor the network to gather a fresh signal before committing to another analysis or restorative action.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 1
+            }
+          },
+          "observation": "selected canonical Blue action_id=1",
+          "replan_reason": "Use a Monitor step to refresh the observation vector before committing further analyses; the two recurring activity indices (11 and 31) suggest persistent Op_Server0/Op_Host0 compromise activity that warrants verification before another restore."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 1
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=1"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 10,
+        "max_llm_calls": 10,
+        "max_tool_calls": 8,
+        "max_dispatches": 4,
+        "max_role_steps": 4,
+        "token_budget": 32768,
+        "wall_clock_sec": 300.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 3442,
+        "budget_accounted_tokens": 4532,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 5.5224,
+        "provider_prompt_tokens": 4351,
+        "provider_completion_tokens": 181,
+        "provider_total_tokens": 4532,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":28,\"episode\":1,\"horizon\":30,\"omitted_prefix_count\":15,\"omitted_prefix_sha256\":\"a8ecdd2ea818cea18a20aac3feab54325af834f4817734b96e208509be02476a\",\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":16,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":17,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":3,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Enterprise0\",\"hostname\":\"Enterprise0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":3},\"step\":18,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":19,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":6,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Host0\",\"hostname\":\"Op_Host0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":6},\"step\":20,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":21,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":22,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":23,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":139,\"action_type\":\"Restore\",\"agent\":\"Blue\",\"display\":\"Restore Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":139},\"step\":24,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":25,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":3,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Enterprise0\",\"hostname\":\"Enterprise0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":3},\"step\":26,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":27,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "dff8c26ee307782bca9da3725c1da1cdd7ca75b66d2cafcf576dc0120170b6f7",
+      "memory_omitted_prefix_count": 15,
+      "memory_omitted_prefix_sha256": "a8ecdd2ea818cea18a20aac3feab54325af834f4817734b96e208509be02476a"
+    },
+    {
+      "condition": "B_lineAgent:30",
+      "episode": 1,
+      "step": 29,
+      "horizon": 30,
+      "requested_blue_action": {
+        "action_id": 9
+      },
+      "action": {
+        "action_id": 9
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "event": "tool",
+          "hypothesis": "Op_Server0 was restored in step 24, but the current observation at step 29 shows activity bit at index 31 set on Op_Server0 alongside a User2 (index 11) compromise bit, suggesting ongoing or new activity on Op_Server0. Re-analysing Op_Server0 will clarify whether it is still compromised or clean before deciding on removal/restoration.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 9
+            }
+          },
+          "observation": "selected canonical Blue action_id=9",
+          "replan_reason": "Confirm Op_Server0's current compromise status via analyse before any removal/restore, since recent observation shows new flags (index 31) despite prior restoration."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 9
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=9"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 10,
+        "max_llm_calls": 10,
+        "max_tool_calls": 8,
+        "max_dispatches": 4,
+        "max_role_steps": 4,
+        "token_budget": 32768,
+        "wall_clock_sec": 300.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 3391,
+        "budget_accounted_tokens": 4504,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 3.392,
+        "provider_prompt_tokens": 4356,
+        "provider_completion_tokens": 148,
+        "provider_total_tokens": 4504,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":29,\"episode\":1,\"horizon\":30,\"omitted_prefix_count\":16,\"omitted_prefix_sha256\":\"d5e8dd44b4c5936f9cc031fc2949374cee7e226730c6f52c159df2cbbaaf13d2\",\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":17,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":3,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Enterprise0\",\"hostname\":\"Enterprise0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":3},\"step\":18,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":19,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":6,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Host0\",\"hostname\":\"Op_Host0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":6},\"step\":20,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":21,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":22,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":23,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":139,\"action_type\":\"Restore\",\"agent\":\"Blue\",\"display\":\"Restore Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":139},\"step\":24,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":25,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":3,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Enterprise0\",\"hostname\":\"Enterprise0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":3},\"step\":26,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":27,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":28,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "45526f5aaec047b36eeb4c756556445f4f01215934f3fd7076506aeb5cd32c68",
+      "memory_omitted_prefix_count": 16,
+      "memory_omitted_prefix_sha256": "d5e8dd44b4c5936f9cc031fc2949374cee7e226730c6f52c159df2cbbaaf13d2"
+    },
+    {
+      "condition": "B_lineAgent:30",
+      "episode": 1,
+      "step": 30,
+      "horizon": 30,
+      "requested_blue_action": {
+        "action_id": 12
+      },
+      "action": {
+        "action_id": 12
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "event": "tool",
+          "hypothesis": "Prior step (29) analysed Op_Server0; current observation shows only User2 (idx 11) and Defender (idx 15) still flagged as compromised. User2 remains a persistent foothold and has not been investigated this episode—recommend immediate Analyse on User2 to determine whether it requires removal or restoration next step.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 12
+            }
+          },
+          "observation": "selected canonical Blue action_id=12",
+          "replan_reason": "Shifting reconnaissance focus from Op_Server0 to the only still-anomalous host (User2) to close the diagnostic gap before deciding on Remove/Restore."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 12
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=12"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 10,
+        "max_llm_calls": 10,
+        "max_tool_calls": 8,
+        "max_dispatches": 4,
+        "max_role_steps": 4,
+        "token_budget": 32768,
+        "wall_clock_sec": 300.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 3381,
+        "budget_accounted_tokens": 4491,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 2.849,
+        "provider_prompt_tokens": 4356,
+        "provider_completion_tokens": 135,
+        "provider_total_tokens": 4491,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":30,\"episode\":1,\"horizon\":30,\"omitted_prefix_count\":17,\"omitted_prefix_sha256\":\"94a5a61361a467abf874df4c5ce6c9d090c3510ced904c7b0536a4f682bb6adc\",\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":3,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Enterprise0\",\"hostname\":\"Enterprise0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":3},\"step\":18,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":19,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":6,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Host0\",\"hostname\":\"Op_Host0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":6},\"step\":20,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":21,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":22,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":23,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":139,\"action_type\":\"Restore\",\"agent\":\"Blue\",\"display\":\"Restore Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":139},\"step\":24,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":25,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":3,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Enterprise0\",\"hostname\":\"Enterprise0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":3},\"step\":26,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":27,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":28,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":9,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Server0\",\"hostname\":\"Op_Server0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0\\\\\\\\n 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":9},\"step\":29,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "0f51880d6b93aaa0daaa63bfbc15567aa215c19ff5a20cf1bb041a9817235b0f",
+      "memory_omitted_prefix_count": 17,
+      "memory_omitted_prefix_sha256": "94a5a61361a467abf874df4c5ce6c9d090c3510ced904c7b0536a4f682bb6adc"
+    }
+  ],
+  "reward_delta": -59.0,
+  "cumulative_episode_reward": -151.7,
+  "actions": [
+    {
+      "blue": "Analyse Op_Server0",
+      "requested_blue_action": {
+        "action_id": 9,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 9,
+        "action_type": "Analyse",
+        "hostname": "Op_Server0",
+        "agent": "Blue",
+        "display": "Analyse Op_Server0"
+      },
+      "red": "Impact Op_Server0",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": -13.1
+    },
+    {
+      "blue": "Analyse Op_Server0",
+      "requested_blue_action": {
+        "action_id": 9,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 9,
+        "action_type": "Analyse",
+        "hostname": "Op_Server0",
+        "agent": "Blue",
+        "display": "Analyse Op_Server0"
+      },
+      "red": "Impact Op_Server0",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": -13.1
+    },
+    {
+      "blue": "Analyse Op_Server0",
+      "requested_blue_action": {
+        "action_id": 9,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 9,
+        "action_type": "Analyse",
+        "hostname": "Op_Server0",
+        "agent": "Blue",
+        "display": "Analyse Op_Server0"
+      },
+      "red": "Impact Op_Server0",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": -13.1
+    },
+    {
+      "blue": "Restore Op_Server0",
+      "requested_blue_action": {
+        "action_id": 139,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 139,
+        "action_type": "Restore",
+        "hostname": "Op_Server0",
+        "agent": "Blue",
+        "display": "Restore Op_Server0"
+      },
+      "red": "Impact Op_Server0",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": -3.1
+    },
+    {
+      "blue": "Analyse Op_Server0",
+      "requested_blue_action": {
+        "action_id": 9,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 9,
+        "action_type": "Analyse",
+        "hostname": "Op_Server0",
+        "agent": "Blue",
+        "display": "Analyse Op_Server0"
+      },
+      "red": "PrivilegeEscalate Op_Server0",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": -2.1
+    },
+    {
+      "blue": "Analyse Enterprise0",
+      "requested_blue_action": {
+        "action_id": 3,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 3,
+        "action_type": "Analyse",
+        "hostname": "Enterprise0",
+        "agent": "Blue",
+        "display": "Analyse Enterprise0"
+      },
+      "red": "ExploitRemoteService 10.0.245.117",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": -2.1
+    },
+    {
+      "blue": "Analyse Op_Server0",
+      "requested_blue_action": {
+        "action_id": 9,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 9,
+        "action_type": "Analyse",
+        "hostname": "Op_Server0",
+        "agent": "Blue",
+        "display": "Analyse Op_Server0"
+      },
+      "red": "PrivilegeEscalate Op_Server0",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": -3.1
+    },
+    {
+      "blue": "Monitor",
+      "requested_blue_action": {
+        "action_id": 1,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 1,
+        "action_type": "Monitor",
+        "hostname": null,
+        "agent": "Blue",
+        "display": "Monitor"
+      },
+      "red": "Impact Op_Server0",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": -3.1
+    },
+    {
+      "blue": "Analyse Op_Server0",
+      "requested_blue_action": {
+        "action_id": 9,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 9,
+        "action_type": "Analyse",
+        "hostname": "Op_Server0",
+        "agent": "Blue",
+        "display": "Analyse Op_Server0"
+      },
+      "red": "Impact Op_Server0",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": -3.1
+    },
+    {
+      "blue": "Analyse User2",
+      "requested_blue_action": {
+        "action_id": 12,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 12,
+        "action_type": "Analyse",
+        "hostname": "User2",
+        "agent": "Blue",
+        "display": "Analyse User2"
+      },
+      "red": "Impact Op_Server0",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": -3.1
+    }
+  ],
+  "resource_usage": {
+    "llm_calls": 10,
+    "tool_calls": 10,
+    "estimated_tokens": 33832,
+    "budget_accounted_tokens": 44945,
+    "provider_prompt_tokens": 43521,
+    "provider_completion_tokens": 1424,
+    "provider_total_tokens": 44945,
+    "dispatches": 0,
+    "wall_clock_sec": 34.018,
+    "fallback_count": 0,
+    "exhaustion_count": 0,
+    "dispatch_roles": {}
+  },
+  "segment_wall_clock_sec": 34.0634,
+  "episode_complete": true,
+  "episode_committed": true,
+  "provisional_reason": null,
+  "episode_result": {
+    "episode": 1,
+    "reward": -151.7,
+    "red_agent": "B_lineAgent",
+    "steps": 30,
+    "actions": [
+      {
+        "blue": "Monitor",
+        "requested_blue_action": {
+          "action_id": 1,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 1,
+          "action_type": "Monitor",
+          "hostname": null,
+          "agent": "Blue",
+          "display": "Monitor"
+        },
+        "red": "DiscoverRemoteSystems 10.0.42.16/28",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": 0.0
+      },
+      {
+        "blue": "Monitor",
+        "requested_blue_action": {
+          "action_id": 1,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 1,
+          "action_type": "Monitor",
+          "hostname": null,
+          "agent": "Blue",
+          "display": "Monitor"
+        },
+        "red": "DiscoverNetworkServices 10.0.42.17",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": 0.0
+      },
+      {
+        "blue": "Analyse Op_Server0",
+        "requested_blue_action": {
+          "action_id": 9,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 9,
+          "action_type": "Analyse",
+          "hostname": "Op_Server0",
+          "agent": "Blue",
+          "display": "Analyse Op_Server0"
+        },
+        "red": "ExploitRemoteService 10.0.42.17",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": 0.0
+      },
+      {
+        "blue": "Analyse Op_Server0",
+        "requested_blue_action": {
+          "action_id": 9,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 9,
+          "action_type": "Analyse",
+          "hostname": "Op_Server0",
+          "agent": "Blue",
+          "display": "Analyse Op_Server0"
+        },
+        "red": "PrivilegeEscalate User1",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -0.1
+      },
+      {
+        "blue": "Analyse Op_Server0",
+        "requested_blue_action": {
+          "action_id": 9,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 9,
+          "action_type": "Analyse",
+          "hostname": "Op_Server0",
+          "agent": "Blue",
+          "display": "Analyse Op_Server0"
+        },
+        "red": "DiscoverNetworkServices 10.0.146.105",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -0.1
+      },
+      {
+        "blue": "Analyse Op_Server0",
+        "requested_blue_action": {
+          "action_id": 9,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 9,
+          "action_type": "Analyse",
+          "hostname": "Op_Server0",
+          "agent": "Blue",
+          "display": "Analyse Op_Server0"
+        },
+        "red": "ExploitRemoteService 10.0.146.105",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -0.1
+      },
+      {
+        "blue": "Analyse Enterprise2",
+        "requested_blue_action": {
+          "action_id": 5,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 5,
+          "action_type": "Analyse",
+          "hostname": "Enterprise2",
+          "agent": "Blue",
+          "display": "Analyse Enterprise2"
+        },
+        "red": "PrivilegeEscalate Enterprise1",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -1.1
+      },
+      {
+        "blue": "Analyse User1",
+        "requested_blue_action": {
+          "action_id": 11,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 11,
+          "action_type": "Analyse",
+          "hostname": "User1",
+          "agent": "Blue",
+          "display": "Analyse User1"
+        },
+        "red": "DiscoverRemoteSystems 10.0.146.96/28",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -1.1
+      },
+      {
+        "blue": "Analyse User1",
+        "requested_blue_action": {
+          "action_id": 11,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 11,
+          "action_type": "Analyse",
+          "hostname": "User1",
+          "agent": "Blue",
+          "display": "Analyse User1"
+        },
+        "red": "DiscoverNetworkServices 10.0.146.107",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -1.1
+      },
+      {
+        "blue": "Analyse User1",
+        "requested_blue_action": {
+          "action_id": 11,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 11,
+          "action_type": "Analyse",
+          "hostname": "User1",
+          "agent": "Blue",
+          "display": "Analyse User1"
+        },
+        "red": "ExploitRemoteService 10.0.146.107",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -1.1
+      },
+      {
+        "blue": "Analyse Op_Server0",
+        "requested_blue_action": {
+          "action_id": 9,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 9,
+          "action_type": "Analyse",
+          "hostname": "Op_Server0",
+          "agent": "Blue",
+          "display": "Analyse Op_Server0"
+        },
+        "red": "PrivilegeEscalate Enterprise2",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -2.1
+      },
+      {
+        "blue": "Remove User1",
+        "requested_blue_action": {
+          "action_id": 24,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 24,
+          "action_type": "Remove",
+          "hostname": "User1",
+          "agent": "Blue",
+          "display": "Remove User1"
+        },
+        "red": "DiscoverNetworkServices 10.0.245.117",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -2.1
+      },
+      {
+        "blue": "Analyse Defender",
+        "requested_blue_action": {
+          "action_id": 2,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 2,
+          "action_type": "Analyse",
+          "hostname": "Defender",
+          "agent": "Blue",
+          "display": "Analyse Defender"
+        },
+        "red": "ExploitRemoteService 10.0.245.117",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -2.1
+      },
+      {
+        "blue": "Analyse Op_Server0",
+        "requested_blue_action": {
+          "action_id": 9,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 9,
+          "action_type": "Analyse",
+          "hostname": "Op_Server0",
+          "agent": "Blue",
+          "display": "Analyse Op_Server0"
+        },
+        "red": "PrivilegeEscalate Op_Server0",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -3.1
+      },
+      {
+        "blue": "Analyse Op_Server0",
+        "requested_blue_action": {
+          "action_id": 9,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 9,
+          "action_type": "Analyse",
+          "hostname": "Op_Server0",
+          "agent": "Blue",
+          "display": "Analyse Op_Server0"
+        },
+        "red": "Impact Op_Server0",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -13.1
+      },
+      {
+        "blue": "Monitor",
+        "requested_blue_action": {
+          "action_id": 1,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 1,
+          "action_type": "Monitor",
+          "hostname": null,
+          "agent": "Blue",
+          "display": "Monitor"
+        },
+        "red": "Impact Op_Server0",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -13.1
+      },
+      {
+        "blue": "Analyse Op_Server0",
+        "requested_blue_action": {
+          "action_id": 9,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 9,
+          "action_type": "Analyse",
+          "hostname": "Op_Server0",
+          "agent": "Blue",
+          "display": "Analyse Op_Server0"
+        },
+        "red": "Impact Op_Server0",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -13.1
+      },
+      {
+        "blue": "Analyse Enterprise0",
+        "requested_blue_action": {
+          "action_id": 3,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 3,
+          "action_type": "Analyse",
+          "hostname": "Enterprise0",
+          "agent": "Blue",
+          "display": "Analyse Enterprise0"
+        },
+        "red": "Impact Op_Server0",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -13.1
+      },
+      {
+        "blue": "Analyse Op_Server0",
+        "requested_blue_action": {
+          "action_id": 9,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 9,
+          "action_type": "Analyse",
+          "hostname": "Op_Server0",
+          "agent": "Blue",
+          "display": "Analyse Op_Server0"
+        },
+        "red": "Impact Op_Server0",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -13.1
+      },
+      {
+        "blue": "Analyse Op_Host0",
+        "requested_blue_action": {
+          "action_id": 6,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 6,
+          "action_type": "Analyse",
+          "hostname": "Op_Host0",
+          "agent": "Blue",
+          "display": "Analyse Op_Host0"
+        },
+        "red": "Impact Op_Server0",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -13.1
+      },
+      {
+        "blue": "Analyse Op_Server0",
+        "requested_blue_action": {
+          "action_id": 9,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 9,
+          "action_type": "Analyse",
+          "hostname": "Op_Server0",
+          "agent": "Blue",
+          "display": "Analyse Op_Server0"
+        },
+        "red": "Impact Op_Server0",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -13.1
+      },
+      {
+        "blue": "Analyse Op_Server0",
+        "requested_blue_action": {
+          "action_id": 9,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 9,
+          "action_type": "Analyse",
+          "hostname": "Op_Server0",
+          "agent": "Blue",
+          "display": "Analyse Op_Server0"
+        },
+        "red": "Impact Op_Server0",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -13.1
+      },
+      {
+        "blue": "Analyse Op_Server0",
+        "requested_blue_action": {
+          "action_id": 9,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 9,
+          "action_type": "Analyse",
+          "hostname": "Op_Server0",
+          "agent": "Blue",
+          "display": "Analyse Op_Server0"
+        },
+        "red": "Impact Op_Server0",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -13.1
+      },
+      {
+        "blue": "Restore Op_Server0",
+        "requested_blue_action": {
+          "action_id": 139,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 139,
+          "action_type": "Restore",
+          "hostname": "Op_Server0",
+          "agent": "Blue",
+          "display": "Restore Op_Server0"
+        },
+        "red": "Impact Op_Server0",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -3.1
+      },
+      {
+        "blue": "Analyse Op_Server0",
+        "requested_blue_action": {
+          "action_id": 9,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 9,
+          "action_type": "Analyse",
+          "hostname": "Op_Server0",
+          "agent": "Blue",
+          "display": "Analyse Op_Server0"
+        },
+        "red": "PrivilegeEscalate Op_Server0",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -2.1
+      },
+      {
+        "blue": "Analyse Enterprise0",
+        "requested_blue_action": {
+          "action_id": 3,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 3,
+          "action_type": "Analyse",
+          "hostname": "Enterprise0",
+          "agent": "Blue",
+          "display": "Analyse Enterprise0"
+        },
+        "red": "ExploitRemoteService 10.0.245.117",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -2.1
+      },
+      {
+        "blue": "Analyse Op_Server0",
+        "requested_blue_action": {
+          "action_id": 9,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 9,
+          "action_type": "Analyse",
+          "hostname": "Op_Server0",
+          "agent": "Blue",
+          "display": "Analyse Op_Server0"
+        },
+        "red": "PrivilegeEscalate Op_Server0",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -3.1
+      },
+      {
+        "blue": "Monitor",
+        "requested_blue_action": {
+          "action_id": 1,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 1,
+          "action_type": "Monitor",
+          "hostname": null,
+          "agent": "Blue",
+          "display": "Monitor"
+        },
+        "red": "Impact Op_Server0",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -3.1
+      },
+      {
+        "blue": "Analyse Op_Server0",
+        "requested_blue_action": {
+          "action_id": 9,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 9,
+          "action_type": "Analyse",
+          "hostname": "Op_Server0",
+          "agent": "Blue",
+          "display": "Analyse Op_Server0"
+        },
+        "red": "Impact Op_Server0",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -3.1
+      },
+      {
+        "blue": "Analyse User2",
+        "requested_blue_action": {
+          "action_id": 12,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 12,
+          "action_type": "Analyse",
+          "hostname": "User2",
+          "agent": "Blue",
+          "display": "Analyse User2"
+        },
+        "red": "Impact Op_Server0",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -3.1
+      }
+    ],
+    "illegal_actions": 0,
+    "restore_actions": 1,
+    "restore_cost_proxy": -1.0,
+    "host_compromise_events": null,
+    "host_compromise_metric_status": "not_exposed_by_official_wrapper",
+    "condition": "B_lineAgent:30",
+    "condition_seed": 82721
+  },
+  "episode_resource_usage": {
+    "condition": "B_lineAgent:30",
+    "episode": 1,
+    "step_budget": {
+      "max_steps": 10,
+      "max_llm_calls": 10,
+      "max_tool_calls": 8,
+      "max_dispatches": 4,
+      "max_role_steps": 4,
+      "token_budget": 32768,
+      "wall_clock_sec": 300.0
+    },
+    "episode_safety_ceiling": {
+      "budget_accounted_tokens": 1228800,
+      "llm_calls": 375,
+      "tool_calls": 300,
+      "wall_clock_sec": 11250.0
+    },
+    "used": {
+      "llm_calls": 30,
+      "tool_calls": 30,
+      "estimated_tokens": 91415,
+      "budget_accounted_tokens": 118652,
+      "wall_clock_sec": 92.9319,
+      "provider_prompt_tokens": 114507,
+      "provider_completion_tokens": 4145,
+      "provider_total_tokens": 118652,
+      "provider_usage_steps": 30,
+      "dispatches": 0
+    },
+    "decision_steps": 30,
+    "fallback_count": 0,
+    "budget_exhaustion_count": 0,
+    "dispatch_utilization": {
+      "dispatches": 0,
+      "steps_with_dispatch": 0,
+      "step_rate": 0.0,
+      "roles": {}
+    },
+    "episode_safety_ceiling_reached": null,
+    "budget_limit_violations": [],
+    "elapsed_sec": 93.0822
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "artifact_type": "cage2_resource_only_calibration",
+  "status": "completed_h30_subset_after_final_contract_fix",
+  "performance_use": false,
+  "reward_fields_read_for_budget_selection": false,
+  "source_run_dir": "logs/bench/20260827_cage2_minimax_contract_v2_calibration",
+  "protocol_version": "cage2_segmented_v1",
+  "manifest_sha256": "8b4d0d16cc1d48b7fbd44ff625c6307fc26215dde1793863f8e04a78d3e9a7a6",
+  "source_provenance": {
+    "git_head_sha": "2a0c7063b5c4528213b95d061c7f5d41b3e61c68",
+    "git_tree_sha": "11cf66a80181efd77c9733b21aad13c0da808288",
+    "git_dirty": false,
+    "git_diff_sha256": null
+  },
+  "model_settings": {
+    "configured_model": "openai/MiniMax-M3",
+    "temperature": 0.0,
+    "thinking": "disabled",
+    "max_output_tokens": 8192
+  },
+  "coverage": {
+    "red_agents": ["B_lineAgent"],
+    "horizons": [30],
+    "seeds": [82721],
+    "arms": ["single", "orchestrator_only", "full"],
+    "episodes": 3,
+    "environment_steps": 90,
+    "segments": 9,
+    "window_steps": 10,
+    "missing_required_tail_coverage": [
+      "RedMeanderAgent/h50 after final contract fix",
+      "SleepAgent/h100 after final contract fix"
+    ]
+  },
+  "resource_percentiles_method": "nearest-rank over per-environment-step provider usage",
+  "per_arm": {
+    "single": {
+      "steps": 30,
+      "provider_total_tokens": {"p50": 4387, "p90": 4468, "p95": 4523, "p99": 4534, "max": 4534},
+      "llm_calls": {"p50": 1, "p90": 1, "p95": 1, "p99": 1, "max": 1},
+      "tool_calls": {"p50": 1, "p90": 1, "p95": 1, "p99": 1, "max": 1},
+      "dispatches": {"p50": 0, "p90": 0, "p95": 0, "p99": 0, "max": 0},
+      "wall_clock_sec": {"p50": 2.7976, "p90": 4.3454, "p95": 5.4712, "p99": 5.7109, "max": 5.7109}
+    },
+    "orchestrator_only": {
+      "steps": 30,
+      "provider_total_tokens": {"p50": 4448, "p90": 4519, "p95": 4532, "p99": 4572, "max": 4572},
+      "llm_calls": {"p50": 1, "p90": 1, "p95": 1, "p99": 1, "max": 1},
+      "tool_calls": {"p50": 1, "p90": 1, "p95": 1, "p99": 1, "max": 1},
+      "dispatches": {"p50": 0, "p90": 0, "p95": 0, "p99": 0, "max": 0},
+      "wall_clock_sec": {"p50": 2.849, "p90": 3.8826, "p95": 5.5224, "p99": 6.6933, "max": 6.6933}
+    },
+    "full": {
+      "steps": 30,
+      "provider_total_tokens": {"p50": 4518, "p90": 9826, "p95": 10978, "p99": 12000, "max": 12000},
+      "llm_calls": {"p50": 1, "p90": 3, "p95": 3, "p99": 3, "max": 3},
+      "tool_calls": {"p50": 1, "p90": 1, "p95": 1, "p99": 1, "max": 1},
+      "dispatches": {"p50": 0, "p90": 1, "p95": 1, "p99": 1, "max": 1},
+      "wall_clock_sec": {"p50": 3.4149, "p90": 13.2048, "p95": 20.1642, "p99": 27.6829, "max": 27.6829},
+      "spawn_counts_by_role": {"watcher": 6, "analyst": 1}
+    }
+  },
+  "contract_error_counts": {
+    "DispatchNotAllowed": 0,
+    "InvalidRole": 0,
+    "ToolNotAvailable": 0
+  },
+  "maximum_observed_segment_duration_sec": 64.675,
+  "proposed_publication_v2": {
+    "max_steps": 7,
+    "max_llm_calls": 5,
+    "max_tool_calls": 4,
+    "max_dispatches": 3,
+    "max_role_steps": 4,
+    "token_budget": 24576,
+    "wall_clock_sec": 90.0,
+    "status": "proposed_not_frozen",
+    "reason": "Numerically provides >=2.048x token and >=3.25x wall-time headroom over this final-contract h30 sample, but final-contract h50/h100 tail coverage was skipped at user request."
+  }
+}

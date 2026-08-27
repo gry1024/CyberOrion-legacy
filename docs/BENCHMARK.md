@@ -237,12 +237,18 @@ episode，已 committed 的 episode 永不重跑。最终 reducer 只从 manifes
   --arms single,orchestrator_only,full \
   --red-agents B_lineAgent,RedMeanderAgent,SleepAgent \
   --horizons 30,50,100 --seeds 101,102,103 \
-  --budget-profile publication_v2
+  --budget-profile diagnostic
 
 # Ctrl-C 或进程中断后的精确恢复入口
 ~/cai_env/bin/python scripts/run_cage_segmented.py \
   --resume /tmp/cyberorion_cage_runs/publication_v2
 ```
+
+截至 2026-08-27，MiniMax-M3 最终动作契约后的资源校准只完成
+B_lineAgent/h30 三臂子集；`publication_v2` 数值提案与分位数见
+`logs/bench/20260827_cage2_minimax_contract_v2_calibration_summary.*`。由于用户要求
+在该 episode 组后停止，h50/h100 tail 尚缺，故 profile **未冻结、未登记到代码**，
+不得启动 publication_v2 性能实验。
 
 Live paired 只允许显式本地 runner 和注入的审计 harness：
 

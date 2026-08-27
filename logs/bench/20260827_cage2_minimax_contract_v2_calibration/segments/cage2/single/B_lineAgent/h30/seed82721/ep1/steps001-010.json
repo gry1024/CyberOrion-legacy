@@ -1,0 +1,1052 @@
+{
+  "schema_version": 1,
+  "protocol_version": "cage2_segmented_v1",
+  "segment_id": "cage2/single/B_lineAgent/h30/seed82721/ep1/steps001-010",
+  "job_id": "cage2/single/B_lineAgent/h30/seed82721/ep1",
+  "arm": "single",
+  "mode": "single",
+  "red_agent": "B_lineAgent",
+  "horizon": 30,
+  "seed": 82721,
+  "episode": 1,
+  "planned_step_range": [
+    1,
+    10
+  ],
+  "observed_step_range": [
+    1,
+    10
+  ],
+  "source_provenance": {
+    "git_head_sha": "2a0c7063b5c4528213b95d061c7f5d41b3e61c68",
+    "git_tree_sha": "11cf66a80181efd77c9733b21aad13c0da808288",
+    "git_dirty": false,
+    "git_diff_sha256": null
+  },
+  "model_settings": {
+    "provider": "openai",
+    "model": "MiniMax-M3",
+    "configured_model": "openai/MiniMax-M3",
+    "thinking": "disabled",
+    "max_output_tokens": 8192,
+    "temperature": 0.0,
+    "temperature_status": "explicit",
+    "usage_accounting": "provider_or_estimated_per_task"
+  },
+  "budget_profile": "diagnostic",
+  "step_budget": {
+    "max_steps": 10,
+    "max_llm_calls": 10,
+    "max_tool_calls": 8,
+    "max_dispatches": 4,
+    "max_role_steps": 4,
+    "token_budget": 32768,
+    "wall_clock_sec": 300.0
+  },
+  "manifest_sha256": "8b4d0d16cc1d48b7fbd44ff625c6307fc26215dde1793863f8e04a78d3e9a7a6",
+  "raw_trace": [
+    {
+      "condition": "B_lineAgent:30",
+      "episode": 1,
+      "step": 1,
+      "horizon": 30,
+      "requested_blue_action": {
+        "action_id": 1
+      },
+      "action": {
+        "action_id": 1
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "reference",
+          "event": "tool",
+          "hypothesis": "Initial step with no observed activity; gathering baseline telemetry via Monitor before taking any host-specific action.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 1
+            }
+          },
+          "observation": "selected canonical Blue action_id=1",
+          "replan_reason": "No anomalies detected yet; Monitor provides network-wide awareness to inform subsequent analyses."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "reference",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 1
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=1"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 10,
+        "max_llm_calls": 10,
+        "max_tool_calls": 8,
+        "max_dispatches": 4,
+        "max_role_steps": 4,
+        "token_budget": 32768,
+        "wall_clock_sec": 300.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 1831,
+        "budget_accounted_tokens": 2012,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 3.415,
+        "provider_prompt_tokens": 1941,
+        "provider_completion_tokens": 71,
+        "provider_total_tokens": 2012,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":1,\"episode\":1,\"horizon\":30,\"omitted_prefix_count\":0,\"omitted_prefix_sha256\":null,\"recent_transitions\":[],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "f773bd751807420821e50b97ee8404f1b729102af1d5357749dc253f620226e5",
+      "memory_omitted_prefix_count": 0,
+      "memory_omitted_prefix_sha256": null
+    },
+    {
+      "condition": "B_lineAgent:30",
+      "episode": 1,
+      "step": 2,
+      "horizon": 30,
+      "requested_blue_action": {
+        "action_id": 1
+      },
+      "action": {
+        "action_id": 1
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "reference",
+          "event": "tool",
+          "hypothesis": "Early episode; previous step was Monitor with all-zero observation. Continue passive observation to avoid disrupting baseline state.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 1
+            }
+          },
+          "observation": "selected canonical Blue action_id=1",
+          "replan_reason": "Maintain surveillance posture while gathering information."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "reference",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 1
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=1"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 10,
+        "max_llm_calls": 10,
+        "max_tool_calls": 8,
+        "max_dispatches": 4,
+        "max_role_steps": 4,
+        "token_budget": 32768,
+        "wall_clock_sec": 300.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 1940,
+        "budget_accounted_tokens": 2196,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 1.7599,
+        "provider_prompt_tokens": 2132,
+        "provider_completion_tokens": 64,
+        "provider_total_tokens": 2196,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":2,\"episode\":1,\"horizon\":30,\"omitted_prefix_count\":0,\"omitted_prefix_sha256\":null,\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":1,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "a1e74bfc33a2cf6a7e3da2d9e14c16a78e788be00bf195c880c000fb994eb51d",
+      "memory_omitted_prefix_count": 0,
+      "memory_omitted_prefix_sha256": null
+    },
+    {
+      "condition": "B_lineAgent:30",
+      "episode": 1,
+      "step": 3,
+      "horizon": 30,
+      "requested_blue_action": {
+        "action_id": 2
+      },
+      "action": {
+        "action_id": 2
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "reference",
+          "event": "tool",
+          "hypothesis": "Observation shows a single '1' in the green-action vector portion at index 35, indicating Red activity detected; no host-level blue vectors set. Two prior Monitor steps have produced no further intel. Continuing Monitor will not improve visibility on which host Red targeted, so we should Analyse the most security-relevant host (Defender) to localize the detected activity.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 2
+            }
+          },
+          "observation": "selected canonical Blue action_id=2",
+          "replan_reason": "Selected Analyse on Defender to identify the host showing the lone green-vector indicator at index 35; switching from passive Monitor to targeted analysis because the indicator suggests Red movement that needs localization before any Restore/Remove decision."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "reference",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 2
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=2"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 10,
+        "max_llm_calls": 10,
+        "max_tool_calls": 8,
+        "max_dispatches": 4,
+        "max_role_steps": 4,
+        "token_budget": 32768,
+        "wall_clock_sec": 300.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 2168,
+        "budget_accounted_tokens": 2472,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 3.6516,
+        "provider_prompt_tokens": 2323,
+        "provider_completion_tokens": 149,
+        "provider_total_tokens": 2472,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":3,\"episode\":1,\"horizon\":30,\"omitted_prefix_count\":0,\"omitted_prefix_sha256\":null,\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":1,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":2,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "c0e0025d23948e810ba95e98a0d1c05c5c15bae0b644f53cb293bdbfe451eabb",
+      "memory_omitted_prefix_count": 0,
+      "memory_omitted_prefix_sha256": null
+    },
+    {
+      "condition": "B_lineAgent:30",
+      "episode": 1,
+      "step": 4,
+      "horizon": 30,
+      "requested_blue_action": {
+        "action_id": 10
+      },
+      "action": {
+        "action_id": 10
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "reference",
+          "event": "tool",
+          "hypothesis": "Initial observation shows activity on Defender (position 36, value 1) and now User0 (position 2) and User2 (position 4) flagged. Need broad situational awareness on user hosts before committing to containment.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 10
+            }
+          },
+          "observation": "selected canonical Blue action_id=10",
+          "replan_reason": "Gather information on the newly flagged User0 host before choosing containment."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "reference",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 10
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=10"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 10,
+        "max_llm_calls": 10,
+        "max_tool_calls": 8,
+        "max_dispatches": 4,
+        "max_role_steps": 4,
+        "token_budget": 32768,
+        "wall_clock_sec": 300.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 2203,
+        "budget_accounted_tokens": 2613,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 2.7474,
+        "provider_prompt_tokens": 2517,
+        "provider_completion_tokens": 96,
+        "provider_total_tokens": 2613,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":4,\"episode\":1,\"horizon\":30,\"omitted_prefix_count\":0,\"omitted_prefix_sha256\":null,\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":1,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":2,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":3,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "a601e203d17386d107349b44ef5edb8e1aeaa7f7d4db3581b6e13bdd7337b997",
+      "memory_omitted_prefix_count": 0,
+      "memory_omitted_prefix_sha256": null
+    },
+    {
+      "condition": "B_lineAgent:30",
+      "episode": 1,
+      "step": 5,
+      "horizon": 30,
+      "requested_blue_action": {
+        "action_id": 10
+      },
+      "action": {
+        "action_id": 10
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "reference",
+          "event": "tool",
+          "hypothesis": "Observation now shows red activity on User0 (position 2 of the 15-host subarray) while the Defender alert (last column) has cleared. With no other compromised hosts visible, targeted analysis of User0 is warranted to confirm and characterize the intrusion before any removal/restoration decisions.",
+          "evidence_ids": [
+            "current_observation_subarray_user0_flag=1",
+            "step4_observation_user0_flag=1_defender_flag=1",
+            "step3_observation_defender_flag=1",
+            "recent_transitions.step4.executed=Analyse User0",
+            "recent_transitions.step3.executed=Analyse Defender"
+          ],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 10
+            }
+          },
+          "observation": "selected canonical Blue action_id=10",
+          "replan_reason": "Newly surfaced compromise on User0 needs fresh analysis to determine the right mitigation."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "reference",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 10
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=10"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 10,
+        "max_llm_calls": 10,
+        "max_tool_calls": 8,
+        "max_dispatches": 4,
+        "max_role_steps": 4,
+        "token_budget": 32768,
+        "wall_clock_sec": 300.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 2406,
+        "budget_accounted_tokens": 2879,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 2.2789,
+        "provider_prompt_tokens": 2712,
+        "provider_completion_tokens": 167,
+        "provider_total_tokens": 2879,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":5,\"episode\":1,\"horizon\":30,\"omitted_prefix_count\":0,\"omitted_prefix_sha256\":null,\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":1,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":2,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":3,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":10,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse User0\",\"hostname\":\"User0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1\\\\\\\\n 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":10},\"step\":4,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "302fd1324f47ee3fd812d50449cf200aa2f662ed95a19eeeade6d57b0b0e2aa4",
+      "memory_omitted_prefix_count": 0,
+      "memory_omitted_prefix_sha256": null
+    },
+    {
+      "condition": "B_lineAgent:30",
+      "episode": 1,
+      "step": 6,
+      "horizon": 30,
+      "requested_blue_action": {
+        "action_id": 3
+      },
+      "action": {
+        "action_id": 3
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "reference",
+          "event": "tool",
+          "hypothesis": "Prior observations showed a 1 on the Defender row that disappeared, but a new 1 on User0 row (col 2) appeared. The current observation shows a 1 on row index 8 (first row, position 8, which corresponds to a host in the enterprise/user block). Need to investigate this new anomaly by analysing the relevant host. Index 8 in the first row likely maps to Enterprise0 (Defender=0, Enterprise0=1, Enterprise1=2, Enterprise2=3, Op_Host0=4, Op_Host1=5, Op_Host2=6, Op_Server0=7, User0=8). Analyse Enterprise0 next.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 3
+            }
+          },
+          "observation": "selected canonical Blue action_id=3",
+          "replan_reason": "Anomalous activity detected on index 8 (likely Enterprise0). Analyse this host to gather more information."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "reference",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 3
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=3"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 10,
+        "max_llm_calls": 10,
+        "max_tool_calls": 8,
+        "max_dispatches": 4,
+        "max_role_steps": 4,
+        "token_budget": 32768,
+        "wall_clock_sec": 300.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 2525,
+        "budget_accounted_tokens": 3106,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 4.3765,
+        "provider_prompt_tokens": 2907,
+        "provider_completion_tokens": 199,
+        "provider_total_tokens": 3106,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":6,\"episode\":1,\"horizon\":30,\"omitted_prefix_count\":0,\"omitted_prefix_sha256\":null,\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":1,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":2,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":3,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":10,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse User0\",\"hostname\":\"User0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1\\\\\\\\n 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":10},\"step\":4,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":10,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse User0\",\"hostname\":\"User0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":10},\"step\":5,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "a71f00344cc0996edb33e2dbc43fb0693a0abba999b43bcfa855714c4ada1f76",
+      "memory_omitted_prefix_count": 0,
+      "memory_omitted_prefix_sha256": null
+    },
+    {
+      "condition": "B_lineAgent:30",
+      "episode": 1,
+      "step": 7,
+      "horizon": 30,
+      "requested_blue_action": {
+        "action_id": 10
+      },
+      "action": {
+        "action_id": 10
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "reference",
+          "event": "tool",
+          "hypothesis": "Observation shows anomalies at indices 8,9,11 (first row, value 1) and 2 (second row, value 1). The pattern suggests Red activity detected on Defender subnet (index 8/9 area) and possibly Enterprise hosts. Index 11 in row1 likely corresponds to Op_Server0 or similar; index 2 in row2 to User0. Given User0 was already probed twice (steps 4-5), continuing analysis on User0 may yield better intel. Action 10 (Analyse User0) is most consistent with prior investigation pattern.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 10
+            }
+          },
+          "observation": "selected canonical Blue action_id=10",
+          "replan_reason": "Targeted reconnaissance on User0 continues based on persistent anomaly at observation index 2 (User0 row)."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "reference",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 10
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=10"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 10,
+        "max_llm_calls": 10,
+        "max_tool_calls": 8,
+        "max_dispatches": 4,
+        "max_role_steps": 4,
+        "token_budget": 32768,
+        "wall_clock_sec": 300.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 2640,
+        "budget_accounted_tokens": 3277,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 2.1416,
+        "provider_prompt_tokens": 3102,
+        "provider_completion_tokens": 175,
+        "provider_total_tokens": 3277,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":7,\"episode\":1,\"horizon\":30,\"omitted_prefix_count\":0,\"omitted_prefix_sha256\":null,\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":1,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":2,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":3,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":10,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse User0\",\"hostname\":\"User0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1\\\\\\\\n 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":10},\"step\":4,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":10,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse User0\",\"hostname\":\"User0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":10},\"step\":5,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":3,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Enterprise0\",\"hostname\":\"Enterprise0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":3},\"step\":6,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "90af1069c1db62d3e4443f74051d86b76eaff918bec4eb1da1059ed7a271b2df",
+      "memory_omitted_prefix_count": 0,
+      "memory_omitted_prefix_sha256": null
+    },
+    {
+      "condition": "B_lineAgent:30",
+      "episode": 1,
+      "step": 8,
+      "horizon": 30,
+      "requested_blue_action": {
+        "action_id": 4
+      },
+      "action": {
+        "action_id": 4
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "reference",
+          "event": "tool",
+          "hypothesis": "Observation shows recent activity on Defender(36), Enterprise0(8), Enterprise1(9), User0(2,11), and User2(2). I have not yet investigated Enterprise1, Enterprise2, Op_Host0, Op_Host1, Op_Host2, Op_Server0, or any User besides User0. Enterprise1 and Enterprise2 are high-value targets; analyzing Enterprise1 next to track lateral movement is the most informative step.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 4
+            }
+          },
+          "observation": "selected canonical Blue action_id=4",
+          "replan_reason": "Coverage gap on Enterprise1 following the recent Defender/User0 activity; analysis informs later Remove/Restore decisions."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "reference",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 4
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=4"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 10,
+        "max_llm_calls": 10,
+        "max_tool_calls": 8,
+        "max_dispatches": 4,
+        "max_role_steps": 4,
+        "token_budget": 32768,
+        "wall_clock_sec": 300.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 2738,
+        "budget_accounted_tokens": 3459,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 3.4244,
+        "provider_prompt_tokens": 3308,
+        "provider_completion_tokens": 151,
+        "provider_total_tokens": 3459,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":8,\"episode\":1,\"horizon\":30,\"omitted_prefix_count\":0,\"omitted_prefix_sha256\":null,\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":1,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":2,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":3,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":10,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse User0\",\"hostname\":\"User0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1\\\\\\\\n 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":10},\"step\":4,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":10,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse User0\",\"hostname\":\"User0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":10},\"step\":5,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":3,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Enterprise0\",\"hostname\":\"Enterprise0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":3},\"step\":6,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":10,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse User0\",\"hostname\":\"User0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":10},\"step\":7,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "665ff9a2af5288278cabd0b078438b25d413e03260f9366ddc49bdc23fe73076",
+      "memory_omitted_prefix_count": 0,
+      "memory_omitted_prefix_sha256": null
+    },
+    {
+      "condition": "B_lineAgent:30",
+      "episode": 1,
+      "step": 9,
+      "horizon": 30,
+      "requested_blue_action": {
+        "action_id": 1
+      },
+      "action": {
+        "action_id": 1
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "reference",
+          "event": "tool",
+          "hypothesis": "The current observation shows activity on Defender (index 37) and Enterprise2 (index 38) with a recurring flag on Enterprise1 (index 40). Given recent scanning of Defender, User0, Enterprise0, and Enterprise1, I should continue monitoring to track the ongoing intrusion pattern before committing to a removal or restore action.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 1
+            }
+          },
+          "observation": "selected canonical Blue action_id=1",
+          "replan_reason": "Monitor gathers additional state information across the network to inform a more decisive defensive action in subsequent steps."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "reference",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 1
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=1"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 10,
+        "max_llm_calls": 10,
+        "max_tool_calls": 8,
+        "max_dispatches": 4,
+        "max_role_steps": 4,
+        "token_budget": 32768,
+        "wall_clock_sec": 300.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 2852,
+        "budget_accounted_tokens": 3613,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 3.2609,
+        "provider_prompt_tokens": 3492,
+        "provider_completion_tokens": 121,
+        "provider_total_tokens": 3613,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":9,\"episode\":1,\"horizon\":30,\"omitted_prefix_count\":0,\"omitted_prefix_sha256\":null,\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":1,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":2,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":3,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":10,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse User0\",\"hostname\":\"User0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1\\\\\\\\n 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":10},\"step\":4,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":10,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse User0\",\"hostname\":\"User0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":10},\"step\":5,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":3,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Enterprise0\",\"hostname\":\"Enterprise0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":3},\"step\":6,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":10,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse User0\",\"hostname\":\"User0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":10},\"step\":7,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":4,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Enterprise1\",\"hostname\":\"Enterprise1\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":4},\"step\":8,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "07d00f51d37371e471bbf05bc942058a71b6810feda285473caef746ca68c10b",
+      "memory_omitted_prefix_count": 0,
+      "memory_omitted_prefix_sha256": null
+    },
+    {
+      "condition": "B_lineAgent:30",
+      "episode": 1,
+      "step": 10,
+      "horizon": 30,
+      "requested_blue_action": {
+        "action_id": 10
+      },
+      "action": {
+        "action_id": 10
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "reference",
+          "event": "tool",
+          "hypothesis": "Current observation: row 1 (37 cols) shows 1s at indices 10,11,12; row 2 (15 cols) shows a 1 at index 2. This indicates activity on Defender (likely compromise[10..12]) and a recurring signal on Enterprise0/scanned subnet at index 2 (matches prior steps). User0 (action_id=10) has been the persistent signal across steps 4-7 and is a top suspect. I have not yet gathered fresh detection on the three Enterprises or Op_Server0/User cluster. The most informative next move is to analyse User0 again to confirm whether it is still compromised/attacker-controlled (since signals persist there), while rotating off Defender (analysed at step 3) and Enterprise0 (step 6). Alternatively scan an unseen host to broaden coverage. Given the recurring User0 signal, re-analysing User0 provides the highest expected information gain and supports a future containment decision.",
+          "evidence_ids": [
+            "4",
+            "5",
+            "6",
+            "7"
+          ],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 10
+            }
+          },
+          "observation": "selected canonical Blue action_id=10",
+          "replan_reason": "Re-analyse User0 because the recurring row2 index-2 signal aligns with User0's network footprint and it has been the most consistent indicator of malicious activity in recent transitions; this informs whether to Remove or Restore User0 next."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "reference",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 10
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=10"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 10,
+        "max_llm_calls": 10,
+        "max_tool_calls": 8,
+        "max_dispatches": 4,
+        "max_role_steps": 4,
+        "token_budget": 32768,
+        "wall_clock_sec": 300.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 3134,
+        "budget_accounted_tokens": 3971,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 3.8684,
+        "provider_prompt_tokens": 3683,
+        "provider_completion_tokens": 288,
+        "provider_total_tokens": 3971,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":10,\"episode\":1,\"horizon\":30,\"omitted_prefix_count\":0,\"omitted_prefix_sha256\":null,\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":1,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":2,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":3,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":10,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse User0\",\"hostname\":\"User0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1\\\\\\\\n 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":10},\"step\":4,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":10,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse User0\",\"hostname\":\"User0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":10},\"step\":5,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":3,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Enterprise0\",\"hostname\":\"Enterprise0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":3},\"step\":6,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":10,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse User0\",\"hostname\":\"User0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":10},\"step\":7,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":4,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Enterprise1\",\"hostname\":\"Enterprise1\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":4},\"step\":8,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":9,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "b7a110cd846594f6c7a9f9e6900ae31980f79f072fe138b12538815bfd4e4431",
+      "memory_omitted_prefix_count": 0,
+      "memory_omitted_prefix_sha256": null
+    }
+  ],
+  "reward_delta": -4.7,
+  "cumulative_episode_reward": -4.7,
+  "actions": [
+    {
+      "blue": "Monitor",
+      "requested_blue_action": {
+        "action_id": 1,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 1,
+        "action_type": "Monitor",
+        "hostname": null,
+        "agent": "Blue",
+        "display": "Monitor"
+      },
+      "red": "DiscoverRemoteSystems 10.0.42.16/28",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": 0.0
+    },
+    {
+      "blue": "Monitor",
+      "requested_blue_action": {
+        "action_id": 1,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 1,
+        "action_type": "Monitor",
+        "hostname": null,
+        "agent": "Blue",
+        "display": "Monitor"
+      },
+      "red": "DiscoverNetworkServices 10.0.42.17",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": 0.0
+    },
+    {
+      "blue": "Analyse Defender",
+      "requested_blue_action": {
+        "action_id": 2,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 2,
+        "action_type": "Analyse",
+        "hostname": "Defender",
+        "agent": "Blue",
+        "display": "Analyse Defender"
+      },
+      "red": "ExploitRemoteService 10.0.42.17",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": 0.0
+    },
+    {
+      "blue": "Analyse User0",
+      "requested_blue_action": {
+        "action_id": 10,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 10,
+        "action_type": "Analyse",
+        "hostname": "User0",
+        "agent": "Blue",
+        "display": "Analyse User0"
+      },
+      "red": "PrivilegeEscalate User1",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": -0.1
+    },
+    {
+      "blue": "Analyse User0",
+      "requested_blue_action": {
+        "action_id": 10,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 10,
+        "action_type": "Analyse",
+        "hostname": "User0",
+        "agent": "Blue",
+        "display": "Analyse User0"
+      },
+      "red": "DiscoverNetworkServices 10.0.146.105",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": -0.1
+    },
+    {
+      "blue": "Analyse Enterprise0",
+      "requested_blue_action": {
+        "action_id": 3,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 3,
+        "action_type": "Analyse",
+        "hostname": "Enterprise0",
+        "agent": "Blue",
+        "display": "Analyse Enterprise0"
+      },
+      "red": "ExploitRemoteService 10.0.146.105",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": -0.1
+    },
+    {
+      "blue": "Analyse User0",
+      "requested_blue_action": {
+        "action_id": 10,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 10,
+        "action_type": "Analyse",
+        "hostname": "User0",
+        "agent": "Blue",
+        "display": "Analyse User0"
+      },
+      "red": "PrivilegeEscalate Enterprise1",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": -1.1
+    },
+    {
+      "blue": "Analyse Enterprise1",
+      "requested_blue_action": {
+        "action_id": 4,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 4,
+        "action_type": "Analyse",
+        "hostname": "Enterprise1",
+        "agent": "Blue",
+        "display": "Analyse Enterprise1"
+      },
+      "red": "DiscoverRemoteSystems 10.0.146.96/28",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": -1.1
+    },
+    {
+      "blue": "Monitor",
+      "requested_blue_action": {
+        "action_id": 1,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 1,
+        "action_type": "Monitor",
+        "hostname": null,
+        "agent": "Blue",
+        "display": "Monitor"
+      },
+      "red": "DiscoverNetworkServices 10.0.146.107",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": -1.1
+    },
+    {
+      "blue": "Analyse User0",
+      "requested_blue_action": {
+        "action_id": 10,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 10,
+        "action_type": "Analyse",
+        "hostname": "User0",
+        "agent": "Blue",
+        "display": "Analyse User0"
+      },
+      "red": "ExploitRemoteService 10.0.146.107",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": -1.1
+    }
+  ],
+  "resource_usage": {
+    "llm_calls": 10,
+    "tool_calls": 10,
+    "estimated_tokens": 24437,
+    "budget_accounted_tokens": 29598,
+    "provider_prompt_tokens": 28117,
+    "provider_completion_tokens": 1481,
+    "provider_total_tokens": 29598,
+    "dispatches": 0,
+    "wall_clock_sec": 30.924599999999998,
+    "fallback_count": 0,
+    "exhaustion_count": 0,
+    "dispatch_roles": {}
+  },
+  "segment_wall_clock_sec": 36.5022,
+  "episode_complete": false,
+  "episode_committed": true,
+  "provisional_reason": null
+}

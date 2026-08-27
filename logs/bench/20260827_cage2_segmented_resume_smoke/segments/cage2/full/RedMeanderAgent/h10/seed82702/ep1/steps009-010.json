@@ -1,0 +1,538 @@
+{
+  "schema_version": 1,
+  "protocol_version": "cage2_segmented_v1",
+  "segment_id": "cage2/full/RedMeanderAgent/h10/seed82702/ep1/steps009-010",
+  "job_id": "cage2/full/RedMeanderAgent/h10/seed82702/ep1",
+  "arm": "full",
+  "mode": "agent",
+  "red_agent": "RedMeanderAgent",
+  "horizon": 10,
+  "seed": 82702,
+  "episode": 1,
+  "planned_step_range": [
+    9,
+    10
+  ],
+  "observed_step_range": [
+    9,
+    10
+  ],
+  "source_provenance": {
+    "git_head_sha": "18fef5b9dff8655901ca417c089a19a43258b698",
+    "git_tree_sha": "936b49f409563a7c2165d108e735e65d99579577",
+    "git_dirty": false,
+    "git_diff_sha256": null
+  },
+  "model_settings": {
+    "provider": "openai",
+    "model": "MiniMax-M3",
+    "configured_model": "openai/MiniMax-M3",
+    "thinking": "disabled",
+    "max_output_tokens": 8192,
+    "temperature": 0.0,
+    "temperature_status": "explicit",
+    "usage_accounting": "provider_or_estimated_per_task"
+  },
+  "budget_profile": "publication_v1",
+  "step_budget": {
+    "max_steps": 7,
+    "max_llm_calls": 5,
+    "max_tool_calls": 4,
+    "max_dispatches": 3,
+    "max_role_steps": 4,
+    "token_budget": 24576,
+    "wall_clock_sec": 90.0
+  },
+  "manifest_sha256": "6822d7324f33a6cd971e3d5bdb95888ea4895e80996b4fcbcb9876e83b7c8813",
+  "raw_trace": [
+    {
+      "condition": "RedMeanderAgent:10",
+      "episode": 1,
+      "step": 9,
+      "horizon": 10,
+      "requested_blue_action": {
+        "action_id": 16
+      },
+      "action": {
+        "action_id": 16
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "event": "tool",
+          "hypothesis": "Compromise signal first appeared on Op_Host0 (step 3) and is now visible on Op_Host1 (step 5) and Enterprise0 (current observation, position 6). Pattern suggests lateral movement from Op_Host0 toward enterprise subnet. With only 1 step left in horizon (step 9 of 10), must choose containment over more analysis.",
+          "evidence_ids": [
+            "step3:Op_Host0 index3=1",
+            "step5:Op_Host1 index37=1",
+            "current_obs:Enterprise0 row1 index6=1",
+            "horizon:9/10 remaining"
+          ],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 16
+            }
+          },
+          "observation": "selected canonical Blue action_id=16",
+          "replan_reason": "Last action step in episode; prioritizes containment of newly compromised enterprise host over continued reconnaissance."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 16
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=16"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 7,
+        "max_llm_calls": 5,
+        "max_tool_calls": 4,
+        "max_dispatches": 3,
+        "max_role_steps": 4,
+        "token_budget": 24576,
+        "wall_clock_sec": 90.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 2971,
+        "budget_accounted_tokens": 3772,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 3.0985,
+        "provider_prompt_tokens": 3572,
+        "provider_completion_tokens": 200,
+        "provider_total_tokens": 3772,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":9,\"episode\":1,\"horizon\":10,\"omitted_prefix_count\":0,\"omitted_prefix_sha256\":null,\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":1,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":2,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":6,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Host0\",\"hostname\":\"Op_Host0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":6},\"step\":3,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":4,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":5,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":6,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":7,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":6,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Host0\",\"hostname\":\"Op_Host0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":6},\"step\":8,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "56053d371f6e812e63a0a8216d7744b88d1e91a69f2fd53cd56c02f585434ea7",
+      "memory_omitted_prefix_count": 0,
+      "memory_omitted_prefix_sha256": null
+    },
+    {
+      "condition": "RedMeanderAgent:10",
+      "episode": 1,
+      "step": 10,
+      "horizon": 10,
+      "requested_blue_action": {
+        "action_id": 6
+      },
+      "action": {
+        "action_id": 6
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "event": "tool",
+          "hypothesis": "Observation shows 15 green-state values with a single '1' at index 6, indicating a freshly detected anomaly on one host that needs identification before further response.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 6
+            }
+          },
+          "observation": "selected canonical Blue action_id=6",
+          "replan_reason": "Budget allows one tool call; need immediate analysis on the flagged host before any removal action."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 6
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=6"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 7,
+        "max_llm_calls": 5,
+        "max_tool_calls": 4,
+        "max_dispatches": 3,
+        "max_role_steps": 4,
+        "token_budget": 24576,
+        "wall_clock_sec": 90.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 3040,
+        "budget_accounted_tokens": 3903,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 3.8321,
+        "provider_prompt_tokens": 3767,
+        "provider_completion_tokens": 136,
+        "provider_total_tokens": 3903,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":10,\"episode\":1,\"horizon\":10,\"omitted_prefix_count\":0,\"omitted_prefix_sha256\":null,\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":1,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":2,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":6,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Host0\",\"hostname\":\"Op_Host0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":6},\"step\":3,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":4,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":5,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":6,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":7,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":6,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Host0\",\"hostname\":\"Op_Host0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":6},\"step\":8,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":16,\"action_type\":\"Remove\",\"agent\":\"Blue\",\"display\":\"Remove Enterprise0\",\"hostname\":\"Enterprise0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 1 1 0 1 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":16},\"step\":9,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "5e007b25abe04beb1e1055fbd1ba6ba97b0ab4e531f3c01dc47419dbe8a9e1d3",
+      "memory_omitted_prefix_count": 0,
+      "memory_omitted_prefix_sha256": null
+    }
+  ],
+  "reward_delta": -0.2,
+  "cumulative_episode_reward": -0.3,
+  "actions": [
+    {
+      "blue": "Remove Enterprise0",
+      "requested_blue_action": {
+        "action_id": 16,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 16,
+        "action_type": "Remove",
+        "hostname": "Enterprise0",
+        "agent": "Blue",
+        "display": "Remove Enterprise0"
+      },
+      "red": "PrivilegeEscalate User2",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": -0.1
+    },
+    {
+      "blue": "Analyse Op_Host0",
+      "requested_blue_action": {
+        "action_id": 6,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 6,
+        "action_type": "Analyse",
+        "hostname": "Op_Host0",
+        "agent": "Blue",
+        "display": "Analyse Op_Host0"
+      },
+      "red": "DiscoverNetworkServices 10.0.143.53",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": -0.1
+    }
+  ],
+  "resource_usage": {
+    "llm_calls": 2,
+    "tool_calls": 2,
+    "estimated_tokens": 6011,
+    "budget_accounted_tokens": 7675,
+    "provider_prompt_tokens": 7339,
+    "provider_completion_tokens": 336,
+    "provider_total_tokens": 7675,
+    "dispatches": 0,
+    "wall_clock_sec": 6.9306,
+    "fallback_count": 0,
+    "exhaustion_count": 0,
+    "dispatch_roles": {}
+  },
+  "segment_wall_clock_sec": 6.9502,
+  "episode_complete": true,
+  "episode_committed": true,
+  "provisional_reason": null,
+  "episode_result": {
+    "episode": 1,
+    "reward": -0.3,
+    "red_agent": "RedMeanderAgent",
+    "steps": 10,
+    "actions": [
+      {
+        "blue": "Analyse Defender",
+        "requested_blue_action": {
+          "action_id": 2,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 2,
+          "action_type": "Analyse",
+          "hostname": "Defender",
+          "agent": "Blue",
+          "display": "Analyse Defender"
+        },
+        "red": "DiscoverRemoteSystems 10.0.5.240/28",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": 0.0
+      },
+      {
+        "blue": "Monitor",
+        "requested_blue_action": {
+          "action_id": 1,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 1,
+          "action_type": "Monitor",
+          "hostname": null,
+          "agent": "Blue",
+          "display": "Monitor"
+        },
+        "red": "DiscoverNetworkServices 10.0.5.244",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": 0.0
+      },
+      {
+        "blue": "Analyse Op_Host0",
+        "requested_blue_action": {
+          "action_id": 6,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 6,
+          "action_type": "Analyse",
+          "hostname": "Op_Host0",
+          "agent": "Blue",
+          "display": "Analyse Op_Host0"
+        },
+        "red": "DiscoverNetworkServices 10.0.5.251",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": 0.0
+      },
+      {
+        "blue": "Monitor",
+        "requested_blue_action": {
+          "action_id": 1,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 1,
+          "action_type": "Monitor",
+          "hostname": null,
+          "agent": "Blue",
+          "display": "Monitor"
+        },
+        "red": "DiscoverNetworkServices 10.0.5.241",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": 0.0
+      },
+      {
+        "blue": "Monitor",
+        "requested_blue_action": {
+          "action_id": 1,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 1,
+          "action_type": "Monitor",
+          "hostname": null,
+          "agent": "Blue",
+          "display": "Monitor"
+        },
+        "red": "DiscoverNetworkServices 10.0.5.250",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": 0.0
+      },
+      {
+        "blue": "Analyse Defender",
+        "requested_blue_action": {
+          "action_id": 2,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 2,
+          "action_type": "Analyse",
+          "hostname": "Defender",
+          "agent": "Blue",
+          "display": "Analyse Defender"
+        },
+        "red": "DiscoverNetworkServices 10.0.5.243",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": 0.0
+      },
+      {
+        "blue": "Analyse Defender",
+        "requested_blue_action": {
+          "action_id": 2,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 2,
+          "action_type": "Analyse",
+          "hostname": "Defender",
+          "agent": "Blue",
+          "display": "Analyse Defender"
+        },
+        "red": "PrivilegeEscalate User0",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": 0.0
+      },
+      {
+        "blue": "Analyse Op_Host0",
+        "requested_blue_action": {
+          "action_id": 6,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 6,
+          "action_type": "Analyse",
+          "hostname": "Op_Host0",
+          "agent": "Blue",
+          "display": "Analyse Op_Host0"
+        },
+        "red": "ExploitRemoteService 10.0.5.244",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -0.1
+      },
+      {
+        "blue": "Remove Enterprise0",
+        "requested_blue_action": {
+          "action_id": 16,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 16,
+          "action_type": "Remove",
+          "hostname": "Enterprise0",
+          "agent": "Blue",
+          "display": "Remove Enterprise0"
+        },
+        "red": "PrivilegeEscalate User2",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -0.1
+      },
+      {
+        "blue": "Analyse Op_Host0",
+        "requested_blue_action": {
+          "action_id": 6,
+          "_cyberorion": {
+            "status": "selected",
+            "fallback_reason": null
+          }
+        },
+        "executed_blue_action": {
+          "action_id": 6,
+          "action_type": "Analyse",
+          "hostname": "Op_Host0",
+          "agent": "Blue",
+          "display": "Analyse Op_Host0"
+        },
+        "red": "DiscoverNetworkServices 10.0.143.53",
+        "valid": true,
+        "invalid_reason": null,
+        "reward": -0.1
+      }
+    ],
+    "illegal_actions": 0,
+    "restore_actions": 0,
+    "restore_cost_proxy": -0.0,
+    "host_compromise_events": null,
+    "host_compromise_metric_status": "not_exposed_by_official_wrapper",
+    "condition": "RedMeanderAgent:10",
+    "condition_seed": 82702
+  },
+  "episode_resource_usage": {
+    "condition": "RedMeanderAgent:10",
+    "episode": 1,
+    "step_budget": {
+      "max_steps": 7,
+      "max_llm_calls": 5,
+      "max_tool_calls": 4,
+      "max_dispatches": 3,
+      "max_role_steps": 4,
+      "token_budget": 24576,
+      "wall_clock_sec": 90.0
+    },
+    "episode_safety_ceiling": {
+      "budget_accounted_tokens": 307200,
+      "llm_calls": 62,
+      "tool_calls": 50,
+      "wall_clock_sec": 1125.0
+    },
+    "used": {
+      "llm_calls": 11,
+      "tool_calls": 10,
+      "estimated_tokens": 27582,
+      "budget_accounted_tokens": 33501,
+      "wall_clock_sec": 30.9074,
+      "provider_prompt_tokens": 31910,
+      "provider_completion_tokens": 1591,
+      "provider_total_tokens": 33501,
+      "provider_usage_steps": 10,
+      "dispatches": 0
+    },
+    "decision_steps": 10,
+    "fallback_count": 0,
+    "budget_exhaustion_count": 0,
+    "dispatch_utilization": {
+      "dispatches": 0,
+      "steps_with_dispatch": 0,
+      "step_rate": 0.0,
+      "roles": {}
+    },
+    "episode_safety_ceiling_reached": null,
+    "budget_limit_violations": [],
+    "elapsed_sec": 31.1472
+  }
+}

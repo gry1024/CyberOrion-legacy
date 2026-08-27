@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "protocol_version": "cage2_segmented_v1",
+  "segment_id": "cage2/full/RedMeanderAgent/h10/seed82702/ep1/steps005-006",
+  "job_id": "cage2/full/RedMeanderAgent/h10/seed82702/ep1",
+  "arm": "full",
+  "mode": "agent",
+  "red_agent": "RedMeanderAgent",
+  "horizon": 10,
+  "seed": 82702,
+  "episode": 1,
+  "planned_step_range": [
+    5,
+    6
+  ],
+  "observed_step_range": [
+    5,
+    6
+  ],
+  "source_provenance": {
+    "git_head_sha": "18fef5b9dff8655901ca417c089a19a43258b698",
+    "git_tree_sha": "936b49f409563a7c2165d108e735e65d99579577",
+    "git_dirty": false,
+    "git_diff_sha256": null
+  },
+  "model_settings": {
+    "provider": "openai",
+    "model": "MiniMax-M3",
+    "configured_model": "openai/MiniMax-M3",
+    "thinking": "disabled",
+    "max_output_tokens": 8192,
+    "temperature": 0.0,
+    "temperature_status": "explicit",
+    "usage_accounting": "provider_or_estimated_per_task"
+  },
+  "budget_profile": "publication_v1",
+  "step_budget": {
+    "max_steps": 7,
+    "max_llm_calls": 5,
+    "max_tool_calls": 4,
+    "max_dispatches": 3,
+    "max_role_steps": 4,
+    "token_budget": 24576,
+    "wall_clock_sec": 90.0
+  },
+  "manifest_sha256": "6822d7324f33a6cd971e3d5bdb95888ea4895e80996b4fcbcb9876e83b7c8813",
+  "raw_trace": [
+    {
+      "condition": "RedMeanderAgent:10",
+      "episode": 1,
+      "step": 5,
+      "horizon": 10,
+      "requested_blue_action": {
+        "action_id": 1
+      },
+      "action": {
+        "action_id": 1
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "event": "tool",
+          "hypothesis": "Observation matrix shows all zeros in the activity row except a single 1 at the last activity column (index 36), which historically in this environment often corresponds to Op_Host2. With no other signals, continue passive monitoring to conserve budget and gather more evidence.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 1
+            }
+          },
+          "observation": "selected canonical Blue action_id=1",
+          "replan_reason": "Step 5 of 10 horizon; budget for tool calls remaining. A single transient activity bit (index 36) without other corroborating signals does not justify analysis spend yet. Re-evaluate next step once a fuller pattern emerges."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 1
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=1"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 7,
+        "max_llm_calls": 5,
+        "max_tool_calls": 4,
+        "max_dispatches": 3,
+        "max_role_steps": 4,
+        "token_budget": 24576,
+        "wall_clock_sec": 90.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 2515,
+        "budget_accounted_tokens": 2990,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 2.4989,
+        "provider_prompt_tokens": 2794,
+        "provider_completion_tokens": 196,
+        "provider_total_tokens": 2990,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":5,\"episode\":1,\"horizon\":10,\"omitted_prefix_count\":0,\"omitted_prefix_sha256\":null,\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":1,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":2,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":6,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Host0\",\"hostname\":\"Op_Host0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":6},\"step\":3,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":4,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "35e2e4493edb732f23847a1aa7a74b9435fb656977e89e3f85ea52fa6a441e4f",
+      "memory_omitted_prefix_count": 0,
+      "memory_omitted_prefix_sha256": null
+    },
+    {
+      "condition": "RedMeanderAgent:10",
+      "episode": 1,
+      "step": 6,
+      "horizon": 10,
+      "requested_blue_action": {
+        "action_id": 2
+      },
+      "action": {
+        "action_id": 2
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "event": "dispatch_error",
+          "hypothesis": "Red activity has been moving across Op_Host0 (index 3 in row 0) and Op_Host1 (index 33 in row 1). Need to investigate the Op subnet cluster to localize the intrusion before deciding containment.",
+          "evidence_ids": [],
+          "action": {
+            "type": "dispatch",
+            "role": "",
+            "mission": ""
+          },
+          "observation": "ERROR[InvalidRole]: ",
+          "replan_reason": "Specialist analysis is required before any containment or removal; current budget still allows dispatches."
+        },
+        {
+          "seq": 2,
+          "role": "orchestrator",
+          "event": "tool",
+          "hypothesis": "Current observation shows a single '1' detected on Defender (position 7 of row 2) — a likely compromise indicator needing immediate analysis of the Defender host.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 2
+            }
+          },
+          "observation": "selected canonical Blue action_id=2",
+          "replan_reason": "Direct orchestrator tool selection is required; no dispatch is appropriate for selecting the canonical action."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 2
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=2"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 7,
+        "max_llm_calls": 5,
+        "max_tool_calls": 4,
+        "max_dispatches": 3,
+        "max_role_steps": 4,
+        "token_budget": 24576,
+        "wall_clock_sec": 90.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 2,
+        "tool_calls": 1,
+        "estimated_tokens": 5112,
+        "budget_accounted_tokens": 6263,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 4.8879,
+        "provider_prompt_tokens": 5986,
+        "provider_completion_tokens": 277,
+        "provider_total_tokens": 6263,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":6,\"episode\":1,\"horizon\":10,\"omitted_prefix_count\":0,\"omitted_prefix_sha256\":null,\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":1,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":2,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":6,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Host0\",\"hostname\":\"Op_Host0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":6},\"step\":3,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":4,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":5,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "3c8d8c921d9a398b70fb07feacddfb53fcba99d3ffdaf5688605d123c2aae10c",
+      "memory_omitted_prefix_count": 0,
+      "memory_omitted_prefix_sha256": null
+    }
+  ],
+  "reward_delta": 0.0,
+  "cumulative_episode_reward": 0.0,
+  "actions": [
+    {
+      "blue": "Monitor",
+      "requested_blue_action": {
+        "action_id": 1,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 1,
+        "action_type": "Monitor",
+        "hostname": null,
+        "agent": "Blue",
+        "display": "Monitor"
+      },
+      "red": "DiscoverNetworkServices 10.0.5.250",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": 0.0
+    },
+    {
+      "blue": "Analyse Defender",
+      "requested_blue_action": {
+        "action_id": 2,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 2,
+        "action_type": "Analyse",
+        "hostname": "Defender",
+        "agent": "Blue",
+        "display": "Analyse Defender"
+      },
+      "red": "DiscoverNetworkServices 10.0.5.243",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": 0.0
+    }
+  ],
+  "resource_usage": {
+    "llm_calls": 3,
+    "tool_calls": 2,
+    "estimated_tokens": 7627,
+    "budget_accounted_tokens": 9253,
+    "provider_prompt_tokens": 8780,
+    "provider_completion_tokens": 473,
+    "provider_total_tokens": 9253,
+    "dispatches": 0,
+    "wall_clock_sec": 7.3868,
+    "fallback_count": 0,
+    "exhaustion_count": 0,
+    "dispatch_roles": {}
+  },
+  "segment_wall_clock_sec": 7.4058,
+  "episode_complete": false,
+  "episode_committed": true,
+  "provisional_reason": null
+}

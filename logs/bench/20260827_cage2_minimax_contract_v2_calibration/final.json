@@ -1,0 +1,1967 @@
+{
+  "schema_version": 1,
+  "protocol_version": "cage2_segmented_v1",
+  "run_id": "20260827_072045_cage2_segmented",
+  "status": "done",
+  "publication_valid": true,
+  "publication_invalid_reasons": [],
+  "completed_segments": 9,
+  "observed_segments": 9,
+  "expected_segments": 9,
+  "completed_episodes": 3,
+  "total_episodes": 3,
+  "missing_jobs": [],
+  "results": [
+    {
+      "episode": 1,
+      "reward": -224.8,
+      "red_agent": "B_lineAgent",
+      "steps": 30,
+      "actions": [
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "DiscoverRemoteSystems 10.0.42.16/28",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": 0.0
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "DiscoverNetworkServices 10.0.42.17",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": 0.0
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "ExploitRemoteService 10.0.42.17",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -0.1
+        },
+        {
+          "blue": "Analyse Defender",
+          "requested_blue_action": {
+            "action_id": 2,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 2,
+            "action_type": "Analyse",
+            "hostname": "Defender",
+            "agent": "Blue",
+            "display": "Analyse Defender"
+          },
+          "red": "PrivilegeEscalate User1",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -0.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "DiscoverNetworkServices 10.0.146.105",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -0.1
+        },
+        {
+          "blue": "Analyse Op_Host2",
+          "requested_blue_action": {
+            "action_id": 8,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 8,
+            "action_type": "Analyse",
+            "hostname": "Op_Host2",
+            "agent": "Blue",
+            "display": "Analyse Op_Host2"
+          },
+          "red": "ExploitRemoteService 10.0.146.105",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -0.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "PrivilegeEscalate Enterprise1",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -1.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "DiscoverRemoteSystems 10.0.146.96/28",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -1.1
+        },
+        {
+          "blue": "Remove Op_Host2",
+          "requested_blue_action": {
+            "action_id": 21,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 21,
+            "action_type": "Remove",
+            "hostname": "Op_Host2",
+            "agent": "Blue",
+            "display": "Remove Op_Host2"
+          },
+          "red": "DiscoverNetworkServices 10.0.146.107",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -1.1
+        },
+        {
+          "blue": "Analyse User4",
+          "requested_blue_action": {
+            "action_id": 14,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 14,
+            "action_type": "Analyse",
+            "hostname": "User4",
+            "agent": "Blue",
+            "display": "Analyse User4"
+          },
+          "red": "ExploitRemoteService 10.0.146.107",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -1.1
+        },
+        {
+          "blue": "Analyse Op_Server0",
+          "requested_blue_action": {
+            "action_id": 9,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 9,
+            "action_type": "Analyse",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Analyse Op_Server0"
+          },
+          "red": "PrivilegeEscalate Enterprise2",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -2.1
+        },
+        {
+          "blue": "Analyse Defender",
+          "requested_blue_action": {
+            "action_id": 2,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 2,
+            "action_type": "Analyse",
+            "hostname": "Defender",
+            "agent": "Blue",
+            "display": "Analyse Defender"
+          },
+          "red": "DiscoverNetworkServices 10.0.245.117",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -2.1
+        },
+        {
+          "blue": "Remove Defender",
+          "requested_blue_action": {
+            "action_id": 15,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 15,
+            "action_type": "Remove",
+            "hostname": "Defender",
+            "agent": "Blue",
+            "display": "Remove Defender"
+          },
+          "red": "ExploitRemoteService 10.0.245.117",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -2.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "PrivilegeEscalate Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -3.1
+        },
+        {
+          "blue": "Restore Defender",
+          "requested_blue_action": {
+            "action_id": 132,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 132,
+            "action_type": "Restore",
+            "hostname": "Defender",
+            "agent": "Blue",
+            "display": "Restore Defender"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -14.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Analyse Op_Server0",
+          "requested_blue_action": {
+            "action_id": 9,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 9,
+            "action_type": "Analyse",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Analyse Op_Server0"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Analyse Op_Server0",
+          "requested_blue_action": {
+            "action_id": 9,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 9,
+            "action_type": "Analyse",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Analyse Op_Server0"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Analyse Op_Server0",
+          "requested_blue_action": {
+            "action_id": 9,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 9,
+            "action_type": "Analyse",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Analyse Op_Server0"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Analyse User3",
+          "requested_blue_action": {
+            "action_id": 13,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 13,
+            "action_type": "Analyse",
+            "hostname": "User3",
+            "agent": "Blue",
+            "display": "Analyse User3"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Remove Op_Server0",
+          "requested_blue_action": {
+            "action_id": 22,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 22,
+            "action_type": "Remove",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Remove Op_Server0"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Analyse User3",
+          "requested_blue_action": {
+            "action_id": 13,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 13,
+            "action_type": "Analyse",
+            "hostname": "User3",
+            "agent": "Blue",
+            "display": "Analyse User3"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Analyse User3",
+          "requested_blue_action": {
+            "action_id": 13,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 13,
+            "action_type": "Analyse",
+            "hostname": "User3",
+            "agent": "Blue",
+            "display": "Analyse User3"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        }
+      ],
+      "illegal_actions": 0,
+      "restore_actions": 1,
+      "restore_cost_proxy": -1.0,
+      "host_compromise_events": null,
+      "host_compromise_metric_status": "not_exposed_by_official_wrapper",
+      "condition": "B_lineAgent:30",
+      "condition_seed": 82721
+    },
+    {
+      "episode": 1,
+      "reward": -151.7,
+      "red_agent": "B_lineAgent",
+      "steps": 30,
+      "actions": [
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "DiscoverRemoteSystems 10.0.42.16/28",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": 0.0
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "DiscoverNetworkServices 10.0.42.17",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": 0.0
+        },
+        {
+          "blue": "Analyse Op_Server0",
+          "requested_blue_action": {
+            "action_id": 9,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 9,
+            "action_type": "Analyse",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Analyse Op_Server0"
+          },
+          "red": "ExploitRemoteService 10.0.42.17",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": 0.0
+        },
+        {
+          "blue": "Analyse Op_Server0",
+          "requested_blue_action": {
+            "action_id": 9,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 9,
+            "action_type": "Analyse",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Analyse Op_Server0"
+          },
+          "red": "PrivilegeEscalate User1",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -0.1
+        },
+        {
+          "blue": "Analyse Op_Server0",
+          "requested_blue_action": {
+            "action_id": 9,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 9,
+            "action_type": "Analyse",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Analyse Op_Server0"
+          },
+          "red": "DiscoverNetworkServices 10.0.146.105",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -0.1
+        },
+        {
+          "blue": "Analyse Op_Server0",
+          "requested_blue_action": {
+            "action_id": 9,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 9,
+            "action_type": "Analyse",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Analyse Op_Server0"
+          },
+          "red": "ExploitRemoteService 10.0.146.105",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -0.1
+        },
+        {
+          "blue": "Analyse Enterprise2",
+          "requested_blue_action": {
+            "action_id": 5,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 5,
+            "action_type": "Analyse",
+            "hostname": "Enterprise2",
+            "agent": "Blue",
+            "display": "Analyse Enterprise2"
+          },
+          "red": "PrivilegeEscalate Enterprise1",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -1.1
+        },
+        {
+          "blue": "Analyse User1",
+          "requested_blue_action": {
+            "action_id": 11,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 11,
+            "action_type": "Analyse",
+            "hostname": "User1",
+            "agent": "Blue",
+            "display": "Analyse User1"
+          },
+          "red": "DiscoverRemoteSystems 10.0.146.96/28",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -1.1
+        },
+        {
+          "blue": "Analyse User1",
+          "requested_blue_action": {
+            "action_id": 11,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 11,
+            "action_type": "Analyse",
+            "hostname": "User1",
+            "agent": "Blue",
+            "display": "Analyse User1"
+          },
+          "red": "DiscoverNetworkServices 10.0.146.107",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -1.1
+        },
+        {
+          "blue": "Analyse User1",
+          "requested_blue_action": {
+            "action_id": 11,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 11,
+            "action_type": "Analyse",
+            "hostname": "User1",
+            "agent": "Blue",
+            "display": "Analyse User1"
+          },
+          "red": "ExploitRemoteService 10.0.146.107",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -1.1
+        },
+        {
+          "blue": "Analyse Op_Server0",
+          "requested_blue_action": {
+            "action_id": 9,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 9,
+            "action_type": "Analyse",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Analyse Op_Server0"
+          },
+          "red": "PrivilegeEscalate Enterprise2",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -2.1
+        },
+        {
+          "blue": "Remove User1",
+          "requested_blue_action": {
+            "action_id": 24,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 24,
+            "action_type": "Remove",
+            "hostname": "User1",
+            "agent": "Blue",
+            "display": "Remove User1"
+          },
+          "red": "DiscoverNetworkServices 10.0.245.117",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -2.1
+        },
+        {
+          "blue": "Analyse Defender",
+          "requested_blue_action": {
+            "action_id": 2,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 2,
+            "action_type": "Analyse",
+            "hostname": "Defender",
+            "agent": "Blue",
+            "display": "Analyse Defender"
+          },
+          "red": "ExploitRemoteService 10.0.245.117",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -2.1
+        },
+        {
+          "blue": "Analyse Op_Server0",
+          "requested_blue_action": {
+            "action_id": 9,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 9,
+            "action_type": "Analyse",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Analyse Op_Server0"
+          },
+          "red": "PrivilegeEscalate Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -3.1
+        },
+        {
+          "blue": "Analyse Op_Server0",
+          "requested_blue_action": {
+            "action_id": 9,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 9,
+            "action_type": "Analyse",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Analyse Op_Server0"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Analyse Op_Server0",
+          "requested_blue_action": {
+            "action_id": 9,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 9,
+            "action_type": "Analyse",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Analyse Op_Server0"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Analyse Enterprise0",
+          "requested_blue_action": {
+            "action_id": 3,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 3,
+            "action_type": "Analyse",
+            "hostname": "Enterprise0",
+            "agent": "Blue",
+            "display": "Analyse Enterprise0"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Analyse Op_Server0",
+          "requested_blue_action": {
+            "action_id": 9,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 9,
+            "action_type": "Analyse",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Analyse Op_Server0"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Analyse Op_Host0",
+          "requested_blue_action": {
+            "action_id": 6,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 6,
+            "action_type": "Analyse",
+            "hostname": "Op_Host0",
+            "agent": "Blue",
+            "display": "Analyse Op_Host0"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Analyse Op_Server0",
+          "requested_blue_action": {
+            "action_id": 9,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 9,
+            "action_type": "Analyse",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Analyse Op_Server0"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Analyse Op_Server0",
+          "requested_blue_action": {
+            "action_id": 9,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 9,
+            "action_type": "Analyse",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Analyse Op_Server0"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Analyse Op_Server0",
+          "requested_blue_action": {
+            "action_id": 9,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 9,
+            "action_type": "Analyse",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Analyse Op_Server0"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Restore Op_Server0",
+          "requested_blue_action": {
+            "action_id": 139,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 139,
+            "action_type": "Restore",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Restore Op_Server0"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -3.1
+        },
+        {
+          "blue": "Analyse Op_Server0",
+          "requested_blue_action": {
+            "action_id": 9,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 9,
+            "action_type": "Analyse",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Analyse Op_Server0"
+          },
+          "red": "PrivilegeEscalate Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -2.1
+        },
+        {
+          "blue": "Analyse Enterprise0",
+          "requested_blue_action": {
+            "action_id": 3,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 3,
+            "action_type": "Analyse",
+            "hostname": "Enterprise0",
+            "agent": "Blue",
+            "display": "Analyse Enterprise0"
+          },
+          "red": "ExploitRemoteService 10.0.245.117",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -2.1
+        },
+        {
+          "blue": "Analyse Op_Server0",
+          "requested_blue_action": {
+            "action_id": 9,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 9,
+            "action_type": "Analyse",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Analyse Op_Server0"
+          },
+          "red": "PrivilegeEscalate Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -3.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -3.1
+        },
+        {
+          "blue": "Analyse Op_Server0",
+          "requested_blue_action": {
+            "action_id": 9,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 9,
+            "action_type": "Analyse",
+            "hostname": "Op_Server0",
+            "agent": "Blue",
+            "display": "Analyse Op_Server0"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -3.1
+        },
+        {
+          "blue": "Analyse User2",
+          "requested_blue_action": {
+            "action_id": 12,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 12,
+            "action_type": "Analyse",
+            "hostname": "User2",
+            "agent": "Blue",
+            "display": "Analyse User2"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -3.1
+        }
+      ],
+      "illegal_actions": 0,
+      "restore_actions": 1,
+      "restore_cost_proxy": -1.0,
+      "host_compromise_events": null,
+      "host_compromise_metric_status": "not_exposed_by_official_wrapper",
+      "condition": "B_lineAgent:30",
+      "condition_seed": 82721
+    },
+    {
+      "episode": 1,
+      "reward": -223.7,
+      "red_agent": "B_lineAgent",
+      "steps": 30,
+      "actions": [
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "DiscoverRemoteSystems 10.0.42.16/28",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": 0.0
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "DiscoverNetworkServices 10.0.42.17",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": 0.0
+        },
+        {
+          "blue": "Analyse Defender",
+          "requested_blue_action": {
+            "action_id": 2,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 2,
+            "action_type": "Analyse",
+            "hostname": "Defender",
+            "agent": "Blue",
+            "display": "Analyse Defender"
+          },
+          "red": "ExploitRemoteService 10.0.42.17",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": 0.0
+        },
+        {
+          "blue": "Analyse User0",
+          "requested_blue_action": {
+            "action_id": 10,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 10,
+            "action_type": "Analyse",
+            "hostname": "User0",
+            "agent": "Blue",
+            "display": "Analyse User0"
+          },
+          "red": "PrivilegeEscalate User1",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -0.1
+        },
+        {
+          "blue": "Analyse User0",
+          "requested_blue_action": {
+            "action_id": 10,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 10,
+            "action_type": "Analyse",
+            "hostname": "User0",
+            "agent": "Blue",
+            "display": "Analyse User0"
+          },
+          "red": "DiscoverNetworkServices 10.0.146.105",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -0.1
+        },
+        {
+          "blue": "Analyse Enterprise0",
+          "requested_blue_action": {
+            "action_id": 3,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 3,
+            "action_type": "Analyse",
+            "hostname": "Enterprise0",
+            "agent": "Blue",
+            "display": "Analyse Enterprise0"
+          },
+          "red": "ExploitRemoteService 10.0.146.105",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -0.1
+        },
+        {
+          "blue": "Analyse User0",
+          "requested_blue_action": {
+            "action_id": 10,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 10,
+            "action_type": "Analyse",
+            "hostname": "User0",
+            "agent": "Blue",
+            "display": "Analyse User0"
+          },
+          "red": "PrivilegeEscalate Enterprise1",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -1.1
+        },
+        {
+          "blue": "Analyse Enterprise1",
+          "requested_blue_action": {
+            "action_id": 4,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 4,
+            "action_type": "Analyse",
+            "hostname": "Enterprise1",
+            "agent": "Blue",
+            "display": "Analyse Enterprise1"
+          },
+          "red": "DiscoverRemoteSystems 10.0.146.96/28",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -1.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "DiscoverNetworkServices 10.0.146.107",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -1.1
+        },
+        {
+          "blue": "Analyse User0",
+          "requested_blue_action": {
+            "action_id": 10,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 10,
+            "action_type": "Analyse",
+            "hostname": "User0",
+            "agent": "Blue",
+            "display": "Analyse User0"
+          },
+          "red": "ExploitRemoteService 10.0.146.107",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -1.1
+        },
+        {
+          "blue": "Analyse User0",
+          "requested_blue_action": {
+            "action_id": 10,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 10,
+            "action_type": "Analyse",
+            "hostname": "User0",
+            "agent": "Blue",
+            "display": "Analyse User0"
+          },
+          "red": "PrivilegeEscalate Enterprise2",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -2.1
+        },
+        {
+          "blue": "Analyse User0",
+          "requested_blue_action": {
+            "action_id": 10,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 10,
+            "action_type": "Analyse",
+            "hostname": "User0",
+            "agent": "Blue",
+            "display": "Analyse User0"
+          },
+          "red": "DiscoverNetworkServices 10.0.245.117",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -2.1
+        },
+        {
+          "blue": "Analyse User0",
+          "requested_blue_action": {
+            "action_id": 10,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 10,
+            "action_type": "Analyse",
+            "hostname": "User0",
+            "agent": "Blue",
+            "display": "Analyse User0"
+          },
+          "red": "ExploitRemoteService 10.0.245.117",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -2.1
+        },
+        {
+          "blue": "Analyse User0",
+          "requested_blue_action": {
+            "action_id": 10,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 10,
+            "action_type": "Analyse",
+            "hostname": "User0",
+            "agent": "Blue",
+            "display": "Analyse User0"
+          },
+          "red": "PrivilegeEscalate Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -3.1
+        },
+        {
+          "blue": "Remove User0",
+          "requested_blue_action": {
+            "action_id": 23,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 23,
+            "action_type": "Remove",
+            "hostname": "User0",
+            "agent": "Blue",
+            "display": "Remove User0"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Analyse User0",
+          "requested_blue_action": {
+            "action_id": 10,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 10,
+            "action_type": "Analyse",
+            "hostname": "User0",
+            "agent": "Blue",
+            "display": "Analyse User0"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Analyse User0",
+          "requested_blue_action": {
+            "action_id": 10,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 10,
+            "action_type": "Analyse",
+            "hostname": "User0",
+            "agent": "Blue",
+            "display": "Analyse User0"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Analyse Enterprise1",
+          "requested_blue_action": {
+            "action_id": 4,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 4,
+            "action_type": "Analyse",
+            "hostname": "Enterprise1",
+            "agent": "Blue",
+            "display": "Analyse Enterprise1"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Analyse Enterprise1",
+          "requested_blue_action": {
+            "action_id": 4,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 4,
+            "action_type": "Analyse",
+            "hostname": "Enterprise1",
+            "agent": "Blue",
+            "display": "Analyse Enterprise1"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Analyse Enterprise1",
+          "requested_blue_action": {
+            "action_id": 4,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 4,
+            "action_type": "Analyse",
+            "hostname": "Enterprise1",
+            "agent": "Blue",
+            "display": "Analyse Enterprise1"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Remove Enterprise1",
+          "requested_blue_action": {
+            "action_id": 17,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 17,
+            "action_type": "Remove",
+            "hostname": "Enterprise1",
+            "agent": "Blue",
+            "display": "Remove Enterprise1"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Analyse User2",
+          "requested_blue_action": {
+            "action_id": 12,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 12,
+            "action_type": "Analyse",
+            "hostname": "User2",
+            "agent": "Blue",
+            "display": "Analyse User2"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Analyse User1",
+          "requested_blue_action": {
+            "action_id": 11,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 11,
+            "action_type": "Analyse",
+            "hostname": "User1",
+            "agent": "Blue",
+            "display": "Analyse User1"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "Impact Op_Server0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -13.1
+        }
+      ],
+      "illegal_actions": 0,
+      "restore_actions": 0,
+      "restore_cost_proxy": -0.0,
+      "host_compromise_events": null,
+      "host_compromise_metric_status": "not_exposed_by_official_wrapper",
+      "condition": "B_lineAgent:30",
+      "condition_seed": 82721
+    }
+  ],
+  "mean_reward": -200.0666666666667,
+  "resource_totals": {
+    "llm_calls": 104,
+    "tool_calls": 90,
+    "estimated_tokens": 309599,
+    "budget_accounted_tokens": 397441,
+    "provider_prompt_tokens": 379420,
+    "provider_completion_tokens": 18021,
+    "provider_total_tokens": 397441,
+    "dispatches": 7,
+    "wall_clock_sec": 362.36740000000003,
+    "fallback_count": 0,
+    "exhaustion_count": 0
+  },
+  "budget_limit_violations": [],
+  "manifest_sha256": "8b4d0d16cc1d48b7fbd44ff625c6307fc26215dde1793863f8e04a78d3e9a7a6"
+}

@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "run_id": "20260827_072045_cage2_segmented",
+  "created_at": 1787840445.0373812,
+  "protocol_version": "cage2_segmented_v1",
+  "source_provenance": {
+    "git_head_sha": "2a0c7063b5c4528213b95d061c7f5d41b3e61c68",
+    "git_tree_sha": "11cf66a80181efd77c9733b21aad13c0da808288",
+    "git_dirty": false,
+    "git_diff_sha256": null
+  },
+  "model_settings": {
+    "provider": "openai",
+    "model": "MiniMax-M3",
+    "configured_model": "openai/MiniMax-M3",
+    "thinking": "disabled",
+    "max_output_tokens": 8192,
+    "temperature": 0.0,
+    "temperature_status": "explicit",
+    "usage_accounting": "provider_or_estimated_per_task"
+  },
+  "budget_profile": "diagnostic",
+  "step_budget": {
+    "max_steps": 10,
+    "max_llm_calls": 10,
+    "max_tool_calls": 8,
+    "max_dispatches": 4,
+    "max_role_steps": 4,
+    "token_budget": 32768,
+    "wall_clock_sec": 300.0
+  },
+  "window_steps": 10,
+  "jobs": [
+    {
+      "job_id": "cage2/single/B_lineAgent/h30/seed82721/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "B_lineAgent",
+      "horizon": 30,
+      "seed": 82721,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/B_lineAgent/h30/seed82721/ep1/steps001-010",
+        "cage2/single/B_lineAgent/h30/seed82721/ep1/steps011-020",
+        "cage2/single/B_lineAgent/h30/seed82721/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/B_lineAgent/h30/seed82721/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "B_lineAgent",
+      "horizon": 30,
+      "seed": 82721,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/B_lineAgent/h30/seed82721/ep1/steps001-010",
+        "cage2/orchestrator_only/B_lineAgent/h30/seed82721/ep1/steps011-020",
+        "cage2/orchestrator_only/B_lineAgent/h30/seed82721/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/full/B_lineAgent/h30/seed82721/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "B_lineAgent",
+      "horizon": 30,
+      "seed": 82721,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/B_lineAgent/h30/seed82721/ep1/steps001-010",
+        "cage2/full/B_lineAgent/h30/seed82721/ep1/steps011-020",
+        "cage2/full/B_lineAgent/h30/seed82721/ep1/steps021-030"
+      ]
+    }
+  ],
+  "immutable_sha256": "8b4d0d16cc1d48b7fbd44ff625c6307fc26215dde1793863f8e04a78d3e9a7a6"
+}

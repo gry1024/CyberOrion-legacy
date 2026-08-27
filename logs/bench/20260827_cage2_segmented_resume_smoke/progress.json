@@ -1,0 +1,12 @@
+{
+  "label": "FINAL",
+  "status": "done",
+  "current_condition": null,
+  "completed_segments": 5,
+  "observed_segments": 5,
+  "total_segments": 5,
+  "completed_episodes": 1,
+  "total_episodes": 1,
+  "updated_at": 1787837269.3640814,
+  "resume_command": "~/cai_env/bin/python scripts/run_cage_segmented.py --resume /tmp/cyberorion_cage_smoke_resume"
+}

@@ -1,0 +1,273 @@
+{
+  "schema_version": 1,
+  "protocol_version": "cage2_segmented_v1",
+  "segment_id": "cage2/full/RedMeanderAgent/h10/seed82702/ep1/steps007-008",
+  "job_id": "cage2/full/RedMeanderAgent/h10/seed82702/ep1",
+  "arm": "full",
+  "mode": "agent",
+  "red_agent": "RedMeanderAgent",
+  "horizon": 10,
+  "seed": 82702,
+  "episode": 1,
+  "planned_step_range": [
+    7,
+    8
+  ],
+  "observed_step_range": [
+    7,
+    8
+  ],
+  "source_provenance": {
+    "git_head_sha": "18fef5b9dff8655901ca417c089a19a43258b698",
+    "git_tree_sha": "936b49f409563a7c2165d108e735e65d99579577",
+    "git_dirty": false,
+    "git_diff_sha256": null
+  },
+  "model_settings": {
+    "provider": "openai",
+    "model": "MiniMax-M3",
+    "configured_model": "openai/MiniMax-M3",
+    "thinking": "disabled",
+    "max_output_tokens": 8192,
+    "temperature": 0.0,
+    "temperature_status": "explicit",
+    "usage_accounting": "provider_or_estimated_per_task"
+  },
+  "budget_profile": "publication_v1",
+  "step_budget": {
+    "max_steps": 7,
+    "max_llm_calls": 5,
+    "max_tool_calls": 4,
+    "max_dispatches": 3,
+    "max_role_steps": 4,
+    "token_budget": 24576,
+    "wall_clock_sec": 90.0
+  },
+  "manifest_sha256": "6822d7324f33a6cd971e3d5bdb95888ea4895e80996b4fcbcb9876e83b7c8813",
+  "raw_trace": [
+    {
+      "condition": "RedMeanderAgent:10",
+      "episode": 1,
+      "step": 7,
+      "horizon": 10,
+      "requested_blue_action": {
+        "action_id": 2
+      },
+      "action": {
+        "action_id": 2
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "event": "tool",
+          "hypothesis": "Recent observation activity at row2 positions 11 and 36 suggests probing/scanning near Defender and an external subnet; consolidate with Defender analysis to localize intrusion before containment.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 2
+            }
+          },
+          "observation": "selected canonical Blue action_id=2",
+          "replan_reason": "Need confirmation on Defender before extending analysis to other hosts or attempting removal/restore."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 2
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=2"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 7,
+        "max_llm_calls": 5,
+        "max_tool_calls": 4,
+        "max_dispatches": 3,
+        "max_role_steps": 4,
+        "token_budget": 24576,
+        "wall_clock_sec": 90.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 2680,
+        "budget_accounted_tokens": 3299,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 3.1203,
+        "provider_prompt_tokens": 3179,
+        "provider_completion_tokens": 120,
+        "provider_total_tokens": 3299,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":7,\"episode\":1,\"horizon\":10,\"omitted_prefix_count\":0,\"omitted_prefix_sha256\":null,\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":1,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":2,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":6,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Host0\",\"hostname\":\"Op_Host0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":6},\"step\":3,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":4,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":5,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":6,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "c6f20aab48d70d92ee4d346561a1e54332f0878beab881d79bb72f5b3dbf5690",
+      "memory_omitted_prefix_count": 0,
+      "memory_omitted_prefix_sha256": null
+    },
+    {
+      "condition": "RedMeanderAgent:10",
+      "episode": 1,
+      "step": 8,
+      "horizon": 10,
+      "requested_blue_action": {
+        "action_id": 6
+      },
+      "action": {
+        "action_id": 6
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "event": "tool",
+          "hypothesis": "Recurring '1' at observation index 37 (Op_Host0/Op_Host1 row) signals a persistent red foothold; step 8/10 leaves limited room—need fresh signal on compromised hosts.",
+          "evidence_ids": [
+            "step1 obs all zeros",
+            "step2 Monitor obs all zeros",
+            "step3 obs index 3 = 1 on Op_Host0 row",
+            "step4 obs index 37 = 1",
+            "step5 obs index 36 = 1",
+            "step6 obs index 6 = 1 on Defender row",
+            "step7 obs index 11 = 1"
+          ],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 6
+            }
+          },
+          "observation": "selected canonical Blue action_id=6",
+          "replan_reason": "Op_Host0 has shown repeated activity markers across steps 3 and 5; reconfirming now to inform a Restore or Remove decision in step 9."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 6
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=6"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 7,
+        "max_llm_calls": 5,
+        "max_tool_calls": 4,
+        "max_dispatches": 3,
+        "max_role_steps": 4,
+        "token_budget": 24576,
+        "wall_clock_sec": 90.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 2829,
+        "budget_accounted_tokens": 3585,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 2.5519,
+        "provider_prompt_tokens": 3373,
+        "provider_completion_tokens": 212,
+        "provider_total_tokens": 3585,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":8,\"episode\":1,\"horizon\":10,\"omitted_prefix_count\":0,\"omitted_prefix_sha256\":null,\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":1,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":2,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":6,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Host0\",\"hostname\":\"Op_Host0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":6},\"step\":3,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":4,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":5,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":6,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":7,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "95c229f298fd9a8ea45144f63bb9cdd1a8c57563c01cd84dc9af01f5c7ee36a1",
+      "memory_omitted_prefix_count": 0,
+      "memory_omitted_prefix_sha256": null
+    }
+  ],
+  "reward_delta": -0.1,
+  "cumulative_episode_reward": -0.1,
+  "actions": [
+    {
+      "blue": "Analyse Defender",
+      "requested_blue_action": {
+        "action_id": 2,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 2,
+        "action_type": "Analyse",
+        "hostname": "Defender",
+        "agent": "Blue",
+        "display": "Analyse Defender"
+      },
+      "red": "PrivilegeEscalate User0",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": 0.0
+    },
+    {
+      "blue": "Analyse Op_Host0",
+      "requested_blue_action": {
+        "action_id": 6,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 6,
+        "action_type": "Analyse",
+        "hostname": "Op_Host0",
+        "agent": "Blue",
+        "display": "Analyse Op_Host0"
+      },
+      "red": "ExploitRemoteService 10.0.5.244",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": -0.1
+    }
+  ],
+  "resource_usage": {
+    "llm_calls": 2,
+    "tool_calls": 2,
+    "estimated_tokens": 5509,
+    "budget_accounted_tokens": 6884,
+    "provider_prompt_tokens": 6552,
+    "provider_completion_tokens": 332,
+    "provider_total_tokens": 6884,
+    "dispatches": 0,
+    "wall_clock_sec": 5.6722,
+    "fallback_count": 0,
+    "exhaustion_count": 0,
+    "dispatch_roles": {}
+  },
+  "segment_wall_clock_sec": 5.6931,
+  "episode_complete": false,
+  "episode_committed": true,
+  "provisional_reason": null
+}

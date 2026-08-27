@@ -1,0 +1,265 @@
+{
+  "schema_version": 1,
+  "protocol_version": "cage2_segmented_v1",
+  "segment_id": "cage2/full/RedMeanderAgent/h10/seed82702/ep1/steps001-002",
+  "job_id": "cage2/full/RedMeanderAgent/h10/seed82702/ep1",
+  "arm": "full",
+  "mode": "agent",
+  "red_agent": "RedMeanderAgent",
+  "horizon": 10,
+  "seed": 82702,
+  "episode": 1,
+  "planned_step_range": [
+    1,
+    2
+  ],
+  "observed_step_range": [
+    1,
+    2
+  ],
+  "source_provenance": {
+    "git_head_sha": "18fef5b9dff8655901ca417c089a19a43258b698",
+    "git_tree_sha": "936b49f409563a7c2165d108e735e65d99579577",
+    "git_dirty": false,
+    "git_diff_sha256": null
+  },
+  "model_settings": {
+    "provider": "openai",
+    "model": "MiniMax-M3",
+    "configured_model": "openai/MiniMax-M3",
+    "thinking": "disabled",
+    "max_output_tokens": 8192,
+    "temperature": 0.0,
+    "temperature_status": "explicit",
+    "usage_accounting": "provider_or_estimated_per_task"
+  },
+  "budget_profile": "publication_v1",
+  "step_budget": {
+    "max_steps": 7,
+    "max_llm_calls": 5,
+    "max_tool_calls": 4,
+    "max_dispatches": 3,
+    "max_role_steps": 4,
+    "token_budget": 24576,
+    "wall_clock_sec": 90.0
+  },
+  "manifest_sha256": "6822d7324f33a6cd971e3d5bdb95888ea4895e80996b4fcbcb9876e83b7c8813",
+  "raw_trace": [
+    {
+      "condition": "RedMeanderAgent:10",
+      "episode": 1,
+      "step": 1,
+      "horizon": 10,
+      "requested_blue_action": {
+        "action_id": 1
+      },
+      "action": {
+        "action_id": 1
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "event": "tool",
+          "hypothesis": "Episode start with all-zero observation; no anomaly signals yet. Begin with passive monitoring to gather baseline before committing defensive actions.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 1
+            }
+          },
+          "observation": "selected canonical Blue action_id=1",
+          "replan_reason": "Initial step: observe quietly via Monitor; will re-evaluate after telemetry arrives."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 1
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=1"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 7,
+        "max_llm_calls": 5,
+        "max_tool_calls": 4,
+        "max_dispatches": 3,
+        "max_role_steps": 4,
+        "token_budget": 24576,
+        "wall_clock_sec": 90.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 1890,
+        "budget_accounted_tokens": 2094,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 3.7734,
+        "provider_prompt_tokens": 2019,
+        "provider_completion_tokens": 75,
+        "provider_total_tokens": 2094,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":1,\"episode\":1,\"horizon\":10,\"omitted_prefix_count\":0,\"omitted_prefix_sha256\":null,\"recent_transitions\":[],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "cf260e362d3769cf7f1ced4baf067c749c61a1b2db2647107010f054fea1747b",
+      "memory_omitted_prefix_count": 0,
+      "memory_omitted_prefix_sha256": null
+    },
+    {
+      "condition": "RedMeanderAgent:10",
+      "episode": 1,
+      "step": 2,
+      "horizon": 10,
+      "requested_blue_action": {
+        "action_id": 1
+      },
+      "action": {
+        "action_id": 1
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "event": "tool",
+          "hypothesis": "Observation vector is all zeros across both rows (37 + 15 entries), indicating no host shows any anomaly at step 2. The previous step's Monitor action returned identical zeros, so the environment is quiescent. Continuing passive observation is the lowest-risk, information-gathering action while preserving tool budget for later steps.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 1
+            }
+          },
+          "observation": "selected canonical Blue action_id=1",
+          "replan_reason": ""
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 1
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=1"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 7,
+        "max_llm_calls": 5,
+        "max_tool_calls": 4,
+        "max_dispatches": 3,
+        "max_role_steps": 4,
+        "token_budget": 24576,
+        "wall_clock_sec": 90.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 2082,
+        "budget_accounted_tokens": 2342,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 5.8085,
+        "provider_prompt_tokens": 2210,
+        "provider_completion_tokens": 132,
+        "provider_total_tokens": 2342,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":2,\"episode\":1,\"horizon\":10,\"omitted_prefix_count\":0,\"omitted_prefix_sha256\":null,\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":1,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "6017a29d36af62fef5c6bf107b3c4b56ba38afb413e3cef30657781e6be24696",
+      "memory_omitted_prefix_count": 0,
+      "memory_omitted_prefix_sha256": null
+    }
+  ],
+  "reward_delta": 0.0,
+  "cumulative_episode_reward": 0.0,
+  "actions": [
+    {
+      "blue": "Monitor",
+      "requested_blue_action": {
+        "action_id": 1,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 1,
+        "action_type": "Monitor",
+        "hostname": null,
+        "agent": "Blue",
+        "display": "Monitor"
+      },
+      "red": "DiscoverRemoteSystems 10.0.5.240/28",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": 0.0
+    },
+    {
+      "blue": "Monitor",
+      "requested_blue_action": {
+        "action_id": 1,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 1,
+        "action_type": "Monitor",
+        "hostname": null,
+        "agent": "Blue",
+        "display": "Monitor"
+      },
+      "red": "DiscoverNetworkServices 10.0.5.241",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": 0.0
+    }
+  ],
+  "resource_usage": {
+    "llm_calls": 2,
+    "tool_calls": 2,
+    "estimated_tokens": 3972,
+    "budget_accounted_tokens": 4436,
+    "provider_prompt_tokens": 4229,
+    "provider_completion_tokens": 207,
+    "provider_total_tokens": 4436,
+    "dispatches": 0,
+    "wall_clock_sec": 9.581900000000001,
+    "fallback_count": 0,
+    "exhaustion_count": 0,
+    "dispatch_roles": {}
+  },
+  "segment_wall_clock_sec": 14.2148,
+  "episode_complete": false,
+  "episode_committed": false,
+  "provisional_reason": "mid_episode_state_not_serializable"
+}

@@ -1,0 +1,267 @@
+{
+  "schema_version": 1,
+  "protocol_version": "cage2_segmented_v1",
+  "segment_id": "cage2/full/RedMeanderAgent/h10/seed82702/ep1/steps003-004",
+  "job_id": "cage2/full/RedMeanderAgent/h10/seed82702/ep1",
+  "arm": "full",
+  "mode": "agent",
+  "red_agent": "RedMeanderAgent",
+  "horizon": 10,
+  "seed": 82702,
+  "episode": 1,
+  "planned_step_range": [
+    3,
+    4
+  ],
+  "observed_step_range": [
+    3,
+    4
+  ],
+  "source_provenance": {
+    "git_head_sha": "18fef5b9dff8655901ca417c089a19a43258b698",
+    "git_tree_sha": "936b49f409563a7c2165d108e735e65d99579577",
+    "git_dirty": false,
+    "git_diff_sha256": null
+  },
+  "model_settings": {
+    "provider": "openai",
+    "model": "MiniMax-M3",
+    "configured_model": "openai/MiniMax-M3",
+    "thinking": "disabled",
+    "max_output_tokens": 8192,
+    "temperature": 0.0,
+    "temperature_status": "explicit",
+    "usage_accounting": "provider_or_estimated_per_task"
+  },
+  "budget_profile": "publication_v1",
+  "step_budget": {
+    "max_steps": 7,
+    "max_llm_calls": 5,
+    "max_tool_calls": 4,
+    "max_dispatches": 3,
+    "max_role_steps": 4,
+    "token_budget": 24576,
+    "wall_clock_sec": 90.0
+  },
+  "manifest_sha256": "6822d7324f33a6cd971e3d5bdb95888ea4895e80996b4fcbcb9876e83b7c8813",
+  "raw_trace": [
+    {
+      "condition": "RedMeanderAgent:10",
+      "episode": 1,
+      "step": 3,
+      "horizon": 10,
+      "requested_blue_action": {
+        "action_id": 6
+      },
+      "action": {
+        "action_id": 6
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "event": "tool",
+          "hypothesis": "Step 1 analysed Defender, step 2 Monitor gave nothing. A new anomaly appeared at row1 col3 (Op_Host0). Need targeted analysis on the host flagged to confirm activity.",
+          "evidence_ids": [
+            "current_observation_marker_at_row1_col3"
+          ],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 6
+            }
+          },
+          "observation": "selected canonical Blue action_id=6",
+          "replan_reason": "Reading the observation matrix shows a signal at position 3 in row 1, mapping to Op_Host0, so dispatching analyser on Op_Host0 next."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 6
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=6"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 7,
+        "max_llm_calls": 5,
+        "max_tool_calls": 4,
+        "max_dispatches": 3,
+        "max_role_steps": 4,
+        "token_budget": 24576,
+        "wall_clock_sec": 90.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 2155,
+        "budget_accounted_tokens": 2520,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 2.3407,
+        "provider_prompt_tokens": 2404,
+        "provider_completion_tokens": 116,
+        "provider_total_tokens": 2520,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":3,\"episode\":1,\"horizon\":10,\"omitted_prefix_count\":0,\"omitted_prefix_sha256\":null,\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":1,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":2,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "c8efcfb7ce69a276e3ec2d1aaa91058e1df2281d3e44b0a8cfdf9170cd948496",
+      "memory_omitted_prefix_count": 0,
+      "memory_omitted_prefix_sha256": null
+    },
+    {
+      "condition": "RedMeanderAgent:10",
+      "episode": 1,
+      "step": 4,
+      "horizon": 10,
+      "requested_blue_action": {
+        "action_id": 1
+      },
+      "action": {
+        "action_id": 1
+      },
+      "selected_or_fallback": "selected",
+      "fallback_reason": null,
+      "decision_trace": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "event": "tool",
+          "hypothesis": "Step 4 observation shows a single '1' at row-1 position 32 while row-2 is all zeros; prior step 3 also showed a '1' at row-2 position 3 (Op_Host0 analysis). Network appears quiet, so continue passive monitoring to conserve budget and gather more telemetry before escalating.",
+          "evidence_ids": [],
+          "action": {
+            "type": "tool",
+            "tool": "select_blue_action",
+            "arguments": {
+              "action_id": 1
+            }
+          },
+          "observation": "selected canonical Blue action_id=1",
+          "replan_reason": "No actionable intrusion pattern yet; budget is limited (6 steps remaining, 4 LLM calls) so conservatively observe before deeper analysis."
+        }
+      ],
+      "tool_calls": [
+        {
+          "seq": 1,
+          "role": "orchestrator",
+          "tool": "select_blue_action",
+          "arguments": {
+            "action_id": 1
+          },
+          "status": "ok",
+          "output": "selected canonical Blue action_id=1"
+        }
+      ],
+      "role_events": [],
+      "trace_source": "runtime",
+      "step_budget": {
+        "max_steps": 7,
+        "max_llm_calls": 5,
+        "max_tool_calls": 4,
+        "max_dispatches": 3,
+        "max_role_steps": 4,
+        "token_budget": 24576,
+        "wall_clock_sec": 90.0
+      },
+      "step_resource_usage": {
+        "llm_calls": 1,
+        "tool_calls": 1,
+        "estimated_tokens": 2343,
+        "budget_accounted_tokens": 2767,
+        "budget_accounting_source": "provider",
+        "wall_clock_sec": 1.8717,
+        "provider_prompt_tokens": 2603,
+        "provider_completion_tokens": 164,
+        "provider_total_tokens": 2767,
+        "provider_usage_status": "available",
+        "dispatches": 0
+      },
+      "budget_status": "ok",
+      "dispatch_count": 0,
+      "dispatched_roles": [],
+      "memory_schema": "cage_observable_transition_v1",
+      "model_visible_memory": "{\"current_step\":4,\"episode\":1,\"horizon\":10,\"omitted_prefix_count\":0,\"omitted_prefix_sha256\":null,\"recent_transitions\":[{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":2,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Defender\",\"hostname\":\"Defender\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":2},\"step\":1,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":1,\"action_type\":\"Monitor\",\"agent\":\"Blue\",\"display\":\"Monitor\",\"hostname\":null},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":1},\"step\":2,\"valid\":true},{\"controller_status\":\"selected\",\"done\":false,\"executed_blue_action\":{\"action_id\":6,\"action_type\":\"Analyse\",\"agent\":\"Blue\",\"display\":\"Analyse Op_Host0\",\"hostname\":\"Op_Host0\"},\"fallback_reason\":null,\"invalid_reason\":null,\"observation_before\":\"\\\"\\\\\\\"[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\\\\\\\\n 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0]\\\\\\\"\\\"\",\"requested_blue_action\":{\"action_id\":6},\"step\":3,\"valid\":true}],\"schema_version\":\"cage_observable_transition_v1\"}",
+      "memory_sha256": "4635989c94b7c0d179c461201142406acdc32d15f74e0a5725ed479cedc5a33f",
+      "memory_omitted_prefix_count": 0,
+      "memory_omitted_prefix_sha256": null
+    }
+  ],
+  "reward_delta": 0.0,
+  "cumulative_episode_reward": 0.0,
+  "actions": [
+    {
+      "blue": "Analyse Op_Host0",
+      "requested_blue_action": {
+        "action_id": 6,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 6,
+        "action_type": "Analyse",
+        "hostname": "Op_Host0",
+        "agent": "Blue",
+        "display": "Analyse Op_Host0"
+      },
+      "red": "DiscoverNetworkServices 10.0.5.251",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": 0.0
+    },
+    {
+      "blue": "Monitor",
+      "requested_blue_action": {
+        "action_id": 1,
+        "_cyberorion": {
+          "status": "selected",
+          "fallback_reason": null
+        }
+      },
+      "executed_blue_action": {
+        "action_id": 1,
+        "action_type": "Monitor",
+        "hostname": null,
+        "agent": "Blue",
+        "display": "Monitor"
+      },
+      "red": "DiscoverNetworkServices 10.0.5.241",
+      "valid": true,
+      "invalid_reason": null,
+      "reward": 0.0
+    }
+  ],
+  "resource_usage": {
+    "llm_calls": 2,
+    "tool_calls": 2,
+    "estimated_tokens": 4498,
+    "budget_accounted_tokens": 5287,
+    "provider_prompt_tokens": 5007,
+    "provider_completion_tokens": 280,
+    "provider_total_tokens": 5287,
+    "dispatches": 0,
+    "wall_clock_sec": 4.2124,
+    "fallback_count": 0,
+    "exhaustion_count": 0,
+    "dispatch_roles": {}
+  },
+  "segment_wall_clock_sec": 4.2296,
+  "episode_complete": false,
+  "episode_committed": true,
+  "provisional_reason": null
+}

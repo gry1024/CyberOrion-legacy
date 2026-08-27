@@ -1,0 +1,27 @@
+{
+  "label": "FINAL",
+  "completed_segments": 5,
+  "observed_segments": 5,
+  "expected_segments": 5,
+  "completed_episodes": 1,
+  "total_episodes": 1,
+  "resource_totals": {
+    "llm_calls": 11,
+    "tool_calls": 10,
+    "estimated_tokens": 27582,
+    "budget_accounted_tokens": 33501,
+    "provider_prompt_tokens": 31910,
+    "provider_completion_tokens": 1591,
+    "provider_total_tokens": 33501,
+    "dispatches": 0,
+    "wall_clock_sec": 30.907400000000003,
+    "fallback_count": 0,
+    "exhaustion_count": 0
+  },
+  "interim_mean_rewards": {
+    "full": -0.3
+  },
+  "paired_samples_available": 0,
+  "interim_full_minus_single": null,
+  "publication_valid": true
+}

@@ -1,0 +1,12 @@
+{
+  "label": "FINAL",
+  "status": "done",
+  "current_condition": null,
+  "completed_segments": 9,
+  "observed_segments": 9,
+  "total_segments": 9,
+  "completed_episodes": 3,
+  "total_episodes": 3,
+  "updated_at": 1787840846.354073,
+  "resume_command": "~/cai_env/bin/python scripts/run_cage_segmented.py --resume /tmp/cyberorion_cage_cal_v2_bline_h30"
+}

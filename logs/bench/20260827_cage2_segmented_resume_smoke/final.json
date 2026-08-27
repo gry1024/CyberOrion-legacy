@@ -1,0 +1,257 @@
+{
+  "schema_version": 1,
+  "protocol_version": "cage2_segmented_v1",
+  "run_id": "20260827_062633_cage2_segmented",
+  "status": "done",
+  "publication_valid": true,
+  "publication_invalid_reasons": [],
+  "completed_segments": 5,
+  "observed_segments": 5,
+  "expected_segments": 5,
+  "completed_episodes": 1,
+  "total_episodes": 1,
+  "missing_jobs": [],
+  "results": [
+    {
+      "episode": 1,
+      "reward": -0.3,
+      "red_agent": "RedMeanderAgent",
+      "steps": 10,
+      "actions": [
+        {
+          "blue": "Analyse Defender",
+          "requested_blue_action": {
+            "action_id": 2,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 2,
+            "action_type": "Analyse",
+            "hostname": "Defender",
+            "agent": "Blue",
+            "display": "Analyse Defender"
+          },
+          "red": "DiscoverRemoteSystems 10.0.5.240/28",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": 0.0
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "DiscoverNetworkServices 10.0.5.244",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": 0.0
+        },
+        {
+          "blue": "Analyse Op_Host0",
+          "requested_blue_action": {
+            "action_id": 6,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 6,
+            "action_type": "Analyse",
+            "hostname": "Op_Host0",
+            "agent": "Blue",
+            "display": "Analyse Op_Host0"
+          },
+          "red": "DiscoverNetworkServices 10.0.5.251",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": 0.0
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "DiscoverNetworkServices 10.0.5.241",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": 0.0
+        },
+        {
+          "blue": "Monitor",
+          "requested_blue_action": {
+            "action_id": 1,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 1,
+            "action_type": "Monitor",
+            "hostname": null,
+            "agent": "Blue",
+            "display": "Monitor"
+          },
+          "red": "DiscoverNetworkServices 10.0.5.250",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": 0.0
+        },
+        {
+          "blue": "Analyse Defender",
+          "requested_blue_action": {
+            "action_id": 2,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 2,
+            "action_type": "Analyse",
+            "hostname": "Defender",
+            "agent": "Blue",
+            "display": "Analyse Defender"
+          },
+          "red": "DiscoverNetworkServices 10.0.5.243",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": 0.0
+        },
+        {
+          "blue": "Analyse Defender",
+          "requested_blue_action": {
+            "action_id": 2,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 2,
+            "action_type": "Analyse",
+            "hostname": "Defender",
+            "agent": "Blue",
+            "display": "Analyse Defender"
+          },
+          "red": "PrivilegeEscalate User0",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": 0.0
+        },
+        {
+          "blue": "Analyse Op_Host0",
+          "requested_blue_action": {
+            "action_id": 6,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 6,
+            "action_type": "Analyse",
+            "hostname": "Op_Host0",
+            "agent": "Blue",
+            "display": "Analyse Op_Host0"
+          },
+          "red": "ExploitRemoteService 10.0.5.244",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -0.1
+        },
+        {
+          "blue": "Remove Enterprise0",
+          "requested_blue_action": {
+            "action_id": 16,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 16,
+            "action_type": "Remove",
+            "hostname": "Enterprise0",
+            "agent": "Blue",
+            "display": "Remove Enterprise0"
+          },
+          "red": "PrivilegeEscalate User2",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -0.1
+        },
+        {
+          "blue": "Analyse Op_Host0",
+          "requested_blue_action": {
+            "action_id": 6,
+            "_cyberorion": {
+              "status": "selected",
+              "fallback_reason": null
+            }
+          },
+          "executed_blue_action": {
+            "action_id": 6,
+            "action_type": "Analyse",
+            "hostname": "Op_Host0",
+            "agent": "Blue",
+            "display": "Analyse Op_Host0"
+          },
+          "red": "DiscoverNetworkServices 10.0.143.53",
+          "valid": true,
+          "invalid_reason": null,
+          "reward": -0.1
+        }
+      ],
+      "illegal_actions": 0,
+      "restore_actions": 0,
+      "restore_cost_proxy": -0.0,
+      "host_compromise_events": null,
+      "host_compromise_metric_status": "not_exposed_by_official_wrapper",
+      "condition": "RedMeanderAgent:10",
+      "condition_seed": 82702
+    }
+  ],
+  "mean_reward": -0.3,
+  "resource_totals": {
+    "llm_calls": 11,
+    "tool_calls": 10,
+    "estimated_tokens": 27582,
+    "budget_accounted_tokens": 33501,
+    "provider_prompt_tokens": 31910,
+    "provider_completion_tokens": 1591,
+    "provider_total_tokens": 33501,
+    "dispatches": 0,
+    "wall_clock_sec": 30.907400000000003,
+    "fallback_count": 0,
+    "exhaustion_count": 0
+  },
+  "budget_limit_violations": [],
+  "manifest_sha256": "6822d7324f33a6cd971e3d5bdb95888ea4895e80996b4fcbcb9876e83b7c8813"
+}
