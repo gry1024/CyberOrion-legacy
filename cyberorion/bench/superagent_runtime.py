@@ -237,15 +237,24 @@ def _system_prompt(role: str, allowed_actions: tuple[str, ...]) -> str:
                 if "complete" in allowed_actions else
                 "task_complete is unavailable; finish through an authorized "
                 "terminal tool.")
-    action_types = "|".join(allowed_actions)
+    variants = {
+        "tool": {"type": "tool", "tool": "authorized_tool_name",
+                 "arguments": {}},
+        "dispatch": {"type": "dispatch", "role": "watcher",
+                     "mission": "bounded mission"},
+        "complete": {"type": "complete", "summary": "final summary"},
+    }
+    action_contract = json.dumps(
+        [variants[action] for action in allowed_actions],
+        ensure_ascii=False, separators=(",", ":"))
     return (
         f"{duties.get(role, duties['reference'])}\n{dispatch}\n"
         f"{terminal}\n"
         "Return exactly one JSON object per step. Do not include hidden "
-        "reasoning. Shape: {\"hypothesis\":\"...\",\"evidence_ids\":[],"
-        f"\"action\":{{\"type\":\"{action_types}\",\"tool\":\"name\","
-        "\"arguments\":{},\"role\":\"watcher\",\"mission\":\"...\","
-        "\"summary\":\"...\"},\"replan_reason\":\"...\"}. Tools can fail; "
+        "reasoning. The action object MUST match exactly one of these permitted "
+        f"variants and MUST NOT contain fields from another variant: {action_contract}. "
+        "Envelope: {\"hypothesis\":\"...\",\"evidence_ids\":[],"
+        "\"action\":<one permitted variant>,\"replan_reason\":\"...\"}. Tools can fail; "
         "observe failures and adapt or report them honestly."
     )
 

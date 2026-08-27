@@ -80,7 +80,10 @@ def test_terminal_required_rejects_task_complete_and_retries_selector() -> None:
 def test_cage_single_contract_is_tool_only() -> None:
     async def llm(**request):
         assert [tool["name"] for tool in request["tools"]] == ["select"]
-        assert '"type":"tool"' in request["messages"][0]["content"]
+        prompt = request["messages"][0]["content"]
+        assert '{"type":"tool","tool":' in prompt
+        assert '"type":"dispatch"' not in prompt
+        assert '"type":"complete"' not in prompt
         return {"action": {"type": "tool", "tool": "select",
                            "arguments": {"action_id": 1}}}
 
@@ -118,11 +121,17 @@ def test_cage_full_contracts_match_orchestrator_and_specialist_permissions() -> 
         config=RuntimeConfig(max_steps=4, max_llm_calls=4,
                              require_terminal_tool=True)))
     assert seen["orchestrator"][0]["tools"] == ["select", "dispatch_task"]
-    assert '"type":"tool|dispatch"' in seen["orchestrator"][0]["prompt"]
+    assert '{"type":"tool","tool":' in seen["orchestrator"][0]["prompt"]
+    assert '{"type":"dispatch","role":' in seen["orchestrator"][0]["prompt"]
+    assert '"type":"complete"' not in seen["orchestrator"][0]["prompt"]
     assert seen["watcher"][0]["tools"] == ["task_complete"]
-    assert '"type":"complete"' in seen["watcher"][0]["prompt"]
-    assert '"type":"tool' not in seen["watcher"][0]["prompt"]
-    assert 'dispatch' not in seen["watcher"][0]["prompt"].split("Shape:", 1)[1]
+    specialist_contract = seen["watcher"][0]["prompt"].split(
+        "permitted variants", 1)[1]
+    assert '{"type":"complete","summary":' in specialist_contract
+    assert '"type":"tool"' not in specialist_contract
+    assert '"type":"dispatch"' not in specialist_contract
+    assert '"role"' not in specialist_contract
+    assert '"mission"' not in specialist_contract
     assert result["status"] == "complete"
 
 
@@ -146,7 +155,10 @@ def test_excytin_like_specialist_contract_is_tool_and_complete() -> None:
     request = seen["analyst"]
     assert [tool["name"] for tool in request["tools"]] == [
         "query_sql", "task_complete"]
-    assert '"type":"tool|complete"' in request["messages"][0]["content"]
+    prompt = request["messages"][0]["content"]
+    assert '{"type":"tool","tool":' in prompt
+    assert '{"type":"complete","summary":' in prompt
+    assert '"type":"dispatch"' not in prompt
 
 
 def test_forbidden_specialist_dispatch_still_fails_closed() -> None:
@@ -198,7 +210,10 @@ def test_cage_orchestrator_only_contract_is_tool_only() -> None:
     async def llm(**request):
         assert request["role"] == "orchestrator"
         assert [tool["name"] for tool in request["tools"]] == ["select"]
-        assert '"type":"tool"' in request["messages"][0]["content"]
+        prompt = request["messages"][0]["content"]
+        assert '{"type":"tool","tool":' in prompt
+        assert '"type":"dispatch"' not in prompt
+        assert '"type":"complete"' not in prompt
         return {"action": {"type": "tool", "tool": "select",
                            "arguments": {"action_id": 1}}}
 
