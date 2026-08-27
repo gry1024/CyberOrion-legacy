@@ -1,0 +1,43 @@
+{
+  "runner": "scripts/run_excytin_official.py",
+  "official_execution": true,
+  "sqlite_projection_involved": false,
+  "upstream": "microsoft/ACESEvals",
+  "upstream_commit_sha": "17135140d0fdf52c2264a1fc248cf01e16b23a79",
+  "cyberorion_source": {
+    "git_head": "3787c807020840d7d9ea0bc7652252c3b9f3d8f2",
+    "git_tree_sha": "0e3e207c977db6c8c45c73313db5dd04db7149ed",
+    "git_dirty": false,
+    "git_diff_sha256": null
+  },
+  "arm": "cyberorion_single",
+  "model": "openai/MiniMax-M3",
+  "judge_llm": "openai/MiniMax-M3",
+  "decoding_config": {
+    "temperature": 0
+  },
+  "judge_config": {
+    "model": "openai/MiniMax-M3"
+  },
+  "task_ids": [
+    "incident_134_latest_cleaned_test_set_task_4",
+    "incident_166_latest_cleaned_test_set_task_20",
+    "incident_322_latest_cleaned_test_set_task_1",
+    "incident_34_latest_cleaned_test_set_task_43",
+    "incident_38_latest_cleaned_test_set_task_5",
+    "incident_39_latest_cleaned_test_set_task_19",
+    "incident_5_latest_cleaned_test_set_task_1",
+    "incident_55_latest_cleaned_test_set_task_13",
+    "incident_134_latest_cleaned_test_set_task_40",
+    "incident_322_latest_cleaned_test_set_task_20",
+    "incident_39_latest_cleaned_test_set_task_10",
+    "incident_55_latest_cleaned_test_set_task_10"
+  ],
+  "task_manifest_sha256": "78afe877e1c15d91a7e20c2cbf16d45d108b01b135dd57268899b9a37fa2de8a",
+  "extra_task_args": {
+    "dataset": "latest_cleaned_test_set"
+  },
+  "started_at": 1787833242.6963959,
+  "finished_at": 1787833510.22934,
+  "log_dir": "/tmp/excytin-publication/single_v1"
+}

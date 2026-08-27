@@ -1,0 +1,1286 @@
+{
+  "schema": "excytin_official_paired_summary_v1",
+  "official_execution": true,
+  "sqlite_projection_involved": false,
+  "upstream": "microsoft/ACESEvals",
+  "upstream_commit_sha": "17135140d0fdf52c2264a1fc248cf01e16b23a79",
+  "cyberorion_source_head": "3787c807020840d7d9ea0bc7652252c3b9f3d8f2",
+  "cyberorion_source_tree_sha": "0e3e207c977db6c8c45c73313db5dd04db7149ed",
+  "manifest_file": "benchmarks/manifests/excytin_pilot_v1.json",
+  "task_manifest_sha256": "78afe877e1c15d91a7e20c2cbf16d45d108b01b135dd57268899b9a37fa2de8a",
+  "manifest_task_count": 12,
+  "manifest_task_ids": [
+    "incident_134_latest_cleaned_test_set_task_4",
+    "incident_166_latest_cleaned_test_set_task_20",
+    "incident_322_latest_cleaned_test_set_task_1",
+    "incident_34_latest_cleaned_test_set_task_43",
+    "incident_38_latest_cleaned_test_set_task_5",
+    "incident_39_latest_cleaned_test_set_task_19",
+    "incident_5_latest_cleaned_test_set_task_1",
+    "incident_55_latest_cleaned_test_set_task_13",
+    "incident_134_latest_cleaned_test_set_task_40",
+    "incident_322_latest_cleaned_test_set_task_20",
+    "incident_39_latest_cleaned_test_set_task_10",
+    "incident_55_latest_cleaned_test_set_task_10"
+  ],
+  "dataset": "latest_cleaned_test_set",
+  "model": "openai/MiniMax-M3",
+  "temperature": 0,
+  "judge_llm": "openai/MiniMax-M3",
+  "judge_policy": "non-default scorer configuration; fixed same judge for all arms; no direct published upstream comparability",
+  "score_policy": {
+    "primary": [
+      "saber_overall",
+      "aggregate"
+    ],
+    "diagnostic": [
+      "submission",
+      "checkpoint_*"
+    ],
+    "aggregation": "official max(submission, checkpoint scores); no invented weighted score"
+  },
+  "fairness_audit": {
+    "same_task_ids": true,
+    "same_execution_order": true,
+    "canonical_official_message_contents_equal": true,
+    "gold_or_scorer_context_added_false_all": true,
+    "note": "raw task_input hashes include dynamic Inspect message IDs; canonical role/content messages match; expected answers appear only in scorer events, not runtime traces"
+  },
+  "runs": {
+    "single": {
+      "eval_file": "20260827_excytin_single_pilot_v1.eval",
+      "eval_sha256": "34172a6048bcf61158c5a33b991cfb2622a8b7a8f4eca16290ee705fac7caad7",
+      "provenance_file": "20260827_excytin_single_pilot_v1.provenance.json",
+      "status": "success",
+      "sample_count": 12,
+      "execution_order": [
+        "incident_134_latest_cleaned_test_set_task_4",
+        "incident_134_latest_cleaned_test_set_task_40",
+        "incident_166_latest_cleaned_test_set_task_20",
+        "incident_322_latest_cleaned_test_set_task_1",
+        "incident_322_latest_cleaned_test_set_task_20",
+        "incident_34_latest_cleaned_test_set_task_43",
+        "incident_38_latest_cleaned_test_set_task_5",
+        "incident_39_latest_cleaned_test_set_task_10",
+        "incident_39_latest_cleaned_test_set_task_19",
+        "incident_55_latest_cleaned_test_set_task_10",
+        "incident_55_latest_cleaned_test_set_task_13",
+        "incident_5_latest_cleaned_test_set_task_1"
+      ],
+      "scores": {
+        "saber_overall": {
+          "mean": 0.3333333333333333,
+          "stderr": 0.1421338109037403
+        },
+        "submission": {
+          "accuracy": 0.3333333333333333,
+          "stderr": 0.1421338109037403
+        },
+        "checkpoint_1": {
+          "accuracy": 0.0,
+          "stderr": 0.0
+        },
+        "checkpoint_2": {
+          "accuracy": 0.0,
+          "stderr": 0.0
+        },
+        "checkpoint_3": {
+          "accuracy": 0.0,
+          "stderr": 0.0
+        },
+        "checkpoint_4": {
+          "accuracy": 0.0,
+          "stderr": 0.0
+        },
+        "checkpoint_5": {
+          "accuracy": 0.0,
+          "stderr": 0.0
+        },
+        "aggregate": {
+          "accuracy": 0.3333333333333333,
+          "stderr": 0.1421338109037403
+        }
+      },
+      "agent_model_events": 79,
+      "judge_model_events": 12,
+      "agent_provider_tokens": 946110,
+      "judge_provider_tokens": 7911,
+      "provider_tokens_total": 954021,
+      "wall_time_sec": 636.738,
+      "sandbox_exec_events": 55,
+      "mysql_command_invocations": 48,
+      "runtime_llm_calls": 79,
+      "runtime_tool_calls": 55,
+      "runtime_errors": 17,
+      "runtime_model_error_tasks": 5,
+      "dispatch_tasks": 0,
+      "dispatch_task_rate": 0.0,
+      "dispatches": 0,
+      "role_counts": {},
+      "tasks": [
+        {
+          "task_id": "incident_134_latest_cleaned_test_set_task_4",
+          "checkpoint_count": 1,
+          "scores": {
+            "saber_overall": 1.0,
+            "submission": 1.0,
+            "checkpoint_1": 0.0,
+            "aggregate": 1.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 0,
+          "llm_calls": 5,
+          "tool_calls": 4,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 40.331
+        },
+        {
+          "task_id": "incident_134_latest_cleaned_test_set_task_40",
+          "checkpoint_count": 3,
+          "scores": {
+            "saber_overall": 0.0,
+            "submission": 0.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "aggregate": 0.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 0,
+          "llm_calls": 7,
+          "tool_calls": 6,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 46.033
+        },
+        {
+          "task_id": "incident_166_latest_cleaned_test_set_task_20",
+          "checkpoint_count": 3,
+          "scores": {
+            "saber_overall": 0.0,
+            "submission": 0.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "aggregate": 0.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 1,
+          "llm_calls": 6,
+          "tool_calls": 4,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 33.144
+        },
+        {
+          "task_id": "incident_322_latest_cleaned_test_set_task_1",
+          "checkpoint_count": 4,
+          "scores": {
+            "saber_overall": 0.0,
+            "submission": 0.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "checkpoint_4": 0.0,
+            "aggregate": 0.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 0,
+          "llm_calls": 1,
+          "tool_calls": 0,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 32.229
+        },
+        {
+          "task_id": "incident_322_latest_cleaned_test_set_task_20",
+          "checkpoint_count": 1,
+          "scores": {
+            "saber_overall": 1.0,
+            "submission": 1.0,
+            "checkpoint_1": 0.0,
+            "aggregate": 1.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 0,
+          "llm_calls": 4,
+          "tool_calls": 3,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 26.467
+        },
+        {
+          "task_id": "incident_34_latest_cleaned_test_set_task_43",
+          "checkpoint_count": 1,
+          "scores": {
+            "saber_overall": 0.0,
+            "submission": 0.0,
+            "checkpoint_1": 0.0,
+            "aggregate": 0.0
+          },
+          "runtime_status": "model_error",
+          "runtime_valid": false,
+          "runtime_errors": 3,
+          "llm_calls": 9,
+          "tool_calls": 6,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 77.156
+        },
+        {
+          "task_id": "incident_38_latest_cleaned_test_set_task_5",
+          "checkpoint_count": 3,
+          "scores": {
+            "saber_overall": 1.0,
+            "submission": 1.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "aggregate": 1.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 0,
+          "llm_calls": 5,
+          "tool_calls": 4,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 48.112
+        },
+        {
+          "task_id": "incident_39_latest_cleaned_test_set_task_10",
+          "checkpoint_count": 2,
+          "scores": {
+            "saber_overall": 0.0,
+            "submission": 0.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "aggregate": 0.0
+          },
+          "runtime_status": "model_error",
+          "runtime_valid": false,
+          "runtime_errors": 3,
+          "llm_calls": 11,
+          "tool_calls": 8,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 107.602
+        },
+        {
+          "task_id": "incident_39_latest_cleaned_test_set_task_19",
+          "checkpoint_count": 4,
+          "scores": {
+            "saber_overall": 1.0,
+            "submission": 1.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "checkpoint_4": 0.0,
+            "aggregate": 1.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 1,
+          "llm_calls": 8,
+          "tool_calls": 6,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 60.047
+        },
+        {
+          "task_id": "incident_55_latest_cleaned_test_set_task_10",
+          "checkpoint_count": 3,
+          "scores": {
+            "saber_overall": 0.0,
+            "submission": 0.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "aggregate": 0.0
+          },
+          "runtime_status": "model_error",
+          "runtime_valid": false,
+          "runtime_errors": 3,
+          "llm_calls": 9,
+          "tool_calls": 6,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 89.68
+        },
+        {
+          "task_id": "incident_55_latest_cleaned_test_set_task_13",
+          "checkpoint_count": 5,
+          "scores": {
+            "saber_overall": 0.0,
+            "submission": 0.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "checkpoint_4": 0.0,
+            "checkpoint_5": 0.0,
+            "aggregate": 0.0
+          },
+          "runtime_status": "model_error",
+          "runtime_valid": false,
+          "runtime_errors": 3,
+          "llm_calls": 7,
+          "tool_calls": 4,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 39.157
+        },
+        {
+          "task_id": "incident_5_latest_cleaned_test_set_task_1",
+          "checkpoint_count": 4,
+          "scores": {
+            "saber_overall": 0.0,
+            "submission": 0.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "checkpoint_4": 0.0,
+            "aggregate": 0.0
+          },
+          "runtime_status": "model_error",
+          "runtime_valid": false,
+          "runtime_errors": 3,
+          "llm_calls": 7,
+          "tool_calls": 4,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 36.78
+        }
+      ]
+    },
+    "orchestrator_only": {
+      "eval_file": "20260827_excytin_orchestrator_only_pilot_v1.eval",
+      "eval_sha256": "003508debcb3f6288a06734152b8a5c9b0f377951eb8cb2c57448bbd5e0a4e2c",
+      "provenance_file": "20260827_excytin_orchestrator_only_pilot_v1.provenance.json",
+      "status": "success",
+      "sample_count": 12,
+      "execution_order": [
+        "incident_134_latest_cleaned_test_set_task_4",
+        "incident_134_latest_cleaned_test_set_task_40",
+        "incident_166_latest_cleaned_test_set_task_20",
+        "incident_322_latest_cleaned_test_set_task_1",
+        "incident_322_latest_cleaned_test_set_task_20",
+        "incident_34_latest_cleaned_test_set_task_43",
+        "incident_38_latest_cleaned_test_set_task_5",
+        "incident_39_latest_cleaned_test_set_task_10",
+        "incident_39_latest_cleaned_test_set_task_19",
+        "incident_55_latest_cleaned_test_set_task_10",
+        "incident_55_latest_cleaned_test_set_task_13",
+        "incident_5_latest_cleaned_test_set_task_1"
+      ],
+      "scores": {
+        "saber_overall": {
+          "mean": 0.6666666666666666,
+          "stderr": 0.14213381090374033
+        },
+        "submission": {
+          "accuracy": 0.6666666666666666,
+          "stderr": 0.14213381090374033
+        },
+        "checkpoint_1": {
+          "accuracy": 0.0,
+          "stderr": 0.0
+        },
+        "checkpoint_2": {
+          "accuracy": 0.0,
+          "stderr": 0.0
+        },
+        "checkpoint_3": {
+          "accuracy": 0.0,
+          "stderr": 0.0
+        },
+        "checkpoint_4": {
+          "accuracy": 0.0,
+          "stderr": 0.0
+        },
+        "checkpoint_5": {
+          "accuracy": 0.0,
+          "stderr": 0.0
+        },
+        "aggregate": {
+          "accuracy": 0.6666666666666666,
+          "stderr": 0.14213381090374033
+        }
+      },
+      "agent_model_events": 85,
+      "judge_model_events": 12,
+      "agent_provider_tokens": 1198259,
+      "judge_provider_tokens": 7823,
+      "provider_tokens_total": 1206082,
+      "wall_time_sec": 666.566,
+      "sandbox_exec_events": 59,
+      "mysql_command_invocations": 53,
+      "runtime_llm_calls": 85,
+      "runtime_tool_calls": 59,
+      "runtime_errors": 14,
+      "runtime_model_error_tasks": 0,
+      "dispatch_tasks": 0,
+      "dispatch_task_rate": 0.0,
+      "dispatches": 0,
+      "role_counts": {},
+      "tasks": [
+        {
+          "task_id": "incident_134_latest_cleaned_test_set_task_4",
+          "checkpoint_count": 1,
+          "scores": {
+            "saber_overall": 1.0,
+            "submission": 1.0,
+            "checkpoint_1": 0.0,
+            "aggregate": 1.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 2,
+          "llm_calls": 8,
+          "tool_calls": 5,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 48.719
+        },
+        {
+          "task_id": "incident_134_latest_cleaned_test_set_task_40",
+          "checkpoint_count": 3,
+          "scores": {
+            "saber_overall": 1.0,
+            "submission": 1.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "aggregate": 1.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 2,
+          "llm_calls": 12,
+          "tool_calls": 9,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 74.293
+        },
+        {
+          "task_id": "incident_166_latest_cleaned_test_set_task_20",
+          "checkpoint_count": 3,
+          "scores": {
+            "saber_overall": 0.0,
+            "submission": 0.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "aggregate": 0.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 2,
+          "llm_calls": 9,
+          "tool_calls": 6,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 58.76
+        },
+        {
+          "task_id": "incident_322_latest_cleaned_test_set_task_1",
+          "checkpoint_count": 4,
+          "scores": {
+            "saber_overall": 1.0,
+            "submission": 1.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "checkpoint_4": 0.0,
+            "aggregate": 1.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 1,
+          "llm_calls": 7,
+          "tool_calls": 5,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 44.505
+        },
+        {
+          "task_id": "incident_322_latest_cleaned_test_set_task_20",
+          "checkpoint_count": 1,
+          "scores": {
+            "saber_overall": 1.0,
+            "submission": 1.0,
+            "checkpoint_1": 0.0,
+            "aggregate": 1.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 2,
+          "llm_calls": 6,
+          "tool_calls": 3,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 41.616
+        },
+        {
+          "task_id": "incident_34_latest_cleaned_test_set_task_43",
+          "checkpoint_count": 1,
+          "scores": {
+            "saber_overall": 1.0,
+            "submission": 1.0,
+            "checkpoint_1": 0.0,
+            "aggregate": 1.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 1,
+          "llm_calls": 13,
+          "tool_calls": 11,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 152.914
+        },
+        {
+          "task_id": "incident_38_latest_cleaned_test_set_task_5",
+          "checkpoint_count": 3,
+          "scores": {
+            "saber_overall": 1.0,
+            "submission": 1.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "aggregate": 1.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 0,
+          "llm_calls": 4,
+          "tool_calls": 3,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 34.001
+        },
+        {
+          "task_id": "incident_39_latest_cleaned_test_set_task_10",
+          "checkpoint_count": 2,
+          "scores": {
+            "saber_overall": 0.0,
+            "submission": 0.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "aggregate": 0.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 2,
+          "llm_calls": 7,
+          "tool_calls": 4,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 47.667
+        },
+        {
+          "task_id": "incident_39_latest_cleaned_test_set_task_19",
+          "checkpoint_count": 4,
+          "scores": {
+            "saber_overall": 1.0,
+            "submission": 1.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "checkpoint_4": 0.0,
+            "aggregate": 1.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 2,
+          "llm_calls": 7,
+          "tool_calls": 4,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 62.797
+        },
+        {
+          "task_id": "incident_55_latest_cleaned_test_set_task_10",
+          "checkpoint_count": 3,
+          "scores": {
+            "saber_overall": 0.0,
+            "submission": 0.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "aggregate": 0.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 0,
+          "llm_calls": 5,
+          "tool_calls": 4,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 37.545
+        },
+        {
+          "task_id": "incident_55_latest_cleaned_test_set_task_13",
+          "checkpoint_count": 5,
+          "scores": {
+            "saber_overall": 1.0,
+            "submission": 1.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "checkpoint_4": 0.0,
+            "checkpoint_5": 0.0,
+            "aggregate": 1.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 0,
+          "llm_calls": 4,
+          "tool_calls": 3,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 37.771
+        },
+        {
+          "task_id": "incident_5_latest_cleaned_test_set_task_1",
+          "checkpoint_count": 4,
+          "scores": {
+            "saber_overall": 0.0,
+            "submission": 0.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "checkpoint_4": 0.0,
+            "aggregate": 0.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 0,
+          "llm_calls": 3,
+          "tool_calls": 2,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 25.978
+        }
+      ]
+    },
+    "full": {
+      "eval_file": "20260827_excytin_full_pilot_v1.eval",
+      "eval_sha256": "173d28029fc402d1047f90f4777e5156e1468da35cc3e263e01b97edada6bfcf",
+      "provenance_file": "20260827_excytin_full_pilot_v1.provenance.json",
+      "status": "success",
+      "sample_count": 12,
+      "execution_order": [
+        "incident_134_latest_cleaned_test_set_task_4",
+        "incident_134_latest_cleaned_test_set_task_40",
+        "incident_166_latest_cleaned_test_set_task_20",
+        "incident_322_latest_cleaned_test_set_task_1",
+        "incident_322_latest_cleaned_test_set_task_20",
+        "incident_34_latest_cleaned_test_set_task_43",
+        "incident_38_latest_cleaned_test_set_task_5",
+        "incident_39_latest_cleaned_test_set_task_10",
+        "incident_39_latest_cleaned_test_set_task_19",
+        "incident_55_latest_cleaned_test_set_task_10",
+        "incident_55_latest_cleaned_test_set_task_13",
+        "incident_5_latest_cleaned_test_set_task_1"
+      ],
+      "scores": {
+        "saber_overall": {
+          "mean": 0.5833333333333334,
+          "stderr": 0.1486470975026408
+        },
+        "submission": {
+          "accuracy": 0.5833333333333334,
+          "stderr": 0.1486470975026408
+        },
+        "checkpoint_1": {
+          "accuracy": 0.0,
+          "stderr": 0.0
+        },
+        "checkpoint_2": {
+          "accuracy": 0.0,
+          "stderr": 0.0
+        },
+        "checkpoint_3": {
+          "accuracy": 0.0,
+          "stderr": 0.0
+        },
+        "checkpoint_4": {
+          "accuracy": 0.0,
+          "stderr": 0.0
+        },
+        "checkpoint_5": {
+          "accuracy": 0.0,
+          "stderr": 0.0
+        },
+        "aggregate": {
+          "accuracy": 0.5833333333333334,
+          "stderr": 0.1486470975026408
+        }
+      },
+      "agent_model_events": 90,
+      "judge_model_events": 12,
+      "agent_provider_tokens": 1829695,
+      "judge_provider_tokens": 8586,
+      "provider_tokens_total": 1838281,
+      "wall_time_sec": 787.533,
+      "sandbox_exec_events": 59,
+      "mysql_command_invocations": 56,
+      "runtime_llm_calls": 90,
+      "runtime_tool_calls": 59,
+      "runtime_errors": 15,
+      "runtime_model_error_tasks": 0,
+      "dispatch_tasks": 2,
+      "dispatch_task_rate": 0.16666666666666666,
+      "dispatches": 3,
+      "role_counts": {
+        "analyst": 3
+      },
+      "tasks": [
+        {
+          "task_id": "incident_134_latest_cleaned_test_set_task_4",
+          "checkpoint_count": 1,
+          "scores": {
+            "saber_overall": 1.0,
+            "submission": 1.0,
+            "checkpoint_1": 0.0,
+            "aggregate": 1.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 2,
+          "llm_calls": 9,
+          "tool_calls": 6,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 59.069
+        },
+        {
+          "task_id": "incident_134_latest_cleaned_test_set_task_40",
+          "checkpoint_count": 3,
+          "scores": {
+            "saber_overall": 1.0,
+            "submission": 1.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "aggregate": 1.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 2,
+          "llm_calls": 13,
+          "tool_calls": 9,
+          "dispatches": 1,
+          "roles": {
+            "analyst": 1
+          },
+          "wall_time_sec": 100.59
+        },
+        {
+          "task_id": "incident_166_latest_cleaned_test_set_task_20",
+          "checkpoint_count": 3,
+          "scores": {
+            "saber_overall": 1.0,
+            "submission": 1.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "aggregate": 1.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 1,
+          "llm_calls": 5,
+          "tool_calls": 3,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 57.247
+        },
+        {
+          "task_id": "incident_322_latest_cleaned_test_set_task_1",
+          "checkpoint_count": 4,
+          "scores": {
+            "saber_overall": 1.0,
+            "submission": 1.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "checkpoint_4": 0.0,
+            "aggregate": 1.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 3,
+          "llm_calls": 13,
+          "tool_calls": 6,
+          "dispatches": 2,
+          "roles": {
+            "analyst": 2
+          },
+          "wall_time_sec": 79.646
+        },
+        {
+          "task_id": "incident_322_latest_cleaned_test_set_task_20",
+          "checkpoint_count": 1,
+          "scores": {
+            "saber_overall": 1.0,
+            "submission": 1.0,
+            "checkpoint_1": 0.0,
+            "aggregate": 1.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 1,
+          "llm_calls": 7,
+          "tool_calls": 5,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 65.372
+        },
+        {
+          "task_id": "incident_34_latest_cleaned_test_set_task_43",
+          "checkpoint_count": 1,
+          "scores": {
+            "saber_overall": 1.0,
+            "submission": 1.0,
+            "checkpoint_1": 0.0,
+            "aggregate": 1.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 2,
+          "llm_calls": 11,
+          "tool_calls": 8,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 170.348
+        },
+        {
+          "task_id": "incident_38_latest_cleaned_test_set_task_5",
+          "checkpoint_count": 3,
+          "scores": {
+            "saber_overall": 0.0,
+            "submission": 0.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "aggregate": 0.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 2,
+          "llm_calls": 6,
+          "tool_calls": 3,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 43.685
+        },
+        {
+          "task_id": "incident_39_latest_cleaned_test_set_task_10",
+          "checkpoint_count": 2,
+          "scores": {
+            "saber_overall": 1.0,
+            "submission": 1.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "aggregate": 1.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 0,
+          "llm_calls": 4,
+          "tool_calls": 3,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 32.182
+        },
+        {
+          "task_id": "incident_39_latest_cleaned_test_set_task_19",
+          "checkpoint_count": 4,
+          "scores": {
+            "saber_overall": 0.0,
+            "submission": 0.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "checkpoint_4": 0.0,
+            "aggregate": 0.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 0,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 20.53
+        },
+        {
+          "task_id": "incident_55_latest_cleaned_test_set_task_10",
+          "checkpoint_count": 3,
+          "scores": {
+            "saber_overall": 0.0,
+            "submission": 0.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "aggregate": 0.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 1,
+          "llm_calls": 5,
+          "tool_calls": 3,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 34.958
+        },
+        {
+          "task_id": "incident_55_latest_cleaned_test_set_task_13",
+          "checkpoint_count": 5,
+          "scores": {
+            "saber_overall": 0.0,
+            "submission": 0.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "checkpoint_4": 0.0,
+            "checkpoint_5": 0.0,
+            "aggregate": 0.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 1,
+          "llm_calls": 10,
+          "tool_calls": 8,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 76.729
+        },
+        {
+          "task_id": "incident_5_latest_cleaned_test_set_task_1",
+          "checkpoint_count": 4,
+          "scores": {
+            "saber_overall": 0.0,
+            "submission": 0.0,
+            "checkpoint_1": 0.0,
+            "checkpoint_2": 0.0,
+            "checkpoint_3": 0.0,
+            "checkpoint_4": 0.0,
+            "aggregate": 0.0
+          },
+          "runtime_status": "complete",
+          "runtime_valid": true,
+          "runtime_errors": 0,
+          "llm_calls": 5,
+          "tool_calls": 4,
+          "dispatches": 0,
+          "roles": {},
+          "wall_time_sec": 47.177
+        }
+      ]
+    }
+  },
+  "paired_comparisons": {
+    "full_minus_single": {
+      "n": 12,
+      "mean": 0.25,
+      "ci95_paired_bootstrap": [
+        -0.166667,
+        0.583333
+      ],
+      "deltas": {
+        "incident_134_latest_cleaned_test_set_task_4": 0.0,
+        "incident_166_latest_cleaned_test_set_task_20": 1.0,
+        "incident_322_latest_cleaned_test_set_task_1": 1.0,
+        "incident_34_latest_cleaned_test_set_task_43": 1.0,
+        "incident_38_latest_cleaned_test_set_task_5": -1.0,
+        "incident_39_latest_cleaned_test_set_task_19": -1.0,
+        "incident_5_latest_cleaned_test_set_task_1": 0.0,
+        "incident_55_latest_cleaned_test_set_task_13": 0.0,
+        "incident_134_latest_cleaned_test_set_task_40": 1.0,
+        "incident_322_latest_cleaned_test_set_task_20": 0.0,
+        "incident_39_latest_cleaned_test_set_task_10": 1.0,
+        "incident_55_latest_cleaned_test_set_task_10": 0.0
+      }
+    },
+    "full_minus_orchestrator_only": {
+      "n": 12,
+      "mean": -0.083333,
+      "ci95_paired_bootstrap": [
+        -0.416667,
+        0.25
+      ],
+      "deltas": {
+        "incident_134_latest_cleaned_test_set_task_4": 0.0,
+        "incident_166_latest_cleaned_test_set_task_20": 1.0,
+        "incident_322_latest_cleaned_test_set_task_1": 0.0,
+        "incident_34_latest_cleaned_test_set_task_43": 0.0,
+        "incident_38_latest_cleaned_test_set_task_5": -1.0,
+        "incident_39_latest_cleaned_test_set_task_19": -1.0,
+        "incident_5_latest_cleaned_test_set_task_1": 0.0,
+        "incident_55_latest_cleaned_test_set_task_13": -1.0,
+        "incident_134_latest_cleaned_test_set_task_40": 0.0,
+        "incident_322_latest_cleaned_test_set_task_20": 0.0,
+        "incident_39_latest_cleaned_test_set_task_10": 1.0,
+        "incident_55_latest_cleaned_test_set_task_10": 0.0
+      }
+    },
+    "orchestrator_only_minus_single": {
+      "n": 12,
+      "mean": 0.333333,
+      "ci95_paired_bootstrap": [
+        0.083333,
+        0.583333
+      ],
+      "deltas": {
+        "incident_134_latest_cleaned_test_set_task_4": 0.0,
+        "incident_166_latest_cleaned_test_set_task_20": 0.0,
+        "incident_322_latest_cleaned_test_set_task_1": 1.0,
+        "incident_34_latest_cleaned_test_set_task_43": 1.0,
+        "incident_38_latest_cleaned_test_set_task_5": 0.0,
+        "incident_39_latest_cleaned_test_set_task_19": 0.0,
+        "incident_5_latest_cleaned_test_set_task_1": 0.0,
+        "incident_55_latest_cleaned_test_set_task_13": 1.0,
+        "incident_134_latest_cleaned_test_set_task_40": 1.0,
+        "incident_322_latest_cleaned_test_set_task_20": 0.0,
+        "incident_39_latest_cleaned_test_set_task_10": 0.0,
+        "incident_55_latest_cleaned_test_set_task_10": 0.0
+      }
+    }
+  },
+  "by_checkpoint_hop": {
+    "1": {
+      "n": 3,
+      "means": {
+        "single": 0.666667,
+        "orchestrator_only": 1.0,
+        "full": 1.0
+      },
+      "full_minus_single": {
+        "n": 3,
+        "mean": 0.333333,
+        "ci95_paired_bootstrap": [
+          0.0,
+          0.666667
+        ],
+        "deltas": {
+          "incident_134_latest_cleaned_test_set_task_4": 0.0,
+          "incident_322_latest_cleaned_test_set_task_20": 0.0,
+          "incident_34_latest_cleaned_test_set_task_43": 1.0
+        }
+      },
+      "full_minus_orchestrator_only": {
+        "n": 3,
+        "mean": 0.0,
+        "ci95_paired_bootstrap": [
+          0.0,
+          0.0
+        ],
+        "deltas": {
+          "incident_134_latest_cleaned_test_set_task_4": 0.0,
+          "incident_322_latest_cleaned_test_set_task_20": 0.0,
+          "incident_34_latest_cleaned_test_set_task_43": 0.0
+        }
+      },
+      "orchestrator_only_minus_single": {
+        "n": 3,
+        "mean": 0.333333,
+        "ci95_paired_bootstrap": [
+          0.0,
+          0.666667
+        ],
+        "deltas": {
+          "incident_134_latest_cleaned_test_set_task_4": 0.0,
+          "incident_322_latest_cleaned_test_set_task_20": 0.0,
+          "incident_34_latest_cleaned_test_set_task_43": 1.0
+        }
+      }
+    },
+    "2": {
+      "n": 1,
+      "means": {
+        "single": 0.0,
+        "orchestrator_only": 0.0,
+        "full": 1.0
+      },
+      "full_minus_single": {
+        "n": 1,
+        "mean": 1.0,
+        "ci95_paired_bootstrap": [
+          1.0,
+          1.0
+        ],
+        "deltas": {
+          "incident_39_latest_cleaned_test_set_task_10": 1.0
+        }
+      },
+      "full_minus_orchestrator_only": {
+        "n": 1,
+        "mean": 1.0,
+        "ci95_paired_bootstrap": [
+          1.0,
+          1.0
+        ],
+        "deltas": {
+          "incident_39_latest_cleaned_test_set_task_10": 1.0
+        }
+      },
+      "orchestrator_only_minus_single": {
+        "n": 1,
+        "mean": 0.0,
+        "ci95_paired_bootstrap": [
+          0.0,
+          0.0
+        ],
+        "deltas": {
+          "incident_39_latest_cleaned_test_set_task_10": 0.0
+        }
+      }
+    },
+    "3": {
+      "n": 4,
+      "means": {
+        "single": 0.25,
+        "orchestrator_only": 0.5,
+        "full": 0.5
+      },
+      "full_minus_single": {
+        "n": 4,
+        "mean": 0.25,
+        "ci95_paired_bootstrap": [
+          -0.5,
+          1.0
+        ],
+        "deltas": {
+          "incident_134_latest_cleaned_test_set_task_40": 1.0,
+          "incident_166_latest_cleaned_test_set_task_20": 1.0,
+          "incident_38_latest_cleaned_test_set_task_5": -1.0,
+          "incident_55_latest_cleaned_test_set_task_10": 0.0
+        }
+      },
+      "full_minus_orchestrator_only": {
+        "n": 4,
+        "mean": 0.0,
+        "ci95_paired_bootstrap": [
+          -0.75,
+          0.5
+        ],
+        "deltas": {
+          "incident_134_latest_cleaned_test_set_task_40": 0.0,
+          "incident_166_latest_cleaned_test_set_task_20": 1.0,
+          "incident_38_latest_cleaned_test_set_task_5": -1.0,
+          "incident_55_latest_cleaned_test_set_task_10": 0.0
+        }
+      },
+      "orchestrator_only_minus_single": {
+        "n": 4,
+        "mean": 0.25,
+        "ci95_paired_bootstrap": [
+          0.0,
+          0.75
+        ],
+        "deltas": {
+          "incident_134_latest_cleaned_test_set_task_40": 1.0,
+          "incident_166_latest_cleaned_test_set_task_20": 0.0,
+          "incident_38_latest_cleaned_test_set_task_5": 0.0,
+          "incident_55_latest_cleaned_test_set_task_10": 0.0
+        }
+      }
+    },
+    "4": {
+      "n": 3,
+      "means": {
+        "single": 0.333333,
+        "orchestrator_only": 0.666667,
+        "full": 0.333333
+      },
+      "full_minus_single": {
+        "n": 3,
+        "mean": 0.0,
+        "ci95_paired_bootstrap": [
+          -1.0,
+          0.666667
+        ],
+        "deltas": {
+          "incident_322_latest_cleaned_test_set_task_1": 1.0,
+          "incident_39_latest_cleaned_test_set_task_19": -1.0,
+          "incident_5_latest_cleaned_test_set_task_1": 0.0
+        }
+      },
+      "full_minus_orchestrator_only": {
+        "n": 3,
+        "mean": -0.333333,
+        "ci95_paired_bootstrap": [
+          -1.0,
+          0.0
+        ],
+        "deltas": {
+          "incident_322_latest_cleaned_test_set_task_1": 0.0,
+          "incident_39_latest_cleaned_test_set_task_19": -1.0,
+          "incident_5_latest_cleaned_test_set_task_1": 0.0
+        }
+      },
+      "orchestrator_only_minus_single": {
+        "n": 3,
+        "mean": 0.333333,
+        "ci95_paired_bootstrap": [
+          0.0,
+          0.666667
+        ],
+        "deltas": {
+          "incident_322_latest_cleaned_test_set_task_1": 1.0,
+          "incident_39_latest_cleaned_test_set_task_19": 0.0,
+          "incident_5_latest_cleaned_test_set_task_1": 0.0
+        }
+      }
+    },
+    "5": {
+      "n": 1,
+      "means": {
+        "single": 0.0,
+        "orchestrator_only": 1.0,
+        "full": 0.0
+      },
+      "full_minus_single": {
+        "n": 1,
+        "mean": 0.0,
+        "ci95_paired_bootstrap": [
+          0.0,
+          0.0
+        ],
+        "deltas": {
+          "incident_55_latest_cleaned_test_set_task_13": 0.0
+        }
+      },
+      "full_minus_orchestrator_only": {
+        "n": 1,
+        "mean": -1.0,
+        "ci95_paired_bootstrap": [
+          -1.0,
+          -1.0
+        ],
+        "deltas": {
+          "incident_55_latest_cleaned_test_set_task_13": -1.0
+        }
+      },
+      "orchestrator_only_minus_single": {
+        "n": 1,
+        "mean": 1.0,
+        "ci95_paired_bootstrap": [
+          1.0,
+          1.0
+        ],
+        "deltas": {
+          "incident_55_latest_cleaned_test_set_task_13": 1.0
+        }
+      }
+    }
+  }
+}
