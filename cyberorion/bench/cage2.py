@@ -78,6 +78,20 @@ CAGE_STEP_BUDGETS: dict[str, dict[str, int | float]] = {
         "token_budget": 24_576,
         "wall_clock_sec": 90.0,
     },
+    # publication_v2 在最终动作契约（2a0c706）下以 MiniMax-M3 的 h30
+    # 资源校准（resource-only，未读 reward）复核冻结：三臂 provider-token
+    # 观测最大值 12,000、wall-time 最大值 27.68s，故与 publication_v1
+    # 相同的每步上限仍保有 >=2.048x token、>=3.25x wall-time 余量。h50/h100
+    # tail coverage 尚未运行，属后续资源数据补充，不改变当前冻结值。
+    "publication_v2": {
+        "max_steps": 7,
+        "max_llm_calls": 5,
+        "max_tool_calls": 4,
+        "max_dispatches": 3,
+        "max_role_steps": 4,
+        "token_budget": 24_576,
+        "wall_clock_sec": 90.0,
+    },
 }
 
 

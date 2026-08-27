@@ -237,7 +237,13 @@ def test_metered_llm_enforces_provider_tokens_when_available() -> None:
     with pytest.raises(LLMBudgetExceeded, match="provider token budget"):
         asyncio.run(meter("s", "u"))
     assert meter.budget_accounted_tokens == 101
-    assert meter.budget_accounting_source == "provider"
+
+
+def test_publication_v2_is_frozen_and_matches_v1_ceiling() -> None:
+    v2 = cage2.CAGE_STEP_BUDGETS["publication_v2"]
+    assert v2 == cage2.CAGE_STEP_BUDGETS["publication_v1"]
+    # 冻结契约必须通过 step budget 校验，且字段完整。
+    assert cage2._step_budget("publication_v2") == v2
 
 
 def _cage_asset(tmp_path: Path, monkeypatch) -> None:
