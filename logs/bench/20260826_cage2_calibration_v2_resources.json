@@ -1,0 +1,36 @@
+{
+  "schema": "cage2_resource_calibration_v2",
+  "performance_fields_read": false,
+  "source_run_prefix": "20260826_082624_cage2_compare_n9",
+  "scope": "all 30/50/100 horizons x B_lineAgent/RedMeanderAgent/SleepAgent",
+  "step_counts": {"single": 540, "orchestrator_only": 540, "agent": 540},
+  "distributions": {
+    "single": {
+      "provider_total_tokens": {"p50": 5018, "p90": 5111, "p95": 5134, "p99": 5195, "max": 18288},
+      "llm_calls": {"p50": 1, "p90": 1, "p95": 1, "p99": 1, "max": 2},
+      "tools": {"p50": 1, "p90": 1, "p95": 1, "p99": 1, "max": 1},
+      "dispatches": {"p50": 0, "p90": 0, "p95": 0, "p99": 0, "max": 0},
+      "wall_clock_sec": {"p50": 1.749, "p90": 2.3528, "p95": 2.6135, "p99": 4.0174, "max": 32.8395}
+    },
+    "orchestrator_only": {
+      "provider_total_tokens": {"p50": 5106, "p90": 5196, "p95": 5217, "p99": 10436, "max": 17790, "available_n": 537},
+      "llm_calls": {"p50": 1, "p90": 1, "p95": 1, "p99": 1, "max": 2},
+      "tools": {"p50": 1, "p90": 1, "p95": 1, "p99": 1, "max": 2},
+      "dispatches": {"p50": 0, "p90": 0, "p95": 0, "p99": 0, "max": 0},
+      "wall_clock_sec": {"p50": 2.0872, "p90": 2.7491, "p95": 3.1719, "p99": 31.0192, "max": 60.0405}
+    },
+    "agent": {
+      "provider_total_tokens": {"p50": 5162, "p90": 5292, "p95": 5327, "p99": 11963, "max": 13320, "available_n": 522},
+      "llm_calls": {"p50": 1, "p90": 1, "p95": 3, "p99": 3, "max": 4},
+      "tools": {"p50": 1, "p90": 1, "p95": 1, "p99": 1, "max": 1},
+      "dispatches": {"p50": 0, "p90": 0, "p95": 0, "p99": 1, "max": 2},
+      "wall_clock_sec": {"p50": 2.0111, "p90": 2.767, "p95": 3.3, "p99": 11.0974, "max": 35.8891}
+    }
+  },
+  "frozen_profile": {
+    "name": "publication_v1", "token_budget": 24576,
+    "max_llm_calls": 5, "max_tool_calls": 4, "max_dispatches": 3,
+    "max_role_steps": 4, "max_steps": 7, "wall_clock_sec": 90.0
+  },
+  "headroom": "token ceiling is 34.4% above cross-arm observed max; discrete ceilings exceed observed maxima; wall ceiling separates the old 60s timeout boundary from ordinary valid decisions"
+}

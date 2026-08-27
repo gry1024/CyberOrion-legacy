@@ -1,0 +1,18 @@
+{
+  "schema": "cage2_paired_seed_manifest_v1",
+  "created_before_performance_run": true,
+  "master_seed": 314159,
+  "episodes_per_condition": 3,
+  "arms": ["single", "orchestrator_only", "agent"],
+  "conditions_order": [
+    {"red_agent": "B_lineAgent", "horizon": 30, "condition_seed": 314159},
+    {"red_agent": "RedMeanderAgent", "horizon": 30, "condition_seed": 314160},
+    {"red_agent": "SleepAgent", "horizon": 30, "condition_seed": 314161},
+    {"red_agent": "B_lineAgent", "horizon": 50, "condition_seed": 314162},
+    {"red_agent": "RedMeanderAgent", "horizon": 50, "condition_seed": 314163},
+    {"red_agent": "SleepAgent", "horizon": 50, "condition_seed": 314164},
+    {"red_agent": "B_lineAgent", "horizon": 100, "condition_seed": 314165},
+    {"red_agent": "RedMeanderAgent", "horizon": 100, "condition_seed": 314166},
+    {"red_agent": "SleepAgent", "horizon": 100, "condition_seed": 314167}
+  ]
+}

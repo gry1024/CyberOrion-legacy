@@ -1,7 +1,8 @@
 # CAGE-2 逐步预算协议与校准计划
 
-状态：**PILOT_V1_FROZEN**。旧的 episode 全局预算已退出 CAGE 执行路径；
-真实诊断校准及原始 artifact 已提交，`pilot_v1` 在查看任何 pilot 性能差异前冻结。
+状态：**PUBLICATION_V1_FROZEN**。旧的 episode 全局预算已退出 CAGE 执行路径；
+`pilot_v1` 保持不可发布的校准证据，`publication_v1` 仅依据资源尾部冻结，
+未使用 reward/performance 选择上限。
 
 ## 1. 证据：现有 episode 全局预算在结构上不适用
 
@@ -213,3 +214,17 @@ scorer/evaluator feedback 只留在评分 artifact，绝不进入 memory 或 pro
 - [x] 用三种 30-step 条件做真实诊断校准并冻结 `pilot_v1` 上限：
       16384 tokens / 4 LLM calls / 3 tools / 2 dispatches / 60s per step
 - [ ] 在冻结上限下运行 9 条 canonical condition 的 Single / Full pilot
+
+## 11. calibration_v2 与 publication_v1（2026-08-26）
+
+校准输入是旧 `pilot_v1` 三臂全部 30/50/100 horizon × 三种 red-agent 的
+1,620 条逐环境步 trace。校准程序只读取
+`step_resource_usage` / dispatch 字段，未读取 episode reward 或 condition mean。
+机器可读分布见 `logs/bench/20260826_cage2_calibration_v2_resources.json`。
+
+跨臂观测最大值为：provider tokens 18,288、LLM calls 4、tools 2、dispatches 2；
+正常完成步 wall time 最大 35.89s，另有一次 60.04s 的旧 60s timeout 边界事件。
+因此冻结三臂完全相同的 `publication_v1`：24,576 tokens / 5 LLM calls /
+4 tools / 3 dispatches / 4 role steps / 90s。token 相对最高观测值留 34.4%
+headroom；其它离散资源均高于观测最大值；90s 把旧 timeout 边界与正常尾部
+分开。该 profile 在任何新性能 seed 运行之前提交，之后不得按结果调整。

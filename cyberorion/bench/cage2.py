@@ -66,6 +66,17 @@ CAGE_STEP_BUDGETS: dict[str, dict[str, int | float]] = {
         "token_budget": 16_384,
         "wall_clock_sec": 60.0,
     },
+    # publication_v1 仅依据不可发布 pilot_v1 的 1,620 条逐步资源轨迹冻结，
+    # 未读取 reward。完整分位数与 headroom 见 calibration_v2 artifact。
+    "publication_v1": {
+        "max_steps": 7,
+        "max_llm_calls": 5,
+        "max_tool_calls": 4,
+        "max_dispatches": 3,
+        "max_role_steps": 4,
+        "token_budget": 24_576,
+        "wall_clock_sec": 90.0,
+    },
 }
 
 
@@ -182,7 +193,7 @@ async def run_bench(
         log_dir: str | Path = DEFAULT_LOG_DIR, llm=None,
         on_progress=None, run_id: str | None = None,
         source_provenance: dict | None = None,
-        cage_budget_profile: str = "pilot_v1",
+        cage_budget_profile: str = "publication_v1",
         cage_step_budget: dict[str, int | float] | None = None,
         condition_steps: tuple[int, ...] | None = None,
         red_agents: tuple[str, ...] | None = None,
