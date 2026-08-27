@@ -10,11 +10,10 @@ seed，不要因暂时无 stdout 就判断卡死，也不要打印 `.env` 中的
 不会清理 descendants。结果落盘前不要退出 Codex；若必须交接，先由接管者确认
 PID 仍存活，且不要主动 kill PID 910。
 
-## 1. 当前正在运行：CAGE-2 publication_v1
+## 1. CAGE-2 publication_v1 已完成
 
-三个模型臂正在**按臂并行、臂内串行**运行。每臂使用独立 detached clean
-worktree 和输出目录，但任务条件与 seed 完全相同。这是允许的并行方式；三臂
-没有共享可变 CybORG 环境。
+三个模型臂已按臂并行、臂内串行完成两次执行。每臂使用独立 detached clean
+worktree 和输出目录，任务条件与 seed 完全相同；三臂没有共享可变 CybORG 环境。
 
 - 固定运行源码 HEAD：`1e65eae28bbb100409787b5c21fcd31981ffd1ea`
 - 模型：`openai/MiniMax-M3`
@@ -24,52 +23,15 @@ worktree 和输出目录，但任务条件与 seed 完全相同。这是允许�
 - master seed：`314159`
 - 每臂：27 episodes = 9 canonical conditions × 3 新 seeds
 - seed manifest：`benchmarks/manifests/cage2_publication_v1_seeds.json`
-- Single：PID `15577`，worktree `/tmp/cage-par-single`，PTY（仅原 Codex
-  会话可用）`20202`
-- Orchestrator-only：PID `15560`，worktree `/tmp/cage-par-orch`，PTY
-  `81923`
-- Full/agent：PID `15544`，worktree `/tmp/cage-par-full`，PTY `23984`
+首轮（无 retry 后缀）和 retry1 都是 `status=done`、`n=27` 的完整执行，且均使用
+同一 publication_v1 配置、同一 27 条种子清单和干净源码。此前把无 retry 文件误判为
+缺失并排除，是一次检查时序/观察错误；它们现在作为首轮正式原始结果纳入归档。
+retry1 不与首轮合并成 n=54，也不把两次执行当成 54 个独立新 seed，而作为同协议
+重复执行/敏感性复核单列。
 
-2026-08-27 02:32 PDT 最近一次检查：三者均为 `Sl`，已运行约 1:11，
-exit 均 pending，无 traceback/401/429。CPU 累计分别约 14/14/11 秒；这是
-网络型 LLM 调用的正常形态。按 30-step 修复后诊断的速度粗估整臂约 2.1 小时，
-Full dispatch 可能更久；估算不是精确进度。
-
-持久输出（接管者主要依赖这些，而不是 PTY）：
-
-```text
-/tmp/cage-publication-par/single/runner_retry1.log
-/tmp/cage-publication-par/single/runner_retry1.exit
-/tmp/cage-publication-par/orchestrator_only/runner_retry1.log
-/tmp/cage-publication-par/orchestrator_only/runner_retry1.exit
-/tmp/cage-publication-par/agent/runner_retry1.log
-/tmp/cage-publication-par/agent/runner_retry1.exit
-```
-
-`runner_retry1.exit` 只会在对应 runner 结束后生成。成功值必须为 `0`，随后同目录
-应出现以下 JSON（以及 `.sample.json`）：
-
-```text
-20260827_cage2_publication_v1_single_n27_retry1.json
-20260827_cage2_publication_v1_orchestrator_only_n27_retry1.json
-20260827_cage2_publication_v1_agent_n27_retry1.json
-```
-
-每约 8 分钟只读检查一次即可：
-
-```bash
-ps -o pid=,stat=,etime=,time=,pcpu= -p 15544,15560,15577
-for arm in single orchestrator_only agent; do
-  test -f "/tmp/cage-publication-par/$arm/runner_retry1.exit" && \
-    { printf '%s exit=' "$arm"; cat "/tmp/cage-publication-par/$arm/runner_retry1.exit"; } || \
-    printf '%s pending\n' "$arm"
-done
-```
-
-宿主进程检查可能需要外部执行权限。`ss -i` 的 `lastsnd/lastrcv` 是毫秒，禁止
-误读为秒。不得凭单个网络字段、单个 CPU 窗口不增长或日志只有 `START` 就停止
-进程；当前 harness 整臂完成才写最终 JSON。只有明确 traceback、非零 exit、冻结
-墙钟超时或至少两类连续异常证据才报告故障。在没有明确故障时绝对不要重启。
+归档文件位于仓库 `logs/bench/`：每臂各有首轮与 retry1 的 `.json`、`.sample.json`，
+并有 `20260827_cage2_publication_v1_paired_summary.{json,md}`。首轮与 retry1 的
+逐臂校验、配对差、horizon/red-agent 分组和资源审计均在该摘要中。
 
 已完成、可复用的 Base heuristic（同一 clean source、seed、条件）是：
 
@@ -87,8 +49,8 @@ Single / Orchestrator-only / Full 三个主架构的配对比较。
 
 - `/tmp/cyberorion-bench-2e62315`：早期正式尝试；不能用。
 - `/tmp/cyberorion-bench-1e65eae` 中除上述完整 Base 外的未完成臂：不能用。
-- 第一轮 `/tmp/cage-publication-par` 并行尝试没有持久 stderr/exit/artifact，
-  已静默结束；当前文件名带 `retry1` 的运行才是有效候选。
+- 第一轮 `/tmp/cage-publication-par` 并行尝试的非 retry 文件后来完整落盘；它们不是
+  无效运行。此前仅因中途检查时尚未看到最终 artifact 而误排除，已在本次归档中纠正。
 - 一次运行因启动时未显式固定 temperature 被正确停止，随后提交 `2e62315`。
 - 一次运行因把 `ss -i` 毫秒字段误读为秒而被错误停止；这是人为监控错误。
 - CAGE 旧顶层 runtime 接受通用 `task_complete`，30-step 诊断中造成 8/30
@@ -213,7 +175,7 @@ dispatch/task。按 checkpoint 数（hop proxy）拆分，并计算三组配对�
 
 ## 5. 已完成提交、测试与剩余 Git 工作
 
-当前主 worktree HEAD：`7cef5c3`。已有提交：
+当前主 worktree HEAD：`dbb6cf6`。已有提交：
 
 ```text
 bd4586a bench: 固化 ExCyTIn 配对清单与官方上下文来源
@@ -221,6 +183,8 @@ d365741 bench: 冻结 CAGE publication_v1 资源预算
 2e62315 bench: CAGE publication 显式固定 temperature
 1e65eae bench: CAGE 顶层决策强制 terminal selector
 7cef5c3 docs: 固化长时 benchmark 运行纪律
+026291d docs: 记录 benchmark 实时接管状态
+dbb6cf6 docs: 补充 benchmark 进程交接风险
 ```
 
 最近 targeted tests：84 passed，命令：
