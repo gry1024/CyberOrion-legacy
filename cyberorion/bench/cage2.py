@@ -223,7 +223,12 @@ async def run_bench(
     current_condition = ""
 
     if mode != "base":
-        llm = llm or make_llm(timeout=max(180.0, float(step_budget["wall_clock_sec"])))
+        # CAGE publication protocol fixes deterministic decoding.  Pass it
+        # explicitly here so a caller cannot accidentally fall back to the
+        # provider default when CO_BENCH_TEMPERATURE is unset.
+        llm = llm or make_llm(
+            timeout=max(180.0, float(step_budget["wall_clock_sec"])),
+            temperature=0.0)
 
         async def choose(
                 observation: Any, *, episode: int = 1, step: int = 1,
