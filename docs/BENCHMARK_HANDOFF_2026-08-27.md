@@ -4,6 +4,12 @@
 `AGENTS.md` 与 `docs/ARCHITECTURE.md`。不要停止当前进程，不要重用旧性能
 seed，不要因暂时无 stdout 就判断卡死，也不要打印 `.env` 中的 key。
 
+进程生存 caveat：三个 runner 当前的 `PPid` 是 Codex supervisor PID 910；它们
+虽已是独立 session/进程组、stdin 为 `/dev/null` 且无控制终端，普通终端关闭通常
+不会触发 SIGHUP，但当前没有 tmux/systemd 托管，不能保证 Codex supervisor 退出时
+不会清理 descendants。结果落盘前不要退出 Codex；若必须交接，先由接管者确认
+PID 仍存活，且不要主动 kill PID 910。
+
 ## 1. 当前正在运行：CAGE-2 publication_v1
 
 三个模型臂正在**按臂并行、臂内串行**运行。每臂使用独立 detached clean
