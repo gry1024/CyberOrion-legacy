@@ -18,8 +18,8 @@ for candidate in (str(_REPO), str(_REPO.parent)):
 
 from cyberorion.bench.cage2 import CAGE_STEP_BUDGETS
 from cyberorion.bench.cage_segments import (
-    ARM_MODES, SegmentError, build_manifest, create_run, load_run,
-    run_segmented,
+    ARM_MODES, DEFAULT_MAX_SEGMENT_SEC, SegmentError, build_manifest,
+    create_run, load_run, run_segmented,
 )
 from cyberorion.bench.external_common import git_provenance, model_metadata
 
@@ -39,6 +39,8 @@ async def _main() -> int:
     parser.add_argument("--seeds", default="101,102,103")
     parser.add_argument("--episodes-per-seed", type=int, default=1)
     parser.add_argument("--window-steps", type=int, default=25)
+    parser.add_argument("--max-segment-sec", type=float,
+                        default=DEFAULT_MAX_SEGMENT_SEC)
     parser.add_argument("--budget-profile", default="publication_v1",
                         choices=sorted(CAGE_STEP_BUDGETS))
     args = parser.parse_args()
@@ -61,7 +63,8 @@ async def _main() -> int:
             episodes_per_seed=args.episodes_per_seed,
             budget_profile=args.budget_profile, step_budget=budget,
             source_provenance=current_source, model_settings=current_model,
-            window_steps=args.window_steps)
+            window_steps=args.window_steps,
+            max_segment_sec=args.max_segment_sec)
         run_dir = create_run(args.run_dir, manifest)
     print(json.dumps({
         "status": "starting", "run_dir": str(run_dir),

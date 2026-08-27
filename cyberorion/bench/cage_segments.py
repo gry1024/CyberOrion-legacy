@@ -19,6 +19,8 @@ from .external_common import git_provenance, model_metadata
 PROTOCOL_VERSION = "cage2_segmented_v1"
 SEGMENT_SCHEMA_VERSION = 1
 DEFAULT_WINDOW_STEPS = 25
+DEFAULT_MAX_SEGMENT_SEC = 420.0
+MAX_SEGMENT_SEC_HARD_CAP = 600.0
 ARM_MODES = {
     "single": "single",
     "orchestrator_only": "orchestrator_only",
@@ -75,10 +77,26 @@ def build_manifest(*, run_id: str, arms: Iterable[str],
                    budget_profile: str, step_budget: dict[str, Any],
                    source_provenance: dict[str, Any] | None = None,
                    model_settings: dict[str, Any] | None = None,
-                   window_steps: int = DEFAULT_WINDOW_STEPS) -> dict[str, Any]:
-    """生成顺序稳定的不可变 episode/segment manifest。"""
+                   window_steps: int = DEFAULT_WINDOW_STEPS,
+                   max_segment_sec: float = DEFAULT_MAX_SEGMENT_SEC) -> dict[str, Any]:
+    """生成顺序稳定的不可变 episode/segment manifest。
+
+    环境对同一 seed 是确定性的：每个 job 都调用 ``run_bench(n=1, seed=job["seed"])``，
+    因此 ``episodes_per_seed > 1`` 会用同一环境 seed 重复生成 episode，而非独立
+    复现。publication/校准一律要求 ``episodes_per_seed == 1``，独立复现必须通过
+    manifest 中显式不同的 seed 表达。重复 seed 同样被拒绝，避免无意的重复环境复现。
+    """
     if window_steps <= 0 or episodes_per_seed <= 0:
         raise ValueError("window_steps and episodes_per_seed must be positive")
+    if episodes_per_seed != 1:
+        raise ValueError(
+            "episodes_per_seed must be 1: the environment is deterministic per "
+            "seed, so multiple episodes per seed would rerun the same environment "
+            "instead of producing independent replicates; express replicates as "
+            "distinct seeds in the manifest")
+    if not (0 < max_segment_sec <= MAX_SEGMENT_SEC_HARD_CAP):
+        raise ValueError(
+            f"max_segment_sec must be in (0, {MAX_SEGMENT_SEC_HARD_CAP}]")
     selected_arms = tuple(arms)
     unknown = set(selected_arms) - set(ARM_MODES)
     if not selected_arms or unknown:
@@ -90,6 +108,10 @@ def build_manifest(*, run_id: str, arms: Iterable[str],
     selected_seeds = tuple(map(int, seeds))
     if not selected_red or not selected_horizons or not selected_seeds:
         raise ValueError("red_agents, horizons and seeds must not be empty")
+    if len(set(selected_seeds)) != len(selected_seeds):
+        raise ValueError(
+            "duplicate seeds would rerun identical environments; independent "
+            "replicates require distinct seeds in the manifest")
     jobs = []
     # condition/seed 外层、arm 内层，让三个 paired arm 尽早形成可用样本，
     # 同时仍保持严格串行，避免共享 CybORG 状态并发。
@@ -118,6 +140,7 @@ def build_manifest(*, run_id: str, arms: Iterable[str],
         "budget_profile": budget_profile,
         "step_budget": dict(step_budget),
         "window_steps": int(window_steps),
+        "max_segment_sec": float(max_segment_sec),
         "jobs": jobs,
     }
     return {
@@ -132,7 +155,8 @@ def build_manifest(*, run_id: str, arms: Iterable[str],
 def _immutable(manifest: dict[str, Any]) -> dict[str, Any]:
     return {key: manifest.get(key) for key in (
         "protocol_version", "source_provenance", "model_settings",
-        "budget_profile", "step_budget", "window_steps", "jobs")}
+        "budget_profile", "step_budget", "window_steps", "max_segment_sec",
+        "jobs")}
 
 
 def validate_manifest(manifest: dict[str, Any]) -> None:
@@ -225,9 +249,14 @@ def _sum_resources(traces: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def _write_provisional(run_dir: Path, manifest: dict[str, Any], job: dict[str, Any],
-                       events: list[dict[str, Any]], start: int, end: int,
-                       segment_started: float) -> dict[str, Any]:
-    segment_id = _segment_id(job["job_id"], start, end)
+                       events: list[dict[str, Any]], window_start: int,
+                       window_end: int, segment_started: float,
+                       clock: Callable[[], float] = time.perf_counter) -> dict[str, Any]:
+    observed_start = int(events[0]["step"])
+    observed_end = int(events[-1]["step"])
+    # segment_id 由实际落盘步范围推导，保证 wall-time flush 把同一 step-window
+    # 拆成多个更细段时 id 仍唯一，不会与其它 segment 冲突。
+    segment_id = _segment_id(job["job_id"], observed_start, observed_end)
     traces = [event.get("agent_trace") or {} for event in events]
     payload = {
         "schema_version": SEGMENT_SCHEMA_VERSION,
@@ -236,8 +265,8 @@ def _write_provisional(run_dir: Path, manifest: dict[str, Any], job: dict[str, A
         "arm": job["arm"], "mode": job["mode"],
         "red_agent": job["red_agent"], "horizon": job["horizon"],
         "seed": job["seed"], "episode": job["episode"],
-        "planned_step_range": [start, end],
-        "observed_step_range": [events[0]["step"], events[-1]["step"]],
+        "planned_step_range": [window_start, window_end],
+        "observed_step_range": [observed_start, observed_end],
         "source_provenance": manifest["source_provenance"],
         "model_settings": manifest["model_settings"],
         "budget_profile": manifest["budget_profile"],
@@ -249,7 +278,7 @@ def _write_provisional(run_dir: Path, manifest: dict[str, Any], job: dict[str, A
         "cumulative_episode_reward": events[-1].get("cumulative_episode_reward"),
         "actions": [event.get("action") for event in events],
         "resource_usage": _sum_resources(traces),
-        "segment_wall_clock_sec": round(time.perf_counter() - segment_started, 4),
+        "segment_wall_clock_sec": round(clock() - segment_started, 4),
         "episode_complete": False,
         "episode_committed": False,
         "provisional_reason": "mid_episode_state_not_serializable",
@@ -309,17 +338,19 @@ def _committed_episode_jobs(run_dir: Path) -> set[str]:
 
 def reduce_run(run_dir: str | Path, *, require_complete: bool = True) -> dict[str, Any]:
     directory, manifest = load_run(run_dir)
-    expected = {segment_id for job in manifest["jobs"]
-                for segment_id in job["segment_ids"]}
+    planned = {segment_id for job in manifest["jobs"]
+               for segment_id in job["segment_ids"]}
+    known_jobs = {job["job_id"] for job in manifest["jobs"]}
     rows = _read_segments(directory)
     ids = [str(row.get("segment_id")) for _, row in rows]
     duplicates = sorted(segment_id for segment_id, count in Counter(ids).items()
                         if count > 1)
     if duplicates:
         raise SegmentError(f"duplicate segment IDs: {duplicates}")
-    foreign = sorted(set(ids) - expected)
-    if foreign:
-        raise SegmentError(f"unexpected segment IDs: {foreign}")
+    foreign_jobs = sorted({row.get("job_id") for _, row in rows
+                           if row.get("job_id") not in known_jobs})
+    if foreign_jobs:
+        raise SegmentError(f"segments from unknown jobs: {foreign_jobs}")
     for _, row in rows:
         if row.get("manifest_sha256") != manifest["immutable_sha256"]:
             raise SegmentError(f"segment provenance mismatch: {row.get('segment_id')}")
@@ -375,7 +406,7 @@ def reduce_run(run_dir: str | Path, *, require_complete: bool = True) -> dict[st
             ("resource_limit_violation", bool(limit_violations))) if failed],
         "completed_segments": len(committed),
         "observed_segments": len(rows),
-        "expected_segments": len(expected),
+        "expected_segments": len(planned),
         "completed_episodes": len(completed_jobs),
         "total_episodes": len(manifest["jobs"]),
         "missing_jobs": missing_jobs,
@@ -448,11 +479,29 @@ async def _default_executor(job: dict[str, Any], on_step, *, manifest: dict[str,
 
 
 async def run_segmented(run_dir: str | Path, manifest: dict[str, Any],
-                        *, executor: EpisodeExecutor | None = None) -> dict[str, Any]:
-    """顺序执行 manifest；仅当前未完成 episode 可在恢复时重跑。"""
+                        *, executor: EpisodeExecutor | None = None,
+                        clock: Callable[[], float] = time.perf_counter) -> dict[str, Any]:
+    """顺序执行 manifest；仅当前未完成 episode 可在恢复时重跑。
+
+    分段边界为「step-window 或 wall-time 阈值」二者取先触发者：每完成一个环境步，
+    若当前段已累计超过 ``manifest["max_segment_sec"]`` 秒，则立即以该步为界落盘，
+    保证任何已落盘段都不会无限膨胀。step-window 分段仍然保留，作为常规分界。
+    """
     directory = Path(run_dir).resolve()
     validate_manifest(manifest)
+    window_steps = int(manifest["window_steps"])
+    max_segment_sec = float(manifest.get(
+        "max_segment_sec", DEFAULT_MAX_SEGMENT_SEC))
     completed = _committed_episode_jobs(directory)
+
+    def _flush(events: list[dict[str, Any]]) -> None:
+        """以 events 实际步范围落盘一段。"""
+        last = int(events[-1]["step"])
+        window_start = ((last - 1) // window_steps) * window_steps + 1
+        window_end = min(int(job["horizon"]), window_start + window_steps - 1)
+        _write_provisional(directory, manifest, job, events,
+                           window_start, window_end, segment_started, clock=clock)
+
     try:
         for job in manifest["jobs"]:
             if job["job_id"] in completed:
@@ -463,22 +512,18 @@ async def run_segmented(run_dir: str | Path, manifest: dict[str, Any],
             _write_live_files(directory, manifest, current_condition=current,
                               status="running")
             events: list[dict[str, Any]] = []
-            segment_started = time.perf_counter()
+            segment_started = clock()
 
             async def on_step(event: dict[str, Any]) -> None:
                 nonlocal events, segment_started
                 events.append(event)
                 step = int(event["step"])
-                boundary = step % int(manifest["window_steps"]) == 0
-                if boundary or event.get("done"):
-                    start = ((step - 1) // int(manifest["window_steps"])) * int(
-                        manifest["window_steps"]) + 1
-                    end = min(int(job["horizon"]),
-                              start + int(manifest["window_steps"]) - 1)
-                    _write_provisional(directory, manifest, job, events,
-                                       start, end, segment_started)
+                boundary = step % window_steps == 0
+                time_exceeded = (clock() - segment_started) >= max_segment_sec
+                if boundary or time_exceeded or event.get("done"):
+                    _flush(events)
                     events = []
-                    segment_started = time.perf_counter()
+                    segment_started = clock()
                     _write_live_files(directory, manifest,
                                       current_condition=current, status="running")
 
@@ -490,13 +535,7 @@ async def run_segmented(run_dir: str | Path, manifest: dict[str, Any],
                 if inspect.isawaitable(episode_run):
                     episode_run = await episode_run
             if events:
-                step = int(events[-1]["step"])
-                start = ((step - 1) // int(manifest["window_steps"])) * int(
-                    manifest["window_steps"]) + 1
-                end = min(int(job["horizon"]),
-                          start + int(manifest["window_steps"]) - 1)
-                _write_provisional(directory, manifest, job, events,
-                                   start, end, segment_started)
+                _flush(events)
             _commit_episode(directory, manifest, job, episode_run)
             completed.add(job["job_id"])
             _write_live_files(directory, manifest, current_condition=current,
@@ -512,7 +551,8 @@ async def run_segmented(run_dir: str | Path, manifest: dict[str, Any],
 
 
 __all__ = [
-    "ARM_MODES", "DEFAULT_WINDOW_STEPS", "PROTOCOL_VERSION", "SegmentError",
+    "ARM_MODES", "DEFAULT_WINDOW_STEPS", "DEFAULT_MAX_SEGMENT_SEC",
+    "MAX_SEGMENT_SEC_HARD_CAP", "PROTOCOL_VERSION", "SegmentError",
     "SegmentInterrupted", "build_manifest", "create_run", "load_run",
     "reduce_run", "run_segmented",
 ]
