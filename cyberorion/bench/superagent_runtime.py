@@ -50,9 +50,12 @@ class RuntimeConfig:
     max_invalid_decisions: int = 3
     max_observation_chars: int = 4000
     max_trace_text_chars: int = 1200
+    require_terminal_tool: bool = False
 
     def __post_init__(self) -> None:
         for name, value in self.__dict__.items():
+            if isinstance(value, bool):
+                continue
             if value <= 0:
                 raise ValueError(f"{name} must be positive")
 
@@ -176,7 +179,8 @@ def _tool_schema(spec: ToolSpec) -> dict[str, Any]:
     }
 
 
-def _virtual_tool_schemas(allow_dispatch: bool) -> list[dict[str, Any]]:
+def _virtual_tool_schemas(allow_dispatch: bool,
+                          allow_complete: bool = True) -> list[dict[str, Any]]:
     rows = []
     if allow_dispatch:
         rows.append({
@@ -191,19 +195,21 @@ def _virtual_tool_schemas(allow_dispatch: bool) -> list[dict[str, Any]]:
                 "required": ["role", "mission"],
             },
         })
-    rows.append({
-        "name": "task_complete",
-        "description": "submit final summary",
-        "parameters": {
-            "type": "object",
-            "properties": {"summary": {"type": ["string", "object"]}},
-            "required": ["summary"],
-        },
-    })
+    if allow_complete:
+        rows.append({
+            "name": "task_complete",
+            "description": "submit final summary",
+            "parameters": {
+                "type": "object",
+                "properties": {"summary": {"type": ["string", "object"]}},
+                "required": ["summary"],
+            },
+        })
     return rows
 
 
-def _system_prompt(role: str, allow_dispatch: bool) -> str:
+def _system_prompt(role: str, allow_dispatch: bool,
+                   require_terminal_tool: bool = False) -> str:
     duties = {
         "reference": "You are the single reference blue-team agent.",
         "orchestrator": "You are the CyberOrion blue-team commander.",
@@ -213,11 +219,19 @@ def _system_prompt(role: str, allow_dispatch: bool) -> str:
         "hunter": "You hunt residual compromise and verify cleanup.",
     }
     dispatch = "You may dispatch roles." if allow_dispatch else "You may not dispatch roles."
+    terminal = (
+        "You must finish by calling an available terminal tool; "
+        "task_complete is unavailable."
+        if require_terminal_tool else
+        "You may finish with task_complete."
+    )
+    action_types = "tool|dispatch" if require_terminal_tool else "tool|dispatch|complete"
     return (
         f"{duties.get(role, duties['reference'])}\n{dispatch}\n"
+        f"{terminal}\n"
         "Return exactly one JSON object per step. Do not include hidden "
         "reasoning. Shape: {\"hypothesis\":\"...\",\"evidence_ids\":[],"
-        "\"action\":{\"type\":\"tool|dispatch|complete\",\"tool\":\"name\","
+        f"\"action\":{{\"type\":\"{action_types}\",\"tool\":\"name\","
         "\"arguments\":{},\"role\":\"watcher\",\"mission\":\"...\","
         "\"summary\":\"...\"},\"replan_reason\":\"...\"}. Tools can fail; "
         "observe failures and adapt or report them honestly."
@@ -414,11 +428,16 @@ def _role_access(tools: Mapping[str, ToolSpec],
 
 async def _run_role(state: _State, *, role: str, task: str,
                     allow_dispatch: bool) -> tuple[str, str]:
+    terminal_required = (
+        state.config.require_terminal_tool
+        and role in {"reference", "orchestrator"})
     tools = state.available(role)
     schemas = [_tool_schema(spec) for spec in tools.values()]
-    schemas.extend(_virtual_tool_schemas(allow_dispatch))
+    schemas.extend(_virtual_tool_schemas(
+        allow_dispatch, allow_complete=not terminal_required))
     messages = [
-        {"role": "system", "content": _system_prompt(role, allow_dispatch)},
+        {"role": "system", "content": _system_prompt(
+            role, allow_dispatch, terminal_required)},
         {"role": "user", "content": task},
     ]
     local_steps = 0
@@ -447,6 +466,15 @@ async def _run_role(state: _State, *, role: str, task: str,
         action = decision["action"]
         kind = action["type"]
         if kind == "complete":
+            if terminal_required:
+                observation = (
+                    "ERROR[TerminalToolRequired]: call the authorized terminal "
+                    "tool to finish; a textual recommendation is not an action")
+                state.trace(role, "complete_rejected", decision, observation)
+                messages.append({"role": "assistant", "content": json.dumps(
+                    decision, ensure_ascii=False)})
+                messages.append({"role": "user", "content": observation})
+                continue
             summary = _clip(action.get("summary") or "", state.config.max_trace_text_chars)
             state.trace(role, "complete", decision, summary)
             return "complete", summary

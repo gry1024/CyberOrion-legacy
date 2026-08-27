@@ -49,6 +49,34 @@ def test_terminal_tool_completes_without_redundant_llm_call() -> None:
     assert result["budget"]["tool_calls"] == 1
 
 
+def test_terminal_required_rejects_task_complete_and_retries_selector() -> None:
+    calls = 0
+
+    async def llm(**request):
+        nonlocal calls
+        calls += 1
+        names = {tool["name"] for tool in request["tools"]}
+        assert "task_complete" not in names
+        if calls == 1:
+            return {"action": {"type": "complete", "summary": "select 2"}}
+        assert "TerminalToolRequired" in str(request["messages"])
+        return {"action": {"type": "tool", "tool": "select",
+                           "arguments": {"action_id": 2}}}
+
+    result = asyncio.run(run_reference(
+        task="choose", llm=llm,
+        tools={"select": ToolSpec(
+            "select", lambda action_id: f"selected {action_id}", terminal=True)},
+        config=RuntimeConfig(max_steps=3, max_llm_calls=3, max_tool_calls=2,
+                             max_dispatches=1, max_role_steps=1,
+                             require_terminal_tool=True)))
+    assert calls == 2
+    assert result["status"] == "complete"
+    assert [row["event"] for row in result["decision_trace"]] == [
+        "complete_rejected", "tool"]
+    assert result["output"] == "selected 2"
+
+
 def test_orchestrator_only_uses_commander_path_without_dispatch() -> None:
     async def llm(**request):
         assert request["role"] == "orchestrator"

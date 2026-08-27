@@ -394,6 +394,7 @@ async def run_bench(
                 max_tool_calls=int(step_budget["max_tool_calls"]),
                 max_dispatches=int(step_budget["max_dispatches"]),
                 max_role_steps=int(step_budget["max_role_steps"]),
+                require_terminal_tool=True,
             )
             runtime = None
             failure_reason = None
