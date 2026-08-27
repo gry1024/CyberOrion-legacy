@@ -197,6 +197,7 @@ cd <cai-repo>/cyberorion && python server.py   # → http://localhost:8000
     ④ `cai/util.py::fix_message_list` 第二遍：前一条是同一 assistant 的兄弟 tool 消息也算合法序列（原逻辑在两个并行 tool 响应间**乒乓死循环**，CPU 占满、事件循环冻结）。
 12. **DeepSeek 推理轮很慢（单轮 30-120s）**：四个 `_model()` 的 `AsyncOpenAI(timeout=300.0)` 不能降回 60；子代理墙钟 `_SUBAGENT_TIMEOUT=420`、指挥官 900、红方 600。超时判死必须用 `asyncio.wait` + 显式 cancel（`core/agent_runner.py::run_with_timeout`）——**`asyncio.wait_for` 无效**：SDK `result.py::stream_events` 会吞 `CancelledError`，wait_for 拿到部分结果正常返回，超时分支是死代码。
 13. **受限环境（沙箱）网络连外部 LLM 服务会长时间卡顿**：AI agent 在受限网络环境（sandbox）里执行需要访问外部 LLM 端点（`OPENAI_API_BASE` 的 OpenAI 兼容 API、`curl .../models` 检查模型）或 GitHub 的 Bash 命令时，请求被沙箱网络策略拦下/挂起，表现为长时间无响应甚至"卡死"。解决：这类命令必须**直接请求外部网络**执行（在 Claude Code 中即允许 Bash 绕过网络沙箱/`dangerouslyDisableSandbox`，或先向用户请求网络权限），不要反复重试或加长 timeout 硬等。凡跑真实 LLM 的 bench（`scripts/run_bench.py` 等）、`server.py` 端到端、`curl` 探测端点的命令都属于此类；纯本地命令（pytest、本地文件操作）才可以在沙箱里跑。
+14. **长时 benchmark 禁止凭感觉重启**：正式计费调用前必须把源码 SHA/tree/dirty、模型与 endpoint 域名（不含 key）、temperature/thinking、judge、任务/种子 manifest SHA、预算、输出目录和执行方式落盘或打印到持久日志，并在首个计费请求前 fail closed。多小时 runner 必须将 stdout/stderr 和最终退出码写到 worktree 外的独立路径；新增长时 harness 应优先按 task/condition 原子 checkpoint，使已完成单元可验证地续跑。监控时不得把 `ss -i` 的 `lastsnd/lastrcv` 数值当作秒（Linux 此处为毫秒），也不得凭单一信号判死；至少结合进程状态、持久日志/产物增长、配置的墙钟超时或明确异常中的两类证据，并连续两次检查后再判断。除明确 integrity failure、已触发的冻结超时或可复现 provider 错误外，停止/重启正式运行前先向用户报告。并行只允许在同 manifest/settings 下使用独立 worktree、输出目录和无共享可变状态的环境；共享 Docker Compose、数据库或官方服务状态的 runner 必须串行。正式 run 启动后不得仅为提速切换执行策略。
 
 ---
 
