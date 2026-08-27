@@ -179,10 +179,24 @@ def _tool_schema(spec: ToolSpec) -> dict[str, Any]:
     }
 
 
-def _virtual_tool_schemas(allow_dispatch: bool,
-                          allow_complete: bool = True) -> list[dict[str, Any]]:
-    rows = []
+def _allowed_actions(*, has_tools: bool, allow_dispatch: bool,
+                     allow_complete: bool) -> tuple[str, ...]:
+    """从实际运行时权限生成唯一的 model-visible 动作契约。"""
+    actions = []
+    if has_tools:
+        actions.append("tool")
     if allow_dispatch:
+        actions.append("dispatch")
+    if allow_complete:
+        actions.append("complete")
+    if not actions:
+        raise ValueError("role has no permitted action")
+    return tuple(actions)
+
+
+def _virtual_tool_schemas(allowed_actions: tuple[str, ...]) -> list[dict[str, Any]]:
+    rows = []
+    if "dispatch" in allowed_actions:
         rows.append({
             "name": "dispatch_task",
             "description": "dispatch watcher/analyst/responder/hunter",
@@ -195,7 +209,7 @@ def _virtual_tool_schemas(allow_dispatch: bool,
                 "required": ["role", "mission"],
             },
         })
-    if allow_complete:
+    if "complete" in allowed_actions:
         rows.append({
             "name": "task_complete",
             "description": "submit final summary",
@@ -208,8 +222,7 @@ def _virtual_tool_schemas(allow_dispatch: bool,
     return rows
 
 
-def _system_prompt(role: str, allow_dispatch: bool,
-                   require_terminal_tool: bool = False) -> str:
+def _system_prompt(role: str, allowed_actions: tuple[str, ...]) -> str:
     duties = {
         "reference": "You are the single reference blue-team agent.",
         "orchestrator": "You are the CyberOrion blue-team commander.",
@@ -218,14 +231,13 @@ def _system_prompt(role: str, allow_dispatch: bool,
         "responder": "You perform minimal response and read failures.",
         "hunter": "You hunt residual compromise and verify cleanup.",
     }
-    dispatch = "You may dispatch roles." if allow_dispatch else "You may not dispatch roles."
-    terminal = (
-        "You must finish by calling an available terminal tool; "
-        "task_complete is unavailable."
-        if require_terminal_tool else
-        "You may finish with task_complete."
-    )
-    action_types = "tool|dispatch" if require_terminal_tool else "tool|dispatch|complete"
+    dispatch = ("You may dispatch roles." if "dispatch" in allowed_actions
+                else "You may not dispatch roles.")
+    terminal = ("You may finish with task_complete."
+                if "complete" in allowed_actions else
+                "task_complete is unavailable; finish through an authorized "
+                "terminal tool.")
+    action_types = "|".join(allowed_actions)
     return (
         f"{duties.get(role, duties['reference'])}\n{dispatch}\n"
         f"{terminal}\n"
@@ -432,12 +444,14 @@ async def _run_role(state: _State, *, role: str, task: str,
         state.config.require_terminal_tool
         and role in {"reference", "orchestrator"})
     tools = state.available(role)
+    allowed_actions = _allowed_actions(
+        has_tools=bool(tools), allow_dispatch=allow_dispatch,
+        allow_complete=not terminal_required)
     schemas = [_tool_schema(spec) for spec in tools.values()]
-    schemas.extend(_virtual_tool_schemas(
-        allow_dispatch, allow_complete=not terminal_required))
+    schemas.extend(_virtual_tool_schemas(allowed_actions))
     messages = [
         {"role": "system", "content": _system_prompt(
-            role, allow_dispatch, terminal_required)},
+            role, allowed_actions)},
         {"role": "user", "content": task},
     ]
     local_steps = 0

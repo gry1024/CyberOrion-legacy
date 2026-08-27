@@ -216,6 +216,12 @@ reward、累计 reward、score、scorer feedback 或隐藏 chain-of-thought。�
 wall time、dispatch/roles、预算状态和 fallback；episode 只累计成本并设置线性 runaway
 safety ceiling。当前 `diagnostic` profile 是校准上限，不是 publication budget。
 
+`20260827_cage2_publication_v1_*` 原始产物生成于 specialist 动作契约修复之前：
+当时无工具、禁止继续派遣的 specialist 仍会看到 `tool|dispatch|complete`，因此其中
+Full 的 `DispatchNotAllowed`/`InvalidRole`、额外调用、fallback 与 reward 仅作为
+pre-contract-fix 审计和资源校准证据保留，不作为最终 Full 性能证据；原始 JSON 不作
+追溯修改。
+
 Live paired 只允许显式本地 runner 和注入的审计 harness：
 
 ```bash

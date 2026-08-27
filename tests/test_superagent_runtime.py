@@ -77,6 +77,109 @@ def test_terminal_required_rejects_task_complete_and_retries_selector() -> None:
     assert result["output"] == "selected 2"
 
 
+def test_cage_single_contract_is_tool_only() -> None:
+    async def llm(**request):
+        assert [tool["name"] for tool in request["tools"]] == ["select"]
+        assert '"type":"tool"' in request["messages"][0]["content"]
+        return {"action": {"type": "tool", "tool": "select",
+                           "arguments": {"action_id": 1}}}
+
+    result = asyncio.run(run_reference(
+        task="choose", llm=llm,
+        tools={"select": ToolSpec("select", lambda action_id: action_id,
+                                  terminal=True)},
+        config=RuntimeConfig(require_terminal_tool=True)))
+    assert result["status"] == "complete"
+
+
+def test_cage_full_contracts_match_orchestrator_and_specialist_permissions() -> None:
+    seen = {}
+
+    async def llm(**request):
+        role = request["role"]
+        seen.setdefault(role, []).append({
+            "tools": [tool["name"] for tool in request["tools"]],
+            "prompt": request["messages"][0]["content"],
+        })
+        if role == "orchestrator" and len(seen[role]) == 1:
+            return {"action": {"type": "dispatch", "role": "watcher",
+                               "mission": "inspect"}}
+        if role == "watcher":
+            return {"action": {"type": "complete", "summary": "clear"}}
+        return {"action": {"type": "tool", "tool": "select",
+                           "arguments": {"action_id": 1}}}
+
+    result = asyncio.run(run_superagent(
+        task="choose", llm=llm,
+        tools={"select": ToolSpec("select", lambda action_id: action_id,
+                                  terminal=True)},
+        role_tools={role: () for role in (
+            "watcher", "analyst", "responder", "hunter")},
+        config=RuntimeConfig(max_steps=4, max_llm_calls=4,
+                             require_terminal_tool=True)))
+    assert seen["orchestrator"][0]["tools"] == ["select", "dispatch_task"]
+    assert '"type":"tool|dispatch"' in seen["orchestrator"][0]["prompt"]
+    assert seen["watcher"][0]["tools"] == ["task_complete"]
+    assert '"type":"complete"' in seen["watcher"][0]["prompt"]
+    assert '"type":"tool' not in seen["watcher"][0]["prompt"]
+    assert 'dispatch' not in seen["watcher"][0]["prompt"].split("Shape:", 1)[1]
+    assert result["status"] == "complete"
+
+
+def test_excytin_like_specialist_contract_is_tool_and_complete() -> None:
+    seen = {}
+
+    async def llm(**request):
+        role = request["role"]
+        seen[role] = request
+        if role == "orchestrator" and not any(
+                message.get("name") == "dispatch_task"
+                for message in request["messages"]):
+            return {"action": {"type": "dispatch", "role": "analyst",
+                               "mission": "query"}}
+        return {"action": {"type": "complete", "summary": "done"}}
+
+    asyncio.run(run_superagent(
+        task="investigate", llm=llm, tools={"query_sql": lambda: "row"},
+        role_tools={"analyst": ("query_sql",)},
+        config=RuntimeConfig(max_steps=3, max_llm_calls=3)))
+    request = seen["analyst"]
+    assert [tool["name"] for tool in request["tools"]] == [
+        "query_sql", "task_complete"]
+    assert '"type":"tool|complete"' in request["messages"][0]["content"]
+
+
+def test_forbidden_specialist_dispatch_still_fails_closed() -> None:
+    watcher_calls = 0
+
+    async def llm(**request):
+        nonlocal watcher_calls
+        if request["role"] == "orchestrator" and not any(
+                message.get("name") == "dispatch_task"
+                for message in request["messages"]):
+            return {"action": {"type": "dispatch", "role": "watcher",
+                               "mission": "inspect"}}
+        if request["role"] == "watcher":
+            watcher_calls += 1
+            if watcher_calls == 1:
+                return {"action": {"type": "dispatch", "role": "analyst",
+                                   "mission": "illegal"}}
+            return {"action": {"type": "complete", "summary": "repaired"}}
+        return {"action": {"type": "complete", "summary": "done"}}
+
+    result = asyncio.run(run_superagent(
+        task="defend", llm=llm, tools={"read": lambda: "ok"},
+        role_tools={role: () for role in (
+            "watcher", "analyst", "responder", "hunter")},
+        config=RuntimeConfig(max_steps=5, max_llm_calls=5,
+                             max_role_steps=2)))
+    errors = [row for row in result["decision_trace"]
+              if row["event"] == "dispatch_error"]
+    assert len(errors) == 1
+    assert "DispatchNotAllowed" in errors[0]["observation"]
+    assert result["budget"]["dispatches"] == 1
+
+
 def test_orchestrator_only_uses_commander_path_without_dispatch() -> None:
     async def llm(**request):
         assert request["role"] == "orchestrator"
@@ -89,6 +192,22 @@ def test_orchestrator_only_uses_commander_path_without_dispatch() -> None:
                              max_dispatches=1, max_role_steps=1)))
     assert result["mode"] == "orchestrator_only"
     assert result["role_events"] == []
+
+
+def test_cage_orchestrator_only_contract_is_tool_only() -> None:
+    async def llm(**request):
+        assert request["role"] == "orchestrator"
+        assert [tool["name"] for tool in request["tools"]] == ["select"]
+        assert '"type":"tool"' in request["messages"][0]["content"]
+        return {"action": {"type": "tool", "tool": "select",
+                           "arguments": {"action_id": 1}}}
+
+    result = asyncio.run(run_orchestrator_only(
+        task="choose", llm=llm,
+        tools={"select": ToolSpec("select", lambda action_id: action_id,
+                                  terminal=True)},
+        config=RuntimeConfig(require_terminal_tool=True)))
+    assert result["status"] == "complete"
 
 
 def test_superagent_dispatch_is_runtime_event_and_uses_shared_budget() -> None:
