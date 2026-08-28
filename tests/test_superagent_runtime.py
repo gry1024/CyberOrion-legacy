@@ -122,6 +122,8 @@ def test_cage_full_contracts_match_orchestrator_and_specialist_permissions() -> 
                              require_terminal_tool=True)))
     assert seen["orchestrator"][0]["tools"] == ["select", "dispatch_task"]
     assert '{"type":"tool","tool":' in seen["orchestrator"][0]["prompt"]
+    assert '"select"' in seen["orchestrator"][0]["prompt"]
+    assert "authorized_tool_name" not in seen["orchestrator"][0]["prompt"]
     assert '{"type":"dispatch","role":' in seen["orchestrator"][0]["prompt"]
     assert '"type":"complete"' not in seen["orchestrator"][0]["prompt"]
     assert seen["watcher"][0]["tools"] == ["task_complete"]
@@ -132,6 +134,97 @@ def test_cage_full_contracts_match_orchestrator_and_specialist_permissions() -> 
     assert '"type":"dispatch"' not in specialist_contract
     assert '"role"' not in specialist_contract
     assert '"mission"' not in specialist_contract
+    assert '"type":"tool"' not in specialist_contract
+    assert result["status"] == "complete"
+
+
+def test_model_visible_cage_tool_contract_uses_real_orchestrator_tool() -> None:
+    seen: dict[str, str] = {}
+
+    async def llm(**request):
+        role = request["role"]
+        if role == "orchestrator":
+            seen[role] = request["messages"][0]["content"]
+            return {"action": {"type": "tool", "tool": "select_blue_action",
+                                "arguments": {"action_id": 2}}}
+        return {"action": {"type": "complete", "summary": "done"}}
+
+    result = asyncio.run(run_superagent(
+        task="choose", llm=llm,
+        tools={"select_blue_action": ToolSpec(
+            "select_blue_action", lambda action_id: f"selected {action_id}",
+            input_schema={"type": "object", "properties": {
+                "action_id": {"type": "integer"}},
+                "required": ["action_id"], "additionalProperties": False},
+            terminal=True)},
+        role_tools={role: () for role in (
+            "watcher", "analyst", "responder", "hunter")},
+        config=RuntimeConfig(require_terminal_tool=True)))
+    prompt = seen["orchestrator"]
+    assert "select_blue_action" in prompt
+    assert "authorized_tool_name" not in prompt
+    assert '"type":"tool"' in prompt
+    assert '"type":"dispatch"' in prompt
+    assert '"type":"complete"' not in prompt
+    assert result["status"] == "complete"
+
+
+def test_model_visible_specialist_without_real_tools_has_no_tool_action() -> None:
+    seen: dict[str, str] = {}
+
+    async def llm(**request):
+        seen[request["role"]] = request["messages"][0]["content"]
+        if request["role"] == "orchestrator":
+            if not any(message.get("name") == "dispatch_task"
+                       for message in request["messages"]):
+                return {"action": {"type": "dispatch", "role": "watcher",
+                                    "mission": "inspect"}}
+            return {"action": {"type": "tool", "tool": "select_blue_action",
+                                "arguments": {"action_id": 0}}}
+        return {"action": {"type": "complete", "summary": "done"}}
+
+    result = asyncio.run(run_superagent(
+        task="defend", llm=llm, tools={"select_blue_action": ToolSpec(
+            "select_blue_action", lambda action_id: action_id, terminal=True)},
+        role_tools={role: () for role in (
+            "watcher", "analyst", "responder", "hunter")},
+        config=RuntimeConfig(max_steps=4, max_llm_calls=4,
+                             max_dispatches=1, max_role_steps=1)))
+    prompt = seen["watcher"]
+    assert '"type":"tool"' not in prompt
+    assert "actual_real_tools" not in prompt
+    assert '"type":"complete"' in prompt
+    assert result["status"] == "complete"
+
+
+def test_model_visible_generic_multi_tool_contract_lists_only_visible_tools() -> None:
+    seen: dict[str, str] = {}
+
+    async def llm(**request):
+        seen["prompt"] = request["messages"][0]["content"]
+        return {"action": {"type": "complete", "summary": "done"}}
+
+    result = asyncio.run(run_reference(
+        task="triage", llm=llm,
+        tools={
+            "read_alert": ToolSpec(
+                "read_alert", lambda alert_id: alert_id,
+                input_schema={"type": "object", "properties": {
+                    "alert_id": {"type": "string"}},
+                    "required": ["alert_id"]}),
+            "list_hosts": ToolSpec(
+                "list_hosts", lambda: [],
+                input_schema={"type": "object", "properties": {}}),
+        },
+        config=RuntimeConfig(max_steps=2, max_llm_calls=2,
+                             max_tool_calls=1, max_dispatches=1,
+                             max_role_steps=1)))
+    prompt = seen["prompt"]
+    assert "read_alert" in prompt
+    assert "list_hosts" in prompt
+    assert "authorized_tool_name" not in prompt
+    assert "tool_name" not in prompt
+    assert "example_tool" not in prompt
     assert result["status"] == "complete"
 
 

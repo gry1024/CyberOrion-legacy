@@ -222,7 +222,8 @@ def _virtual_tool_schemas(allowed_actions: tuple[str, ...]) -> list[dict[str, An
     return rows
 
 
-def _system_prompt(role: str, allowed_actions: tuple[str, ...]) -> str:
+def _system_prompt(role: str, allowed_actions: tuple[str, ...],
+                   real_tools: Mapping[str, ToolSpec] | None = None) -> str:
     duties = {
         "reference": "You are the single reference blue-team agent.",
         "orchestrator": "You are the CyberOrion blue-team commander.",
@@ -237,22 +238,57 @@ def _system_prompt(role: str, allowed_actions: tuple[str, ...]) -> str:
                 if "complete" in allowed_actions else
                 "task_complete is unavailable; finish through an authorized "
                 "terminal tool.")
-    variants = {
-        "tool": {"type": "tool", "tool": "authorized_tool_name",
-                 "arguments": {}},
-        "dispatch": {"type": "dispatch", "role": "watcher",
-                     "mission": "bounded mission"},
-        "complete": {"type": "complete", "summary": "final summary"},
-    }
-    action_contract = json.dumps(
-        [variants[action] for action in allowed_actions],
-        ensure_ascii=False, separators=(",", ":"))
+    visible = tuple((real_tools or {}).values())
+    if "tool" in allowed_actions and not visible:
+        raise ValueError("tool action requires at least one visible real tool")
+    tool_forms = []
+    if "tool" in allowed_actions:
+        for spec in visible:
+            tool_forms.append(
+                "{\"type\":\"tool\",\"tool\":"
+                f"{json.dumps(spec.name, ensure_ascii=False)},"
+                "\"arguments\":<JSON object satisfying the matching "
+                "real-tool schema>}"
+            )
+    contract: dict[str, Any] = {}
+    if tool_forms:
+        schemas = {
+            spec.name: _json_safe(dict(spec.input_schema))
+            for spec in visible
+        }
+        contract["tool"] = {
+            "actual_real_tools": [spec.name for spec in visible],
+            "arguments_schema_by_tool": schemas,
+        }
+    if "dispatch" in allowed_actions:
+        contract["dispatch"] = {
+            "type": "dispatch", "role": "watcher",
+            "mission": "bounded mission",
+        }
+    if "complete" in allowed_actions:
+        contract["complete"] = {
+            "type": "complete", "summary": "final summary",
+        }
+    action_contract = json.dumps(contract, ensure_ascii=False, separators=(",", ":"))
+    tool_rule = ""
+    if tool_forms:
+        names = json.dumps([spec.name for spec in visible], ensure_ascii=False)
+        tool_rule = (
+            "For a tool action, action.tool MUST exactly equal one of the "
+            f"actual real tool names {names}; action.arguments MUST be an "
+            "ordinary JSON object that validates against the schema keyed by "
+            "that exact tool name in the tool contract. The angle-bracket text "
+            "in the tool forms is notation only; do not emit it literally. "
+            f"Tool forms: {' or '.join(tool_forms)}. "
+        )
     return (
         f"{duties.get(role, duties['reference'])}\n{dispatch}\n"
         f"{terminal}\n"
         "Return exactly one JSON object per step. Do not include hidden "
-        "reasoning. The action object MUST match exactly one of these permitted "
-        f"variants and MUST NOT contain fields from another variant: {action_contract}. "
+        "reasoning. "
+        f"{tool_rule}The action object MUST match exactly one of the permitted "
+        f"variants in this contract and MUST NOT contain fields from another "
+        f"variant: {action_contract}. "
         "Envelope: {\"hypothesis\":\"...\",\"evidence_ids\":[],"
         "\"action\":<one permitted variant>,\"replan_reason\":\"...\"}. Tools can fail; "
         "observe failures and adapt or report them honestly."
@@ -460,7 +496,7 @@ async def _run_role(state: _State, *, role: str, task: str,
     schemas.extend(_virtual_tool_schemas(allowed_actions))
     messages = [
         {"role": "system", "content": _system_prompt(
-            role, allowed_actions)},
+            role, allowed_actions, tools)},
         {"role": "user", "content": task},
     ]
     local_steps = 0
