@@ -246,6 +246,22 @@ def test_publication_v2_is_frozen_and_matches_v1_ceiling() -> None:
     assert cage2._step_budget("publication_v2") == v2
 
 
+def test_publication_v3_is_frozen_without_mutating_v2() -> None:
+    v2 = cage2.CAGE_STEP_BUDGETS["publication_v2"]
+    v3 = cage2.CAGE_STEP_BUDGETS["publication_v3"]
+    assert v2 == {
+        "max_steps": 7, "max_llm_calls": 5, "max_tool_calls": 4,
+        "max_dispatches": 3, "max_role_steps": 4,
+        "token_budget": 24_576, "wall_clock_sec": 90.0,
+    }
+    assert v3 == {
+        "max_steps": 7, "max_llm_calls": 7, "max_tool_calls": 4,
+        "max_dispatches": 4, "max_role_steps": 5,
+        "token_budget": 24_576, "wall_clock_sec": 90.0,
+    }
+    assert cage2._step_budget("publication_v3") == v3
+
+
 def _cage_asset(tmp_path: Path, monkeypatch) -> None:
     asset = tmp_path / "cage"
     asset.mkdir()

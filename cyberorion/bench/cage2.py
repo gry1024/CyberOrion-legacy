@@ -92,6 +92,19 @@ CAGE_STEP_BUDGETS: dict[str, dict[str, int | float]] = {
         "token_budget": 24_576,
         "wall_clock_sec": 90.0,
     },
+    # publication_v3 依据最终工具契约源码上的三组 resource-only 校准冻结；
+    # 未读取 reward/action quality，且不改变 publication_v2。h100 使用
+    # calibration-only 600s 观测墙钟尾部，未触发超时。证据见任务产物
+    # FINAL_SOURCE_RESOURCE_CALIBRATION_SUMMARY.json。
+    "publication_v3": {
+        "max_steps": 7,
+        "max_llm_calls": 7,
+        "max_tool_calls": 4,
+        "max_dispatches": 4,
+        "max_role_steps": 5,
+        "token_budget": 24_576,
+        "wall_clock_sec": 90.0,
+    },
 }
 
 
