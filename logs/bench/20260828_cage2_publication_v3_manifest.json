@@ -1,0 +1,2332 @@
+{
+  "schema_version": 1,
+  "run_id": "20260828_cage2_publication_v3_full_manifest",
+  "created_at": 1787904310.3029304,
+  "protocol_version": "cage2_segmented_v1",
+  "source_provenance": {
+    "git_head_sha": "da64b9cbc60b9bb30b3f3c83cba0600287ee1527",
+    "git_tree_sha": "6ef465fe7ad79103e1481f7e71d05206f48e51fc",
+    "git_dirty": false,
+    "git_diff_sha256": null
+  },
+  "model_settings": {
+    "provider": "openai",
+    "model": "MiniMax-M3",
+    "configured_model": "openai/MiniMax-M3",
+    "thinking": "disabled",
+    "max_output_tokens": 8192,
+    "temperature": 0.0,
+    "temperature_status": "explicit",
+    "usage_accounting": "provider_or_estimated_per_task"
+  },
+  "budget_profile": "publication_v3",
+  "step_budget": {
+    "max_steps": 7,
+    "max_llm_calls": 7,
+    "max_tool_calls": 4,
+    "max_dispatches": 4,
+    "max_role_steps": 5,
+    "token_budget": 24576,
+    "wall_clock_sec": 90.0
+  },
+  "window_steps": 10,
+  "max_segment_sec": 420.0,
+  "jobs": [
+    {
+      "job_id": "cage2/single/B_lineAgent/h30/seed92731/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "B_lineAgent",
+      "horizon": 30,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/B_lineAgent/h30/seed92731/ep1/steps001-010",
+        "cage2/single/B_lineAgent/h30/seed92731/ep1/steps011-020",
+        "cage2/single/B_lineAgent/h30/seed92731/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/B_lineAgent/h30/seed92731/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "B_lineAgent",
+      "horizon": 30,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/B_lineAgent/h30/seed92731/ep1/steps001-010",
+        "cage2/orchestrator_only/B_lineAgent/h30/seed92731/ep1/steps011-020",
+        "cage2/orchestrator_only/B_lineAgent/h30/seed92731/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/full/B_lineAgent/h30/seed92731/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "B_lineAgent",
+      "horizon": 30,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/B_lineAgent/h30/seed92731/ep1/steps001-010",
+        "cage2/full/B_lineAgent/h30/seed92731/ep1/steps011-020",
+        "cage2/full/B_lineAgent/h30/seed92731/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/single/B_lineAgent/h30/seed92732/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "B_lineAgent",
+      "horizon": 30,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/B_lineAgent/h30/seed92732/ep1/steps001-010",
+        "cage2/single/B_lineAgent/h30/seed92732/ep1/steps011-020",
+        "cage2/single/B_lineAgent/h30/seed92732/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/B_lineAgent/h30/seed92732/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "B_lineAgent",
+      "horizon": 30,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/B_lineAgent/h30/seed92732/ep1/steps001-010",
+        "cage2/orchestrator_only/B_lineAgent/h30/seed92732/ep1/steps011-020",
+        "cage2/orchestrator_only/B_lineAgent/h30/seed92732/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/full/B_lineAgent/h30/seed92732/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "B_lineAgent",
+      "horizon": 30,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/B_lineAgent/h30/seed92732/ep1/steps001-010",
+        "cage2/full/B_lineAgent/h30/seed92732/ep1/steps011-020",
+        "cage2/full/B_lineAgent/h30/seed92732/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/single/B_lineAgent/h30/seed92733/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "B_lineAgent",
+      "horizon": 30,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/B_lineAgent/h30/seed92733/ep1/steps001-010",
+        "cage2/single/B_lineAgent/h30/seed92733/ep1/steps011-020",
+        "cage2/single/B_lineAgent/h30/seed92733/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/B_lineAgent/h30/seed92733/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "B_lineAgent",
+      "horizon": 30,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/B_lineAgent/h30/seed92733/ep1/steps001-010",
+        "cage2/orchestrator_only/B_lineAgent/h30/seed92733/ep1/steps011-020",
+        "cage2/orchestrator_only/B_lineAgent/h30/seed92733/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/full/B_lineAgent/h30/seed92733/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "B_lineAgent",
+      "horizon": 30,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/B_lineAgent/h30/seed92733/ep1/steps001-010",
+        "cage2/full/B_lineAgent/h30/seed92733/ep1/steps011-020",
+        "cage2/full/B_lineAgent/h30/seed92733/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/single/B_lineAgent/h30/seed92734/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "B_lineAgent",
+      "horizon": 30,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/B_lineAgent/h30/seed92734/ep1/steps001-010",
+        "cage2/single/B_lineAgent/h30/seed92734/ep1/steps011-020",
+        "cage2/single/B_lineAgent/h30/seed92734/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/B_lineAgent/h30/seed92734/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "B_lineAgent",
+      "horizon": 30,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/B_lineAgent/h30/seed92734/ep1/steps001-010",
+        "cage2/orchestrator_only/B_lineAgent/h30/seed92734/ep1/steps011-020",
+        "cage2/orchestrator_only/B_lineAgent/h30/seed92734/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/full/B_lineAgent/h30/seed92734/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "B_lineAgent",
+      "horizon": 30,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/B_lineAgent/h30/seed92734/ep1/steps001-010",
+        "cage2/full/B_lineAgent/h30/seed92734/ep1/steps011-020",
+        "cage2/full/B_lineAgent/h30/seed92734/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/single/B_lineAgent/h30/seed92735/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "B_lineAgent",
+      "horizon": 30,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/B_lineAgent/h30/seed92735/ep1/steps001-010",
+        "cage2/single/B_lineAgent/h30/seed92735/ep1/steps011-020",
+        "cage2/single/B_lineAgent/h30/seed92735/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/B_lineAgent/h30/seed92735/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "B_lineAgent",
+      "horizon": 30,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/B_lineAgent/h30/seed92735/ep1/steps001-010",
+        "cage2/orchestrator_only/B_lineAgent/h30/seed92735/ep1/steps011-020",
+        "cage2/orchestrator_only/B_lineAgent/h30/seed92735/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/full/B_lineAgent/h30/seed92735/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "B_lineAgent",
+      "horizon": 30,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/B_lineAgent/h30/seed92735/ep1/steps001-010",
+        "cage2/full/B_lineAgent/h30/seed92735/ep1/steps011-020",
+        "cage2/full/B_lineAgent/h30/seed92735/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/single/B_lineAgent/h50/seed92731/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "B_lineAgent",
+      "horizon": 50,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/B_lineAgent/h50/seed92731/ep1/steps001-010",
+        "cage2/single/B_lineAgent/h50/seed92731/ep1/steps011-020",
+        "cage2/single/B_lineAgent/h50/seed92731/ep1/steps021-030",
+        "cage2/single/B_lineAgent/h50/seed92731/ep1/steps031-040",
+        "cage2/single/B_lineAgent/h50/seed92731/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/B_lineAgent/h50/seed92731/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "B_lineAgent",
+      "horizon": 50,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92731/ep1/steps001-010",
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92731/ep1/steps011-020",
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92731/ep1/steps021-030",
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92731/ep1/steps031-040",
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92731/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/full/B_lineAgent/h50/seed92731/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "B_lineAgent",
+      "horizon": 50,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/B_lineAgent/h50/seed92731/ep1/steps001-010",
+        "cage2/full/B_lineAgent/h50/seed92731/ep1/steps011-020",
+        "cage2/full/B_lineAgent/h50/seed92731/ep1/steps021-030",
+        "cage2/full/B_lineAgent/h50/seed92731/ep1/steps031-040",
+        "cage2/full/B_lineAgent/h50/seed92731/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/single/B_lineAgent/h50/seed92732/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "B_lineAgent",
+      "horizon": 50,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/B_lineAgent/h50/seed92732/ep1/steps001-010",
+        "cage2/single/B_lineAgent/h50/seed92732/ep1/steps011-020",
+        "cage2/single/B_lineAgent/h50/seed92732/ep1/steps021-030",
+        "cage2/single/B_lineAgent/h50/seed92732/ep1/steps031-040",
+        "cage2/single/B_lineAgent/h50/seed92732/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/B_lineAgent/h50/seed92732/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "B_lineAgent",
+      "horizon": 50,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92732/ep1/steps001-010",
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92732/ep1/steps011-020",
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92732/ep1/steps021-030",
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92732/ep1/steps031-040",
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92732/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/full/B_lineAgent/h50/seed92732/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "B_lineAgent",
+      "horizon": 50,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/B_lineAgent/h50/seed92732/ep1/steps001-010",
+        "cage2/full/B_lineAgent/h50/seed92732/ep1/steps011-020",
+        "cage2/full/B_lineAgent/h50/seed92732/ep1/steps021-030",
+        "cage2/full/B_lineAgent/h50/seed92732/ep1/steps031-040",
+        "cage2/full/B_lineAgent/h50/seed92732/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/single/B_lineAgent/h50/seed92733/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "B_lineAgent",
+      "horizon": 50,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/B_lineAgent/h50/seed92733/ep1/steps001-010",
+        "cage2/single/B_lineAgent/h50/seed92733/ep1/steps011-020",
+        "cage2/single/B_lineAgent/h50/seed92733/ep1/steps021-030",
+        "cage2/single/B_lineAgent/h50/seed92733/ep1/steps031-040",
+        "cage2/single/B_lineAgent/h50/seed92733/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/B_lineAgent/h50/seed92733/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "B_lineAgent",
+      "horizon": 50,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92733/ep1/steps001-010",
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92733/ep1/steps011-020",
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92733/ep1/steps021-030",
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92733/ep1/steps031-040",
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92733/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/full/B_lineAgent/h50/seed92733/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "B_lineAgent",
+      "horizon": 50,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/B_lineAgent/h50/seed92733/ep1/steps001-010",
+        "cage2/full/B_lineAgent/h50/seed92733/ep1/steps011-020",
+        "cage2/full/B_lineAgent/h50/seed92733/ep1/steps021-030",
+        "cage2/full/B_lineAgent/h50/seed92733/ep1/steps031-040",
+        "cage2/full/B_lineAgent/h50/seed92733/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/single/B_lineAgent/h50/seed92734/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "B_lineAgent",
+      "horizon": 50,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/B_lineAgent/h50/seed92734/ep1/steps001-010",
+        "cage2/single/B_lineAgent/h50/seed92734/ep1/steps011-020",
+        "cage2/single/B_lineAgent/h50/seed92734/ep1/steps021-030",
+        "cage2/single/B_lineAgent/h50/seed92734/ep1/steps031-040",
+        "cage2/single/B_lineAgent/h50/seed92734/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/B_lineAgent/h50/seed92734/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "B_lineAgent",
+      "horizon": 50,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92734/ep1/steps001-010",
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92734/ep1/steps011-020",
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92734/ep1/steps021-030",
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92734/ep1/steps031-040",
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92734/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/full/B_lineAgent/h50/seed92734/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "B_lineAgent",
+      "horizon": 50,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/B_lineAgent/h50/seed92734/ep1/steps001-010",
+        "cage2/full/B_lineAgent/h50/seed92734/ep1/steps011-020",
+        "cage2/full/B_lineAgent/h50/seed92734/ep1/steps021-030",
+        "cage2/full/B_lineAgent/h50/seed92734/ep1/steps031-040",
+        "cage2/full/B_lineAgent/h50/seed92734/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/single/B_lineAgent/h50/seed92735/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "B_lineAgent",
+      "horizon": 50,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/B_lineAgent/h50/seed92735/ep1/steps001-010",
+        "cage2/single/B_lineAgent/h50/seed92735/ep1/steps011-020",
+        "cage2/single/B_lineAgent/h50/seed92735/ep1/steps021-030",
+        "cage2/single/B_lineAgent/h50/seed92735/ep1/steps031-040",
+        "cage2/single/B_lineAgent/h50/seed92735/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/B_lineAgent/h50/seed92735/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "B_lineAgent",
+      "horizon": 50,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92735/ep1/steps001-010",
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92735/ep1/steps011-020",
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92735/ep1/steps021-030",
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92735/ep1/steps031-040",
+        "cage2/orchestrator_only/B_lineAgent/h50/seed92735/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/full/B_lineAgent/h50/seed92735/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "B_lineAgent",
+      "horizon": 50,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/B_lineAgent/h50/seed92735/ep1/steps001-010",
+        "cage2/full/B_lineAgent/h50/seed92735/ep1/steps011-020",
+        "cage2/full/B_lineAgent/h50/seed92735/ep1/steps021-030",
+        "cage2/full/B_lineAgent/h50/seed92735/ep1/steps031-040",
+        "cage2/full/B_lineAgent/h50/seed92735/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/single/B_lineAgent/h100/seed92731/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "B_lineAgent",
+      "horizon": 100,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/B_lineAgent/h100/seed92731/ep1/steps001-010",
+        "cage2/single/B_lineAgent/h100/seed92731/ep1/steps011-020",
+        "cage2/single/B_lineAgent/h100/seed92731/ep1/steps021-030",
+        "cage2/single/B_lineAgent/h100/seed92731/ep1/steps031-040",
+        "cage2/single/B_lineAgent/h100/seed92731/ep1/steps041-050",
+        "cage2/single/B_lineAgent/h100/seed92731/ep1/steps051-060",
+        "cage2/single/B_lineAgent/h100/seed92731/ep1/steps061-070",
+        "cage2/single/B_lineAgent/h100/seed92731/ep1/steps071-080",
+        "cage2/single/B_lineAgent/h100/seed92731/ep1/steps081-090",
+        "cage2/single/B_lineAgent/h100/seed92731/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/B_lineAgent/h100/seed92731/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "B_lineAgent",
+      "horizon": 100,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92731/ep1/steps001-010",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92731/ep1/steps011-020",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92731/ep1/steps021-030",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92731/ep1/steps031-040",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92731/ep1/steps041-050",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92731/ep1/steps051-060",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92731/ep1/steps061-070",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92731/ep1/steps071-080",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92731/ep1/steps081-090",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92731/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/full/B_lineAgent/h100/seed92731/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "B_lineAgent",
+      "horizon": 100,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/B_lineAgent/h100/seed92731/ep1/steps001-010",
+        "cage2/full/B_lineAgent/h100/seed92731/ep1/steps011-020",
+        "cage2/full/B_lineAgent/h100/seed92731/ep1/steps021-030",
+        "cage2/full/B_lineAgent/h100/seed92731/ep1/steps031-040",
+        "cage2/full/B_lineAgent/h100/seed92731/ep1/steps041-050",
+        "cage2/full/B_lineAgent/h100/seed92731/ep1/steps051-060",
+        "cage2/full/B_lineAgent/h100/seed92731/ep1/steps061-070",
+        "cage2/full/B_lineAgent/h100/seed92731/ep1/steps071-080",
+        "cage2/full/B_lineAgent/h100/seed92731/ep1/steps081-090",
+        "cage2/full/B_lineAgent/h100/seed92731/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/single/B_lineAgent/h100/seed92732/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "B_lineAgent",
+      "horizon": 100,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/B_lineAgent/h100/seed92732/ep1/steps001-010",
+        "cage2/single/B_lineAgent/h100/seed92732/ep1/steps011-020",
+        "cage2/single/B_lineAgent/h100/seed92732/ep1/steps021-030",
+        "cage2/single/B_lineAgent/h100/seed92732/ep1/steps031-040",
+        "cage2/single/B_lineAgent/h100/seed92732/ep1/steps041-050",
+        "cage2/single/B_lineAgent/h100/seed92732/ep1/steps051-060",
+        "cage2/single/B_lineAgent/h100/seed92732/ep1/steps061-070",
+        "cage2/single/B_lineAgent/h100/seed92732/ep1/steps071-080",
+        "cage2/single/B_lineAgent/h100/seed92732/ep1/steps081-090",
+        "cage2/single/B_lineAgent/h100/seed92732/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/B_lineAgent/h100/seed92732/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "B_lineAgent",
+      "horizon": 100,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92732/ep1/steps001-010",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92732/ep1/steps011-020",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92732/ep1/steps021-030",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92732/ep1/steps031-040",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92732/ep1/steps041-050",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92732/ep1/steps051-060",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92732/ep1/steps061-070",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92732/ep1/steps071-080",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92732/ep1/steps081-090",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92732/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/full/B_lineAgent/h100/seed92732/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "B_lineAgent",
+      "horizon": 100,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/B_lineAgent/h100/seed92732/ep1/steps001-010",
+        "cage2/full/B_lineAgent/h100/seed92732/ep1/steps011-020",
+        "cage2/full/B_lineAgent/h100/seed92732/ep1/steps021-030",
+        "cage2/full/B_lineAgent/h100/seed92732/ep1/steps031-040",
+        "cage2/full/B_lineAgent/h100/seed92732/ep1/steps041-050",
+        "cage2/full/B_lineAgent/h100/seed92732/ep1/steps051-060",
+        "cage2/full/B_lineAgent/h100/seed92732/ep1/steps061-070",
+        "cage2/full/B_lineAgent/h100/seed92732/ep1/steps071-080",
+        "cage2/full/B_lineAgent/h100/seed92732/ep1/steps081-090",
+        "cage2/full/B_lineAgent/h100/seed92732/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/single/B_lineAgent/h100/seed92733/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "B_lineAgent",
+      "horizon": 100,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/B_lineAgent/h100/seed92733/ep1/steps001-010",
+        "cage2/single/B_lineAgent/h100/seed92733/ep1/steps011-020",
+        "cage2/single/B_lineAgent/h100/seed92733/ep1/steps021-030",
+        "cage2/single/B_lineAgent/h100/seed92733/ep1/steps031-040",
+        "cage2/single/B_lineAgent/h100/seed92733/ep1/steps041-050",
+        "cage2/single/B_lineAgent/h100/seed92733/ep1/steps051-060",
+        "cage2/single/B_lineAgent/h100/seed92733/ep1/steps061-070",
+        "cage2/single/B_lineAgent/h100/seed92733/ep1/steps071-080",
+        "cage2/single/B_lineAgent/h100/seed92733/ep1/steps081-090",
+        "cage2/single/B_lineAgent/h100/seed92733/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/B_lineAgent/h100/seed92733/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "B_lineAgent",
+      "horizon": 100,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92733/ep1/steps001-010",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92733/ep1/steps011-020",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92733/ep1/steps021-030",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92733/ep1/steps031-040",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92733/ep1/steps041-050",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92733/ep1/steps051-060",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92733/ep1/steps061-070",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92733/ep1/steps071-080",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92733/ep1/steps081-090",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92733/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/full/B_lineAgent/h100/seed92733/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "B_lineAgent",
+      "horizon": 100,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/B_lineAgent/h100/seed92733/ep1/steps001-010",
+        "cage2/full/B_lineAgent/h100/seed92733/ep1/steps011-020",
+        "cage2/full/B_lineAgent/h100/seed92733/ep1/steps021-030",
+        "cage2/full/B_lineAgent/h100/seed92733/ep1/steps031-040",
+        "cage2/full/B_lineAgent/h100/seed92733/ep1/steps041-050",
+        "cage2/full/B_lineAgent/h100/seed92733/ep1/steps051-060",
+        "cage2/full/B_lineAgent/h100/seed92733/ep1/steps061-070",
+        "cage2/full/B_lineAgent/h100/seed92733/ep1/steps071-080",
+        "cage2/full/B_lineAgent/h100/seed92733/ep1/steps081-090",
+        "cage2/full/B_lineAgent/h100/seed92733/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/single/B_lineAgent/h100/seed92734/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "B_lineAgent",
+      "horizon": 100,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/B_lineAgent/h100/seed92734/ep1/steps001-010",
+        "cage2/single/B_lineAgent/h100/seed92734/ep1/steps011-020",
+        "cage2/single/B_lineAgent/h100/seed92734/ep1/steps021-030",
+        "cage2/single/B_lineAgent/h100/seed92734/ep1/steps031-040",
+        "cage2/single/B_lineAgent/h100/seed92734/ep1/steps041-050",
+        "cage2/single/B_lineAgent/h100/seed92734/ep1/steps051-060",
+        "cage2/single/B_lineAgent/h100/seed92734/ep1/steps061-070",
+        "cage2/single/B_lineAgent/h100/seed92734/ep1/steps071-080",
+        "cage2/single/B_lineAgent/h100/seed92734/ep1/steps081-090",
+        "cage2/single/B_lineAgent/h100/seed92734/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/B_lineAgent/h100/seed92734/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "B_lineAgent",
+      "horizon": 100,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92734/ep1/steps001-010",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92734/ep1/steps011-020",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92734/ep1/steps021-030",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92734/ep1/steps031-040",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92734/ep1/steps041-050",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92734/ep1/steps051-060",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92734/ep1/steps061-070",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92734/ep1/steps071-080",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92734/ep1/steps081-090",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92734/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/full/B_lineAgent/h100/seed92734/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "B_lineAgent",
+      "horizon": 100,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/B_lineAgent/h100/seed92734/ep1/steps001-010",
+        "cage2/full/B_lineAgent/h100/seed92734/ep1/steps011-020",
+        "cage2/full/B_lineAgent/h100/seed92734/ep1/steps021-030",
+        "cage2/full/B_lineAgent/h100/seed92734/ep1/steps031-040",
+        "cage2/full/B_lineAgent/h100/seed92734/ep1/steps041-050",
+        "cage2/full/B_lineAgent/h100/seed92734/ep1/steps051-060",
+        "cage2/full/B_lineAgent/h100/seed92734/ep1/steps061-070",
+        "cage2/full/B_lineAgent/h100/seed92734/ep1/steps071-080",
+        "cage2/full/B_lineAgent/h100/seed92734/ep1/steps081-090",
+        "cage2/full/B_lineAgent/h100/seed92734/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/single/B_lineAgent/h100/seed92735/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "B_lineAgent",
+      "horizon": 100,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/B_lineAgent/h100/seed92735/ep1/steps001-010",
+        "cage2/single/B_lineAgent/h100/seed92735/ep1/steps011-020",
+        "cage2/single/B_lineAgent/h100/seed92735/ep1/steps021-030",
+        "cage2/single/B_lineAgent/h100/seed92735/ep1/steps031-040",
+        "cage2/single/B_lineAgent/h100/seed92735/ep1/steps041-050",
+        "cage2/single/B_lineAgent/h100/seed92735/ep1/steps051-060",
+        "cage2/single/B_lineAgent/h100/seed92735/ep1/steps061-070",
+        "cage2/single/B_lineAgent/h100/seed92735/ep1/steps071-080",
+        "cage2/single/B_lineAgent/h100/seed92735/ep1/steps081-090",
+        "cage2/single/B_lineAgent/h100/seed92735/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/B_lineAgent/h100/seed92735/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "B_lineAgent",
+      "horizon": 100,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92735/ep1/steps001-010",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92735/ep1/steps011-020",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92735/ep1/steps021-030",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92735/ep1/steps031-040",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92735/ep1/steps041-050",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92735/ep1/steps051-060",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92735/ep1/steps061-070",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92735/ep1/steps071-080",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92735/ep1/steps081-090",
+        "cage2/orchestrator_only/B_lineAgent/h100/seed92735/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/full/B_lineAgent/h100/seed92735/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "B_lineAgent",
+      "horizon": 100,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/B_lineAgent/h100/seed92735/ep1/steps001-010",
+        "cage2/full/B_lineAgent/h100/seed92735/ep1/steps011-020",
+        "cage2/full/B_lineAgent/h100/seed92735/ep1/steps021-030",
+        "cage2/full/B_lineAgent/h100/seed92735/ep1/steps031-040",
+        "cage2/full/B_lineAgent/h100/seed92735/ep1/steps041-050",
+        "cage2/full/B_lineAgent/h100/seed92735/ep1/steps051-060",
+        "cage2/full/B_lineAgent/h100/seed92735/ep1/steps061-070",
+        "cage2/full/B_lineAgent/h100/seed92735/ep1/steps071-080",
+        "cage2/full/B_lineAgent/h100/seed92735/ep1/steps081-090",
+        "cage2/full/B_lineAgent/h100/seed92735/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/single/RedMeanderAgent/h30/seed92731/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 30,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/RedMeanderAgent/h30/seed92731/ep1/steps001-010",
+        "cage2/single/RedMeanderAgent/h30/seed92731/ep1/steps011-020",
+        "cage2/single/RedMeanderAgent/h30/seed92731/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/RedMeanderAgent/h30/seed92731/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 30,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/RedMeanderAgent/h30/seed92731/ep1/steps001-010",
+        "cage2/orchestrator_only/RedMeanderAgent/h30/seed92731/ep1/steps011-020",
+        "cage2/orchestrator_only/RedMeanderAgent/h30/seed92731/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/full/RedMeanderAgent/h30/seed92731/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 30,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/RedMeanderAgent/h30/seed92731/ep1/steps001-010",
+        "cage2/full/RedMeanderAgent/h30/seed92731/ep1/steps011-020",
+        "cage2/full/RedMeanderAgent/h30/seed92731/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/single/RedMeanderAgent/h30/seed92732/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 30,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/RedMeanderAgent/h30/seed92732/ep1/steps001-010",
+        "cage2/single/RedMeanderAgent/h30/seed92732/ep1/steps011-020",
+        "cage2/single/RedMeanderAgent/h30/seed92732/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/RedMeanderAgent/h30/seed92732/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 30,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/RedMeanderAgent/h30/seed92732/ep1/steps001-010",
+        "cage2/orchestrator_only/RedMeanderAgent/h30/seed92732/ep1/steps011-020",
+        "cage2/orchestrator_only/RedMeanderAgent/h30/seed92732/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/full/RedMeanderAgent/h30/seed92732/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 30,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/RedMeanderAgent/h30/seed92732/ep1/steps001-010",
+        "cage2/full/RedMeanderAgent/h30/seed92732/ep1/steps011-020",
+        "cage2/full/RedMeanderAgent/h30/seed92732/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/single/RedMeanderAgent/h30/seed92733/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 30,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/RedMeanderAgent/h30/seed92733/ep1/steps001-010",
+        "cage2/single/RedMeanderAgent/h30/seed92733/ep1/steps011-020",
+        "cage2/single/RedMeanderAgent/h30/seed92733/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/RedMeanderAgent/h30/seed92733/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 30,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/RedMeanderAgent/h30/seed92733/ep1/steps001-010",
+        "cage2/orchestrator_only/RedMeanderAgent/h30/seed92733/ep1/steps011-020",
+        "cage2/orchestrator_only/RedMeanderAgent/h30/seed92733/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/full/RedMeanderAgent/h30/seed92733/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 30,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/RedMeanderAgent/h30/seed92733/ep1/steps001-010",
+        "cage2/full/RedMeanderAgent/h30/seed92733/ep1/steps011-020",
+        "cage2/full/RedMeanderAgent/h30/seed92733/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/single/RedMeanderAgent/h30/seed92734/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 30,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/RedMeanderAgent/h30/seed92734/ep1/steps001-010",
+        "cage2/single/RedMeanderAgent/h30/seed92734/ep1/steps011-020",
+        "cage2/single/RedMeanderAgent/h30/seed92734/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/RedMeanderAgent/h30/seed92734/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 30,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/RedMeanderAgent/h30/seed92734/ep1/steps001-010",
+        "cage2/orchestrator_only/RedMeanderAgent/h30/seed92734/ep1/steps011-020",
+        "cage2/orchestrator_only/RedMeanderAgent/h30/seed92734/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/full/RedMeanderAgent/h30/seed92734/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 30,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/RedMeanderAgent/h30/seed92734/ep1/steps001-010",
+        "cage2/full/RedMeanderAgent/h30/seed92734/ep1/steps011-020",
+        "cage2/full/RedMeanderAgent/h30/seed92734/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/single/RedMeanderAgent/h30/seed92735/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 30,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/RedMeanderAgent/h30/seed92735/ep1/steps001-010",
+        "cage2/single/RedMeanderAgent/h30/seed92735/ep1/steps011-020",
+        "cage2/single/RedMeanderAgent/h30/seed92735/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/RedMeanderAgent/h30/seed92735/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 30,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/RedMeanderAgent/h30/seed92735/ep1/steps001-010",
+        "cage2/orchestrator_only/RedMeanderAgent/h30/seed92735/ep1/steps011-020",
+        "cage2/orchestrator_only/RedMeanderAgent/h30/seed92735/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/full/RedMeanderAgent/h30/seed92735/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 30,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/RedMeanderAgent/h30/seed92735/ep1/steps001-010",
+        "cage2/full/RedMeanderAgent/h30/seed92735/ep1/steps011-020",
+        "cage2/full/RedMeanderAgent/h30/seed92735/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/single/RedMeanderAgent/h50/seed92731/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 50,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/RedMeanderAgent/h50/seed92731/ep1/steps001-010",
+        "cage2/single/RedMeanderAgent/h50/seed92731/ep1/steps011-020",
+        "cage2/single/RedMeanderAgent/h50/seed92731/ep1/steps021-030",
+        "cage2/single/RedMeanderAgent/h50/seed92731/ep1/steps031-040",
+        "cage2/single/RedMeanderAgent/h50/seed92731/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/RedMeanderAgent/h50/seed92731/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 50,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92731/ep1/steps001-010",
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92731/ep1/steps011-020",
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92731/ep1/steps021-030",
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92731/ep1/steps031-040",
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92731/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/full/RedMeanderAgent/h50/seed92731/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 50,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/RedMeanderAgent/h50/seed92731/ep1/steps001-010",
+        "cage2/full/RedMeanderAgent/h50/seed92731/ep1/steps011-020",
+        "cage2/full/RedMeanderAgent/h50/seed92731/ep1/steps021-030",
+        "cage2/full/RedMeanderAgent/h50/seed92731/ep1/steps031-040",
+        "cage2/full/RedMeanderAgent/h50/seed92731/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/single/RedMeanderAgent/h50/seed92732/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 50,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/RedMeanderAgent/h50/seed92732/ep1/steps001-010",
+        "cage2/single/RedMeanderAgent/h50/seed92732/ep1/steps011-020",
+        "cage2/single/RedMeanderAgent/h50/seed92732/ep1/steps021-030",
+        "cage2/single/RedMeanderAgent/h50/seed92732/ep1/steps031-040",
+        "cage2/single/RedMeanderAgent/h50/seed92732/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/RedMeanderAgent/h50/seed92732/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 50,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92732/ep1/steps001-010",
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92732/ep1/steps011-020",
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92732/ep1/steps021-030",
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92732/ep1/steps031-040",
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92732/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/full/RedMeanderAgent/h50/seed92732/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 50,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/RedMeanderAgent/h50/seed92732/ep1/steps001-010",
+        "cage2/full/RedMeanderAgent/h50/seed92732/ep1/steps011-020",
+        "cage2/full/RedMeanderAgent/h50/seed92732/ep1/steps021-030",
+        "cage2/full/RedMeanderAgent/h50/seed92732/ep1/steps031-040",
+        "cage2/full/RedMeanderAgent/h50/seed92732/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/single/RedMeanderAgent/h50/seed92733/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 50,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/RedMeanderAgent/h50/seed92733/ep1/steps001-010",
+        "cage2/single/RedMeanderAgent/h50/seed92733/ep1/steps011-020",
+        "cage2/single/RedMeanderAgent/h50/seed92733/ep1/steps021-030",
+        "cage2/single/RedMeanderAgent/h50/seed92733/ep1/steps031-040",
+        "cage2/single/RedMeanderAgent/h50/seed92733/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/RedMeanderAgent/h50/seed92733/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 50,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92733/ep1/steps001-010",
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92733/ep1/steps011-020",
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92733/ep1/steps021-030",
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92733/ep1/steps031-040",
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92733/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/full/RedMeanderAgent/h50/seed92733/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 50,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/RedMeanderAgent/h50/seed92733/ep1/steps001-010",
+        "cage2/full/RedMeanderAgent/h50/seed92733/ep1/steps011-020",
+        "cage2/full/RedMeanderAgent/h50/seed92733/ep1/steps021-030",
+        "cage2/full/RedMeanderAgent/h50/seed92733/ep1/steps031-040",
+        "cage2/full/RedMeanderAgent/h50/seed92733/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/single/RedMeanderAgent/h50/seed92734/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 50,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/RedMeanderAgent/h50/seed92734/ep1/steps001-010",
+        "cage2/single/RedMeanderAgent/h50/seed92734/ep1/steps011-020",
+        "cage2/single/RedMeanderAgent/h50/seed92734/ep1/steps021-030",
+        "cage2/single/RedMeanderAgent/h50/seed92734/ep1/steps031-040",
+        "cage2/single/RedMeanderAgent/h50/seed92734/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/RedMeanderAgent/h50/seed92734/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 50,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92734/ep1/steps001-010",
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92734/ep1/steps011-020",
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92734/ep1/steps021-030",
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92734/ep1/steps031-040",
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92734/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/full/RedMeanderAgent/h50/seed92734/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 50,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/RedMeanderAgent/h50/seed92734/ep1/steps001-010",
+        "cage2/full/RedMeanderAgent/h50/seed92734/ep1/steps011-020",
+        "cage2/full/RedMeanderAgent/h50/seed92734/ep1/steps021-030",
+        "cage2/full/RedMeanderAgent/h50/seed92734/ep1/steps031-040",
+        "cage2/full/RedMeanderAgent/h50/seed92734/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/single/RedMeanderAgent/h50/seed92735/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 50,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/RedMeanderAgent/h50/seed92735/ep1/steps001-010",
+        "cage2/single/RedMeanderAgent/h50/seed92735/ep1/steps011-020",
+        "cage2/single/RedMeanderAgent/h50/seed92735/ep1/steps021-030",
+        "cage2/single/RedMeanderAgent/h50/seed92735/ep1/steps031-040",
+        "cage2/single/RedMeanderAgent/h50/seed92735/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/RedMeanderAgent/h50/seed92735/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 50,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92735/ep1/steps001-010",
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92735/ep1/steps011-020",
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92735/ep1/steps021-030",
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92735/ep1/steps031-040",
+        "cage2/orchestrator_only/RedMeanderAgent/h50/seed92735/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/full/RedMeanderAgent/h50/seed92735/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 50,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/RedMeanderAgent/h50/seed92735/ep1/steps001-010",
+        "cage2/full/RedMeanderAgent/h50/seed92735/ep1/steps011-020",
+        "cage2/full/RedMeanderAgent/h50/seed92735/ep1/steps021-030",
+        "cage2/full/RedMeanderAgent/h50/seed92735/ep1/steps031-040",
+        "cage2/full/RedMeanderAgent/h50/seed92735/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/single/RedMeanderAgent/h100/seed92731/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 100,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/RedMeanderAgent/h100/seed92731/ep1/steps001-010",
+        "cage2/single/RedMeanderAgent/h100/seed92731/ep1/steps011-020",
+        "cage2/single/RedMeanderAgent/h100/seed92731/ep1/steps021-030",
+        "cage2/single/RedMeanderAgent/h100/seed92731/ep1/steps031-040",
+        "cage2/single/RedMeanderAgent/h100/seed92731/ep1/steps041-050",
+        "cage2/single/RedMeanderAgent/h100/seed92731/ep1/steps051-060",
+        "cage2/single/RedMeanderAgent/h100/seed92731/ep1/steps061-070",
+        "cage2/single/RedMeanderAgent/h100/seed92731/ep1/steps071-080",
+        "cage2/single/RedMeanderAgent/h100/seed92731/ep1/steps081-090",
+        "cage2/single/RedMeanderAgent/h100/seed92731/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/RedMeanderAgent/h100/seed92731/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 100,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92731/ep1/steps001-010",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92731/ep1/steps011-020",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92731/ep1/steps021-030",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92731/ep1/steps031-040",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92731/ep1/steps041-050",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92731/ep1/steps051-060",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92731/ep1/steps061-070",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92731/ep1/steps071-080",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92731/ep1/steps081-090",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92731/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/full/RedMeanderAgent/h100/seed92731/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 100,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/RedMeanderAgent/h100/seed92731/ep1/steps001-010",
+        "cage2/full/RedMeanderAgent/h100/seed92731/ep1/steps011-020",
+        "cage2/full/RedMeanderAgent/h100/seed92731/ep1/steps021-030",
+        "cage2/full/RedMeanderAgent/h100/seed92731/ep1/steps031-040",
+        "cage2/full/RedMeanderAgent/h100/seed92731/ep1/steps041-050",
+        "cage2/full/RedMeanderAgent/h100/seed92731/ep1/steps051-060",
+        "cage2/full/RedMeanderAgent/h100/seed92731/ep1/steps061-070",
+        "cage2/full/RedMeanderAgent/h100/seed92731/ep1/steps071-080",
+        "cage2/full/RedMeanderAgent/h100/seed92731/ep1/steps081-090",
+        "cage2/full/RedMeanderAgent/h100/seed92731/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/single/RedMeanderAgent/h100/seed92732/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 100,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/RedMeanderAgent/h100/seed92732/ep1/steps001-010",
+        "cage2/single/RedMeanderAgent/h100/seed92732/ep1/steps011-020",
+        "cage2/single/RedMeanderAgent/h100/seed92732/ep1/steps021-030",
+        "cage2/single/RedMeanderAgent/h100/seed92732/ep1/steps031-040",
+        "cage2/single/RedMeanderAgent/h100/seed92732/ep1/steps041-050",
+        "cage2/single/RedMeanderAgent/h100/seed92732/ep1/steps051-060",
+        "cage2/single/RedMeanderAgent/h100/seed92732/ep1/steps061-070",
+        "cage2/single/RedMeanderAgent/h100/seed92732/ep1/steps071-080",
+        "cage2/single/RedMeanderAgent/h100/seed92732/ep1/steps081-090",
+        "cage2/single/RedMeanderAgent/h100/seed92732/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/RedMeanderAgent/h100/seed92732/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 100,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92732/ep1/steps001-010",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92732/ep1/steps011-020",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92732/ep1/steps021-030",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92732/ep1/steps031-040",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92732/ep1/steps041-050",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92732/ep1/steps051-060",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92732/ep1/steps061-070",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92732/ep1/steps071-080",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92732/ep1/steps081-090",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92732/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/full/RedMeanderAgent/h100/seed92732/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 100,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/RedMeanderAgent/h100/seed92732/ep1/steps001-010",
+        "cage2/full/RedMeanderAgent/h100/seed92732/ep1/steps011-020",
+        "cage2/full/RedMeanderAgent/h100/seed92732/ep1/steps021-030",
+        "cage2/full/RedMeanderAgent/h100/seed92732/ep1/steps031-040",
+        "cage2/full/RedMeanderAgent/h100/seed92732/ep1/steps041-050",
+        "cage2/full/RedMeanderAgent/h100/seed92732/ep1/steps051-060",
+        "cage2/full/RedMeanderAgent/h100/seed92732/ep1/steps061-070",
+        "cage2/full/RedMeanderAgent/h100/seed92732/ep1/steps071-080",
+        "cage2/full/RedMeanderAgent/h100/seed92732/ep1/steps081-090",
+        "cage2/full/RedMeanderAgent/h100/seed92732/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/single/RedMeanderAgent/h100/seed92733/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 100,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/RedMeanderAgent/h100/seed92733/ep1/steps001-010",
+        "cage2/single/RedMeanderAgent/h100/seed92733/ep1/steps011-020",
+        "cage2/single/RedMeanderAgent/h100/seed92733/ep1/steps021-030",
+        "cage2/single/RedMeanderAgent/h100/seed92733/ep1/steps031-040",
+        "cage2/single/RedMeanderAgent/h100/seed92733/ep1/steps041-050",
+        "cage2/single/RedMeanderAgent/h100/seed92733/ep1/steps051-060",
+        "cage2/single/RedMeanderAgent/h100/seed92733/ep1/steps061-070",
+        "cage2/single/RedMeanderAgent/h100/seed92733/ep1/steps071-080",
+        "cage2/single/RedMeanderAgent/h100/seed92733/ep1/steps081-090",
+        "cage2/single/RedMeanderAgent/h100/seed92733/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/RedMeanderAgent/h100/seed92733/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 100,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92733/ep1/steps001-010",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92733/ep1/steps011-020",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92733/ep1/steps021-030",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92733/ep1/steps031-040",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92733/ep1/steps041-050",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92733/ep1/steps051-060",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92733/ep1/steps061-070",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92733/ep1/steps071-080",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92733/ep1/steps081-090",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92733/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/full/RedMeanderAgent/h100/seed92733/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 100,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/RedMeanderAgent/h100/seed92733/ep1/steps001-010",
+        "cage2/full/RedMeanderAgent/h100/seed92733/ep1/steps011-020",
+        "cage2/full/RedMeanderAgent/h100/seed92733/ep1/steps021-030",
+        "cage2/full/RedMeanderAgent/h100/seed92733/ep1/steps031-040",
+        "cage2/full/RedMeanderAgent/h100/seed92733/ep1/steps041-050",
+        "cage2/full/RedMeanderAgent/h100/seed92733/ep1/steps051-060",
+        "cage2/full/RedMeanderAgent/h100/seed92733/ep1/steps061-070",
+        "cage2/full/RedMeanderAgent/h100/seed92733/ep1/steps071-080",
+        "cage2/full/RedMeanderAgent/h100/seed92733/ep1/steps081-090",
+        "cage2/full/RedMeanderAgent/h100/seed92733/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/single/RedMeanderAgent/h100/seed92734/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 100,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/RedMeanderAgent/h100/seed92734/ep1/steps001-010",
+        "cage2/single/RedMeanderAgent/h100/seed92734/ep1/steps011-020",
+        "cage2/single/RedMeanderAgent/h100/seed92734/ep1/steps021-030",
+        "cage2/single/RedMeanderAgent/h100/seed92734/ep1/steps031-040",
+        "cage2/single/RedMeanderAgent/h100/seed92734/ep1/steps041-050",
+        "cage2/single/RedMeanderAgent/h100/seed92734/ep1/steps051-060",
+        "cage2/single/RedMeanderAgent/h100/seed92734/ep1/steps061-070",
+        "cage2/single/RedMeanderAgent/h100/seed92734/ep1/steps071-080",
+        "cage2/single/RedMeanderAgent/h100/seed92734/ep1/steps081-090",
+        "cage2/single/RedMeanderAgent/h100/seed92734/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/RedMeanderAgent/h100/seed92734/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 100,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92734/ep1/steps001-010",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92734/ep1/steps011-020",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92734/ep1/steps021-030",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92734/ep1/steps031-040",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92734/ep1/steps041-050",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92734/ep1/steps051-060",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92734/ep1/steps061-070",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92734/ep1/steps071-080",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92734/ep1/steps081-090",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92734/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/full/RedMeanderAgent/h100/seed92734/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 100,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/RedMeanderAgent/h100/seed92734/ep1/steps001-010",
+        "cage2/full/RedMeanderAgent/h100/seed92734/ep1/steps011-020",
+        "cage2/full/RedMeanderAgent/h100/seed92734/ep1/steps021-030",
+        "cage2/full/RedMeanderAgent/h100/seed92734/ep1/steps031-040",
+        "cage2/full/RedMeanderAgent/h100/seed92734/ep1/steps041-050",
+        "cage2/full/RedMeanderAgent/h100/seed92734/ep1/steps051-060",
+        "cage2/full/RedMeanderAgent/h100/seed92734/ep1/steps061-070",
+        "cage2/full/RedMeanderAgent/h100/seed92734/ep1/steps071-080",
+        "cage2/full/RedMeanderAgent/h100/seed92734/ep1/steps081-090",
+        "cage2/full/RedMeanderAgent/h100/seed92734/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/single/RedMeanderAgent/h100/seed92735/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 100,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/RedMeanderAgent/h100/seed92735/ep1/steps001-010",
+        "cage2/single/RedMeanderAgent/h100/seed92735/ep1/steps011-020",
+        "cage2/single/RedMeanderAgent/h100/seed92735/ep1/steps021-030",
+        "cage2/single/RedMeanderAgent/h100/seed92735/ep1/steps031-040",
+        "cage2/single/RedMeanderAgent/h100/seed92735/ep1/steps041-050",
+        "cage2/single/RedMeanderAgent/h100/seed92735/ep1/steps051-060",
+        "cage2/single/RedMeanderAgent/h100/seed92735/ep1/steps061-070",
+        "cage2/single/RedMeanderAgent/h100/seed92735/ep1/steps071-080",
+        "cage2/single/RedMeanderAgent/h100/seed92735/ep1/steps081-090",
+        "cage2/single/RedMeanderAgent/h100/seed92735/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/RedMeanderAgent/h100/seed92735/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 100,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92735/ep1/steps001-010",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92735/ep1/steps011-020",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92735/ep1/steps021-030",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92735/ep1/steps031-040",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92735/ep1/steps041-050",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92735/ep1/steps051-060",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92735/ep1/steps061-070",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92735/ep1/steps071-080",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92735/ep1/steps081-090",
+        "cage2/orchestrator_only/RedMeanderAgent/h100/seed92735/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/full/RedMeanderAgent/h100/seed92735/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "RedMeanderAgent",
+      "horizon": 100,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/RedMeanderAgent/h100/seed92735/ep1/steps001-010",
+        "cage2/full/RedMeanderAgent/h100/seed92735/ep1/steps011-020",
+        "cage2/full/RedMeanderAgent/h100/seed92735/ep1/steps021-030",
+        "cage2/full/RedMeanderAgent/h100/seed92735/ep1/steps031-040",
+        "cage2/full/RedMeanderAgent/h100/seed92735/ep1/steps041-050",
+        "cage2/full/RedMeanderAgent/h100/seed92735/ep1/steps051-060",
+        "cage2/full/RedMeanderAgent/h100/seed92735/ep1/steps061-070",
+        "cage2/full/RedMeanderAgent/h100/seed92735/ep1/steps071-080",
+        "cage2/full/RedMeanderAgent/h100/seed92735/ep1/steps081-090",
+        "cage2/full/RedMeanderAgent/h100/seed92735/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/single/SleepAgent/h30/seed92731/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "SleepAgent",
+      "horizon": 30,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/SleepAgent/h30/seed92731/ep1/steps001-010",
+        "cage2/single/SleepAgent/h30/seed92731/ep1/steps011-020",
+        "cage2/single/SleepAgent/h30/seed92731/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/SleepAgent/h30/seed92731/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "SleepAgent",
+      "horizon": 30,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/SleepAgent/h30/seed92731/ep1/steps001-010",
+        "cage2/orchestrator_only/SleepAgent/h30/seed92731/ep1/steps011-020",
+        "cage2/orchestrator_only/SleepAgent/h30/seed92731/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/full/SleepAgent/h30/seed92731/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "SleepAgent",
+      "horizon": 30,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/SleepAgent/h30/seed92731/ep1/steps001-010",
+        "cage2/full/SleepAgent/h30/seed92731/ep1/steps011-020",
+        "cage2/full/SleepAgent/h30/seed92731/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/single/SleepAgent/h30/seed92732/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "SleepAgent",
+      "horizon": 30,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/SleepAgent/h30/seed92732/ep1/steps001-010",
+        "cage2/single/SleepAgent/h30/seed92732/ep1/steps011-020",
+        "cage2/single/SleepAgent/h30/seed92732/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/SleepAgent/h30/seed92732/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "SleepAgent",
+      "horizon": 30,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/SleepAgent/h30/seed92732/ep1/steps001-010",
+        "cage2/orchestrator_only/SleepAgent/h30/seed92732/ep1/steps011-020",
+        "cage2/orchestrator_only/SleepAgent/h30/seed92732/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/full/SleepAgent/h30/seed92732/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "SleepAgent",
+      "horizon": 30,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/SleepAgent/h30/seed92732/ep1/steps001-010",
+        "cage2/full/SleepAgent/h30/seed92732/ep1/steps011-020",
+        "cage2/full/SleepAgent/h30/seed92732/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/single/SleepAgent/h30/seed92733/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "SleepAgent",
+      "horizon": 30,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/SleepAgent/h30/seed92733/ep1/steps001-010",
+        "cage2/single/SleepAgent/h30/seed92733/ep1/steps011-020",
+        "cage2/single/SleepAgent/h30/seed92733/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/SleepAgent/h30/seed92733/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "SleepAgent",
+      "horizon": 30,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/SleepAgent/h30/seed92733/ep1/steps001-010",
+        "cage2/orchestrator_only/SleepAgent/h30/seed92733/ep1/steps011-020",
+        "cage2/orchestrator_only/SleepAgent/h30/seed92733/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/full/SleepAgent/h30/seed92733/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "SleepAgent",
+      "horizon": 30,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/SleepAgent/h30/seed92733/ep1/steps001-010",
+        "cage2/full/SleepAgent/h30/seed92733/ep1/steps011-020",
+        "cage2/full/SleepAgent/h30/seed92733/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/single/SleepAgent/h30/seed92734/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "SleepAgent",
+      "horizon": 30,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/SleepAgent/h30/seed92734/ep1/steps001-010",
+        "cage2/single/SleepAgent/h30/seed92734/ep1/steps011-020",
+        "cage2/single/SleepAgent/h30/seed92734/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/SleepAgent/h30/seed92734/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "SleepAgent",
+      "horizon": 30,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/SleepAgent/h30/seed92734/ep1/steps001-010",
+        "cage2/orchestrator_only/SleepAgent/h30/seed92734/ep1/steps011-020",
+        "cage2/orchestrator_only/SleepAgent/h30/seed92734/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/full/SleepAgent/h30/seed92734/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "SleepAgent",
+      "horizon": 30,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/SleepAgent/h30/seed92734/ep1/steps001-010",
+        "cage2/full/SleepAgent/h30/seed92734/ep1/steps011-020",
+        "cage2/full/SleepAgent/h30/seed92734/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/single/SleepAgent/h30/seed92735/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "SleepAgent",
+      "horizon": 30,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/SleepAgent/h30/seed92735/ep1/steps001-010",
+        "cage2/single/SleepAgent/h30/seed92735/ep1/steps011-020",
+        "cage2/single/SleepAgent/h30/seed92735/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/SleepAgent/h30/seed92735/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "SleepAgent",
+      "horizon": 30,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/SleepAgent/h30/seed92735/ep1/steps001-010",
+        "cage2/orchestrator_only/SleepAgent/h30/seed92735/ep1/steps011-020",
+        "cage2/orchestrator_only/SleepAgent/h30/seed92735/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/full/SleepAgent/h30/seed92735/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "SleepAgent",
+      "horizon": 30,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/SleepAgent/h30/seed92735/ep1/steps001-010",
+        "cage2/full/SleepAgent/h30/seed92735/ep1/steps011-020",
+        "cage2/full/SleepAgent/h30/seed92735/ep1/steps021-030"
+      ]
+    },
+    {
+      "job_id": "cage2/single/SleepAgent/h50/seed92731/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "SleepAgent",
+      "horizon": 50,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/SleepAgent/h50/seed92731/ep1/steps001-010",
+        "cage2/single/SleepAgent/h50/seed92731/ep1/steps011-020",
+        "cage2/single/SleepAgent/h50/seed92731/ep1/steps021-030",
+        "cage2/single/SleepAgent/h50/seed92731/ep1/steps031-040",
+        "cage2/single/SleepAgent/h50/seed92731/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/SleepAgent/h50/seed92731/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "SleepAgent",
+      "horizon": 50,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/SleepAgent/h50/seed92731/ep1/steps001-010",
+        "cage2/orchestrator_only/SleepAgent/h50/seed92731/ep1/steps011-020",
+        "cage2/orchestrator_only/SleepAgent/h50/seed92731/ep1/steps021-030",
+        "cage2/orchestrator_only/SleepAgent/h50/seed92731/ep1/steps031-040",
+        "cage2/orchestrator_only/SleepAgent/h50/seed92731/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/full/SleepAgent/h50/seed92731/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "SleepAgent",
+      "horizon": 50,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/SleepAgent/h50/seed92731/ep1/steps001-010",
+        "cage2/full/SleepAgent/h50/seed92731/ep1/steps011-020",
+        "cage2/full/SleepAgent/h50/seed92731/ep1/steps021-030",
+        "cage2/full/SleepAgent/h50/seed92731/ep1/steps031-040",
+        "cage2/full/SleepAgent/h50/seed92731/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/single/SleepAgent/h50/seed92732/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "SleepAgent",
+      "horizon": 50,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/SleepAgent/h50/seed92732/ep1/steps001-010",
+        "cage2/single/SleepAgent/h50/seed92732/ep1/steps011-020",
+        "cage2/single/SleepAgent/h50/seed92732/ep1/steps021-030",
+        "cage2/single/SleepAgent/h50/seed92732/ep1/steps031-040",
+        "cage2/single/SleepAgent/h50/seed92732/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/SleepAgent/h50/seed92732/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "SleepAgent",
+      "horizon": 50,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/SleepAgent/h50/seed92732/ep1/steps001-010",
+        "cage2/orchestrator_only/SleepAgent/h50/seed92732/ep1/steps011-020",
+        "cage2/orchestrator_only/SleepAgent/h50/seed92732/ep1/steps021-030",
+        "cage2/orchestrator_only/SleepAgent/h50/seed92732/ep1/steps031-040",
+        "cage2/orchestrator_only/SleepAgent/h50/seed92732/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/full/SleepAgent/h50/seed92732/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "SleepAgent",
+      "horizon": 50,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/SleepAgent/h50/seed92732/ep1/steps001-010",
+        "cage2/full/SleepAgent/h50/seed92732/ep1/steps011-020",
+        "cage2/full/SleepAgent/h50/seed92732/ep1/steps021-030",
+        "cage2/full/SleepAgent/h50/seed92732/ep1/steps031-040",
+        "cage2/full/SleepAgent/h50/seed92732/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/single/SleepAgent/h50/seed92733/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "SleepAgent",
+      "horizon": 50,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/SleepAgent/h50/seed92733/ep1/steps001-010",
+        "cage2/single/SleepAgent/h50/seed92733/ep1/steps011-020",
+        "cage2/single/SleepAgent/h50/seed92733/ep1/steps021-030",
+        "cage2/single/SleepAgent/h50/seed92733/ep1/steps031-040",
+        "cage2/single/SleepAgent/h50/seed92733/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/SleepAgent/h50/seed92733/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "SleepAgent",
+      "horizon": 50,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/SleepAgent/h50/seed92733/ep1/steps001-010",
+        "cage2/orchestrator_only/SleepAgent/h50/seed92733/ep1/steps011-020",
+        "cage2/orchestrator_only/SleepAgent/h50/seed92733/ep1/steps021-030",
+        "cage2/orchestrator_only/SleepAgent/h50/seed92733/ep1/steps031-040",
+        "cage2/orchestrator_only/SleepAgent/h50/seed92733/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/full/SleepAgent/h50/seed92733/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "SleepAgent",
+      "horizon": 50,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/SleepAgent/h50/seed92733/ep1/steps001-010",
+        "cage2/full/SleepAgent/h50/seed92733/ep1/steps011-020",
+        "cage2/full/SleepAgent/h50/seed92733/ep1/steps021-030",
+        "cage2/full/SleepAgent/h50/seed92733/ep1/steps031-040",
+        "cage2/full/SleepAgent/h50/seed92733/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/single/SleepAgent/h50/seed92734/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "SleepAgent",
+      "horizon": 50,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/SleepAgent/h50/seed92734/ep1/steps001-010",
+        "cage2/single/SleepAgent/h50/seed92734/ep1/steps011-020",
+        "cage2/single/SleepAgent/h50/seed92734/ep1/steps021-030",
+        "cage2/single/SleepAgent/h50/seed92734/ep1/steps031-040",
+        "cage2/single/SleepAgent/h50/seed92734/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/SleepAgent/h50/seed92734/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "SleepAgent",
+      "horizon": 50,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/SleepAgent/h50/seed92734/ep1/steps001-010",
+        "cage2/orchestrator_only/SleepAgent/h50/seed92734/ep1/steps011-020",
+        "cage2/orchestrator_only/SleepAgent/h50/seed92734/ep1/steps021-030",
+        "cage2/orchestrator_only/SleepAgent/h50/seed92734/ep1/steps031-040",
+        "cage2/orchestrator_only/SleepAgent/h50/seed92734/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/full/SleepAgent/h50/seed92734/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "SleepAgent",
+      "horizon": 50,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/SleepAgent/h50/seed92734/ep1/steps001-010",
+        "cage2/full/SleepAgent/h50/seed92734/ep1/steps011-020",
+        "cage2/full/SleepAgent/h50/seed92734/ep1/steps021-030",
+        "cage2/full/SleepAgent/h50/seed92734/ep1/steps031-040",
+        "cage2/full/SleepAgent/h50/seed92734/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/single/SleepAgent/h50/seed92735/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "SleepAgent",
+      "horizon": 50,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/SleepAgent/h50/seed92735/ep1/steps001-010",
+        "cage2/single/SleepAgent/h50/seed92735/ep1/steps011-020",
+        "cage2/single/SleepAgent/h50/seed92735/ep1/steps021-030",
+        "cage2/single/SleepAgent/h50/seed92735/ep1/steps031-040",
+        "cage2/single/SleepAgent/h50/seed92735/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/SleepAgent/h50/seed92735/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "SleepAgent",
+      "horizon": 50,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/SleepAgent/h50/seed92735/ep1/steps001-010",
+        "cage2/orchestrator_only/SleepAgent/h50/seed92735/ep1/steps011-020",
+        "cage2/orchestrator_only/SleepAgent/h50/seed92735/ep1/steps021-030",
+        "cage2/orchestrator_only/SleepAgent/h50/seed92735/ep1/steps031-040",
+        "cage2/orchestrator_only/SleepAgent/h50/seed92735/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/full/SleepAgent/h50/seed92735/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "SleepAgent",
+      "horizon": 50,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/SleepAgent/h50/seed92735/ep1/steps001-010",
+        "cage2/full/SleepAgent/h50/seed92735/ep1/steps011-020",
+        "cage2/full/SleepAgent/h50/seed92735/ep1/steps021-030",
+        "cage2/full/SleepAgent/h50/seed92735/ep1/steps031-040",
+        "cage2/full/SleepAgent/h50/seed92735/ep1/steps041-050"
+      ]
+    },
+    {
+      "job_id": "cage2/single/SleepAgent/h100/seed92731/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "SleepAgent",
+      "horizon": 100,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/SleepAgent/h100/seed92731/ep1/steps001-010",
+        "cage2/single/SleepAgent/h100/seed92731/ep1/steps011-020",
+        "cage2/single/SleepAgent/h100/seed92731/ep1/steps021-030",
+        "cage2/single/SleepAgent/h100/seed92731/ep1/steps031-040",
+        "cage2/single/SleepAgent/h100/seed92731/ep1/steps041-050",
+        "cage2/single/SleepAgent/h100/seed92731/ep1/steps051-060",
+        "cage2/single/SleepAgent/h100/seed92731/ep1/steps061-070",
+        "cage2/single/SleepAgent/h100/seed92731/ep1/steps071-080",
+        "cage2/single/SleepAgent/h100/seed92731/ep1/steps081-090",
+        "cage2/single/SleepAgent/h100/seed92731/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/SleepAgent/h100/seed92731/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "SleepAgent",
+      "horizon": 100,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/SleepAgent/h100/seed92731/ep1/steps001-010",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92731/ep1/steps011-020",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92731/ep1/steps021-030",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92731/ep1/steps031-040",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92731/ep1/steps041-050",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92731/ep1/steps051-060",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92731/ep1/steps061-070",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92731/ep1/steps071-080",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92731/ep1/steps081-090",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92731/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/full/SleepAgent/h100/seed92731/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "SleepAgent",
+      "horizon": 100,
+      "seed": 92731,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/SleepAgent/h100/seed92731/ep1/steps001-010",
+        "cage2/full/SleepAgent/h100/seed92731/ep1/steps011-020",
+        "cage2/full/SleepAgent/h100/seed92731/ep1/steps021-030",
+        "cage2/full/SleepAgent/h100/seed92731/ep1/steps031-040",
+        "cage2/full/SleepAgent/h100/seed92731/ep1/steps041-050",
+        "cage2/full/SleepAgent/h100/seed92731/ep1/steps051-060",
+        "cage2/full/SleepAgent/h100/seed92731/ep1/steps061-070",
+        "cage2/full/SleepAgent/h100/seed92731/ep1/steps071-080",
+        "cage2/full/SleepAgent/h100/seed92731/ep1/steps081-090",
+        "cage2/full/SleepAgent/h100/seed92731/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/single/SleepAgent/h100/seed92732/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "SleepAgent",
+      "horizon": 100,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/SleepAgent/h100/seed92732/ep1/steps001-010",
+        "cage2/single/SleepAgent/h100/seed92732/ep1/steps011-020",
+        "cage2/single/SleepAgent/h100/seed92732/ep1/steps021-030",
+        "cage2/single/SleepAgent/h100/seed92732/ep1/steps031-040",
+        "cage2/single/SleepAgent/h100/seed92732/ep1/steps041-050",
+        "cage2/single/SleepAgent/h100/seed92732/ep1/steps051-060",
+        "cage2/single/SleepAgent/h100/seed92732/ep1/steps061-070",
+        "cage2/single/SleepAgent/h100/seed92732/ep1/steps071-080",
+        "cage2/single/SleepAgent/h100/seed92732/ep1/steps081-090",
+        "cage2/single/SleepAgent/h100/seed92732/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/SleepAgent/h100/seed92732/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "SleepAgent",
+      "horizon": 100,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/SleepAgent/h100/seed92732/ep1/steps001-010",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92732/ep1/steps011-020",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92732/ep1/steps021-030",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92732/ep1/steps031-040",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92732/ep1/steps041-050",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92732/ep1/steps051-060",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92732/ep1/steps061-070",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92732/ep1/steps071-080",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92732/ep1/steps081-090",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92732/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/full/SleepAgent/h100/seed92732/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "SleepAgent",
+      "horizon": 100,
+      "seed": 92732,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/SleepAgent/h100/seed92732/ep1/steps001-010",
+        "cage2/full/SleepAgent/h100/seed92732/ep1/steps011-020",
+        "cage2/full/SleepAgent/h100/seed92732/ep1/steps021-030",
+        "cage2/full/SleepAgent/h100/seed92732/ep1/steps031-040",
+        "cage2/full/SleepAgent/h100/seed92732/ep1/steps041-050",
+        "cage2/full/SleepAgent/h100/seed92732/ep1/steps051-060",
+        "cage2/full/SleepAgent/h100/seed92732/ep1/steps061-070",
+        "cage2/full/SleepAgent/h100/seed92732/ep1/steps071-080",
+        "cage2/full/SleepAgent/h100/seed92732/ep1/steps081-090",
+        "cage2/full/SleepAgent/h100/seed92732/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/single/SleepAgent/h100/seed92733/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "SleepAgent",
+      "horizon": 100,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/SleepAgent/h100/seed92733/ep1/steps001-010",
+        "cage2/single/SleepAgent/h100/seed92733/ep1/steps011-020",
+        "cage2/single/SleepAgent/h100/seed92733/ep1/steps021-030",
+        "cage2/single/SleepAgent/h100/seed92733/ep1/steps031-040",
+        "cage2/single/SleepAgent/h100/seed92733/ep1/steps041-050",
+        "cage2/single/SleepAgent/h100/seed92733/ep1/steps051-060",
+        "cage2/single/SleepAgent/h100/seed92733/ep1/steps061-070",
+        "cage2/single/SleepAgent/h100/seed92733/ep1/steps071-080",
+        "cage2/single/SleepAgent/h100/seed92733/ep1/steps081-090",
+        "cage2/single/SleepAgent/h100/seed92733/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/SleepAgent/h100/seed92733/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "SleepAgent",
+      "horizon": 100,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/SleepAgent/h100/seed92733/ep1/steps001-010",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92733/ep1/steps011-020",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92733/ep1/steps021-030",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92733/ep1/steps031-040",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92733/ep1/steps041-050",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92733/ep1/steps051-060",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92733/ep1/steps061-070",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92733/ep1/steps071-080",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92733/ep1/steps081-090",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92733/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/full/SleepAgent/h100/seed92733/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "SleepAgent",
+      "horizon": 100,
+      "seed": 92733,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/SleepAgent/h100/seed92733/ep1/steps001-010",
+        "cage2/full/SleepAgent/h100/seed92733/ep1/steps011-020",
+        "cage2/full/SleepAgent/h100/seed92733/ep1/steps021-030",
+        "cage2/full/SleepAgent/h100/seed92733/ep1/steps031-040",
+        "cage2/full/SleepAgent/h100/seed92733/ep1/steps041-050",
+        "cage2/full/SleepAgent/h100/seed92733/ep1/steps051-060",
+        "cage2/full/SleepAgent/h100/seed92733/ep1/steps061-070",
+        "cage2/full/SleepAgent/h100/seed92733/ep1/steps071-080",
+        "cage2/full/SleepAgent/h100/seed92733/ep1/steps081-090",
+        "cage2/full/SleepAgent/h100/seed92733/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/single/SleepAgent/h100/seed92734/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "SleepAgent",
+      "horizon": 100,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/SleepAgent/h100/seed92734/ep1/steps001-010",
+        "cage2/single/SleepAgent/h100/seed92734/ep1/steps011-020",
+        "cage2/single/SleepAgent/h100/seed92734/ep1/steps021-030",
+        "cage2/single/SleepAgent/h100/seed92734/ep1/steps031-040",
+        "cage2/single/SleepAgent/h100/seed92734/ep1/steps041-050",
+        "cage2/single/SleepAgent/h100/seed92734/ep1/steps051-060",
+        "cage2/single/SleepAgent/h100/seed92734/ep1/steps061-070",
+        "cage2/single/SleepAgent/h100/seed92734/ep1/steps071-080",
+        "cage2/single/SleepAgent/h100/seed92734/ep1/steps081-090",
+        "cage2/single/SleepAgent/h100/seed92734/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/SleepAgent/h100/seed92734/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "SleepAgent",
+      "horizon": 100,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/SleepAgent/h100/seed92734/ep1/steps001-010",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92734/ep1/steps011-020",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92734/ep1/steps021-030",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92734/ep1/steps031-040",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92734/ep1/steps041-050",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92734/ep1/steps051-060",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92734/ep1/steps061-070",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92734/ep1/steps071-080",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92734/ep1/steps081-090",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92734/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/full/SleepAgent/h100/seed92734/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "SleepAgent",
+      "horizon": 100,
+      "seed": 92734,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/SleepAgent/h100/seed92734/ep1/steps001-010",
+        "cage2/full/SleepAgent/h100/seed92734/ep1/steps011-020",
+        "cage2/full/SleepAgent/h100/seed92734/ep1/steps021-030",
+        "cage2/full/SleepAgent/h100/seed92734/ep1/steps031-040",
+        "cage2/full/SleepAgent/h100/seed92734/ep1/steps041-050",
+        "cage2/full/SleepAgent/h100/seed92734/ep1/steps051-060",
+        "cage2/full/SleepAgent/h100/seed92734/ep1/steps061-070",
+        "cage2/full/SleepAgent/h100/seed92734/ep1/steps071-080",
+        "cage2/full/SleepAgent/h100/seed92734/ep1/steps081-090",
+        "cage2/full/SleepAgent/h100/seed92734/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/single/SleepAgent/h100/seed92735/ep1",
+      "arm": "single",
+      "mode": "single",
+      "red_agent": "SleepAgent",
+      "horizon": 100,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/single/SleepAgent/h100/seed92735/ep1/steps001-010",
+        "cage2/single/SleepAgent/h100/seed92735/ep1/steps011-020",
+        "cage2/single/SleepAgent/h100/seed92735/ep1/steps021-030",
+        "cage2/single/SleepAgent/h100/seed92735/ep1/steps031-040",
+        "cage2/single/SleepAgent/h100/seed92735/ep1/steps041-050",
+        "cage2/single/SleepAgent/h100/seed92735/ep1/steps051-060",
+        "cage2/single/SleepAgent/h100/seed92735/ep1/steps061-070",
+        "cage2/single/SleepAgent/h100/seed92735/ep1/steps071-080",
+        "cage2/single/SleepAgent/h100/seed92735/ep1/steps081-090",
+        "cage2/single/SleepAgent/h100/seed92735/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/orchestrator_only/SleepAgent/h100/seed92735/ep1",
+      "arm": "orchestrator_only",
+      "mode": "orchestrator_only",
+      "red_agent": "SleepAgent",
+      "horizon": 100,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/orchestrator_only/SleepAgent/h100/seed92735/ep1/steps001-010",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92735/ep1/steps011-020",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92735/ep1/steps021-030",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92735/ep1/steps031-040",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92735/ep1/steps041-050",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92735/ep1/steps051-060",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92735/ep1/steps061-070",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92735/ep1/steps071-080",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92735/ep1/steps081-090",
+        "cage2/orchestrator_only/SleepAgent/h100/seed92735/ep1/steps091-100"
+      ]
+    },
+    {
+      "job_id": "cage2/full/SleepAgent/h100/seed92735/ep1",
+      "arm": "full",
+      "mode": "agent",
+      "red_agent": "SleepAgent",
+      "horizon": 100,
+      "seed": 92735,
+      "episode": 1,
+      "segment_ids": [
+        "cage2/full/SleepAgent/h100/seed92735/ep1/steps001-010",
+        "cage2/full/SleepAgent/h100/seed92735/ep1/steps011-020",
+        "cage2/full/SleepAgent/h100/seed92735/ep1/steps021-030",
+        "cage2/full/SleepAgent/h100/seed92735/ep1/steps031-040",
+        "cage2/full/SleepAgent/h100/seed92735/ep1/steps041-050",
+        "cage2/full/SleepAgent/h100/seed92735/ep1/steps051-060",
+        "cage2/full/SleepAgent/h100/seed92735/ep1/steps061-070",
+        "cage2/full/SleepAgent/h100/seed92735/ep1/steps071-080",
+        "cage2/full/SleepAgent/h100/seed92735/ep1/steps081-090",
+        "cage2/full/SleepAgent/h100/seed92735/ep1/steps091-100"
+      ]
+    }
+  ],
+  "immutable_sha256": "0c5a3dafc21148410b104b0de49f5711dbda42e2f5884d2446e177522ec79b85"
+}
