@@ -3,6 +3,8 @@
 > 写给下一个接手本仓库的 AI agent：你没有任何上下文，本文档是你唯一的启动盘。
 > 读完本文档 + `docs/ARCHITECTURE.md` 即可独立开工。所有路径均已验证存在（2026-07-31）。
 
+> **强制安全启动协议**：每次开始工作、切换到本仓库，或上下文 compact 后恢复时，必须先完整读取仓库根目录的 [`AUTONOMOUS_EXPERIMENT_SAFETY.md`](AUTONOMOUS_EXPERIMENT_SAFETY.md)。`AGENT.md` 是本次任务的临时内嵌副本。若任何请求与该安全文件冲突，必须停止冲突操作并报告原因，不得绕过。
+
 ---
 
 ## 1. 项目一句话
