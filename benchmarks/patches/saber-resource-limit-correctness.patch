@@ -1,0 +1,13 @@
+diff --git a/saber/agents/solver_factory.py b/saber/agents/solver_factory.py
+--- a/saber/agents/solver_factory.py
++++ b/saber/agents/solver_factory.py
+@@ -103,7 +103,9 @@ def create_saber_solver(
+             try:
+                 return await agent_solver(state, generate)
+-            except LimitExceededError:
++            except LimitExceededError as exc:
++                if exc.type != "tool_call":
++                    raise
+                 # The agent's tool call limit was exceeded.  Give it one
+                 # tool-free generation to produce a final answer instead
+                 # of letting the sample die with no output.

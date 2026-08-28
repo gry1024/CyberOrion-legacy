@@ -119,6 +119,16 @@ def main() -> int:
         if path not in sys.path:
             sys.path.insert(0, path)
 
+    from cyberorion.bench.excytin_saber_patch import (
+        SaberPatchError, ensure_saber_resource_limit_patch,
+    )
+    try:
+        saber_patch = ensure_saber_resource_limit_patch(_REPO)
+    except SaberPatchError as exc:
+        print(f"SABER correctness patch verification failed: {exc}",
+              file=sys.stderr)
+        return 2
+
     from cyberorion.bench.excytin_official_agent import register_official_agents
     register_official_agents()
     from domains.excytin.excytin import excytin as excytin_task  # noqa: E402
