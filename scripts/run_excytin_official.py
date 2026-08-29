@@ -25,6 +25,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+from typing import Any
 
 _REPO = Path(__file__).resolve().parent.parent
 _DEFAULT_UPSTREAM = _REPO / "benchmarks" / "external" / "excytin"
@@ -92,6 +93,37 @@ def _load_manifest(path: Path) -> tuple[list[str], str]:
     return task_ids, hashlib.sha256(raw).hexdigest()
 
 
+def _reorder_task_dataset(task: Any, task_ids: list[str]) -> list[str]:
+    """Make Inspect execute the official samples in manifest order.
+
+    SABER's loader discovers YAML files in lexical path order and its exact-ID
+    filter preserves that discovery order.  Reordering only the already-loaded
+    official ``Sample`` objects keeps task content, tools, and scorers intact
+    while making the frozen manifest order observable and auditable.
+    """
+    dataset = getattr(task, "dataset", None)
+    samples = list(dataset) if dataset is not None else []
+    by_id: dict[str, Any] = {}
+    for sample in samples:
+        sample_id = getattr(sample, "id", None)
+        if not isinstance(sample_id, str) or not sample_id:
+            raise ValueError("official task contains a sample without a string id")
+        if sample_id in by_id:
+            raise ValueError(f"official task contains duplicate sample id: {sample_id}")
+        by_id[sample_id] = sample
+    if set(by_id) != set(task_ids):
+        missing = sorted(set(task_ids) - set(by_id))
+        unexpected = sorted(set(by_id) - set(task_ids))
+        raise ValueError(
+            f"manifest/task sample mismatch; missing={missing}, unexpected={unexpected}")
+    try:
+        dataset.samples[:] = [by_id[sample_id] for sample_id in task_ids]
+    except AttributeError as exc:
+        raise ValueError(
+            "official task dataset does not support deterministic reordering") from exc
+    return [sample.id for sample in dataset.samples]
+
+
 def build_provenance(*, upstream: Path, repo: Path, arm: str, model: str,
                      judge_llm: str, task_ids: list[str], manifest_sha256: str,
                      extra_task_args: dict[str, str], started: float,
@@ -116,6 +148,8 @@ def build_provenance(*, upstream: Path, repo: Path, arm: str, model: str,
         "official_scorer_executed": not mechanism_only,
         "resource_limits": resource_limits,
         "task_ids": task_ids, "task_manifest_sha256": manifest_sha256,
+        "task_ordering": "manifest_order",
+        "task_execution_order": list(task_ids),
         "extra_task_args": extra_task_args,
         "started_at": started, "finished_at": finished,
         "log_dir": str(log_dir),
@@ -214,6 +248,11 @@ def main() -> int:
             return 2
         task_kwargs[key] = value
     task = excytin_task(**task_kwargs)
+    try:
+        _reorder_task_dataset(task, task_ids)
+    except ValueError as exc:
+        print(f"cannot enforce frozen manifest task order: {exc}", file=sys.stderr)
+        return 2
 
     import inspect_ai
     from inspect_ai.model import GenerateConfig, get_model

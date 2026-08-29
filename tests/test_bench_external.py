@@ -635,6 +635,8 @@ def test_official_runner_provenance_is_explicit(tmp_path: Path) -> None:
     assert provenance["arm"] == "cyberorion_single"
     assert provenance["task_ids"] == ["task-1", "task-2"]
     assert provenance["task_manifest_sha256"] == "a" * 64
+    assert provenance["task_ordering"] == "manifest_order"
+    assert provenance["task_execution_order"] == ["task-1", "task-2"]
     assert provenance["decoding_config"] == {
         "temperature": 0,
         "thinking": "disabled",
@@ -647,6 +649,29 @@ def test_official_runner_provenance_is_explicit(tmp_path: Path) -> None:
     assert set(provenance["cyberorion_source"]) == {
         "git_head", "git_tree_sha", "git_dirty", "git_diff_sha256",
         "untracked_paths", "working_tree_fingerprint_sha256"}
+
+
+def test_official_runner_preserves_frozen_manifest_task_order() -> None:
+    from types import SimpleNamespace
+    from scripts.run_excytin_official import _reorder_task_dataset
+
+    class FakeDataset:
+        def __init__(self, samples):
+            self.samples = samples
+
+        def __iter__(self):
+            return iter(self.samples)
+
+    task = SimpleNamespace(dataset=FakeDataset([
+        SimpleNamespace(id="task-b"), SimpleNamespace(id="task-a"),
+    ]))
+    assert _reorder_task_dataset(task, ["task-a", "task-b"]) == [
+        "task-a", "task-b"]
+    assert [sample.id for sample in task.dataset.samples] == [
+        "task-a", "task-b"]
+
+    with pytest.raises(ValueError, match="sample mismatch"):
+        _reorder_task_dataset(task, ["task-a", "task-c"])
 
 
 def test_official_runner_applies_declared_global_tool_limit_at_eval_root() -> None:
