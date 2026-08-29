@@ -1,0 +1,10 @@
+diff --git a/saber/sandbox.py b/saber/sandbox.py
+--- a/saber/sandbox.py
++++ b/saber/sandbox.py
+@@ -515,7 +515,7 @@ async def _start_permanent_services(
+     compose_file: Path,
+     project: str,
+     *,
+-    max_retries: int = 5,
++    max_retries: int = 7,
+     base_delay: float = 2.0,
