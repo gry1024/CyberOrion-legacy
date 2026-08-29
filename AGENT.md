@@ -1,5 +1,9 @@
 # Temporary Autonomous Experiment Safety Instructions
 
+## 第一条：incident-55 容器慢启动观察规则
+
+`incident-55` 的 ExCyTIn 数据库容器创建和健康检查可能非常慢，平均耗时可能超过 15 分钟。不得仅因经过 15 分钟就停止实验；必须持续观察容器健康检查及已创建表的数量。只有在较长时间内已创建表数量持续不增长，并有连续观测证据表明初始化不再推进时，才考虑停止实验。此条是运行监控补充规则，不削弱下方任何安全边界。
+
 Before every task in this repository, and again after any context compaction
 or task resumption, read this file completely. The canonical copy is
 [`AUTONOMOUS_EXPERIMENT_SAFETY.md`](AUTONOMOUS_EXPERIMENT_SAFETY.md). These
