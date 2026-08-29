@@ -4,7 +4,7 @@
   "frozen_at": "2026-08-29",
   "master": {
     "path": "publication/master_manifest.json",
-    "sha256": "1e7b244e170716b16c2787c2738fdc0850c68c6b0c2b9063f9e521872a5afc48",
+    "sha256": "4592cc5322da571b0513692df4f58c69f68eb0081c3592d79568f2559bf94edf",
     "task_count": 599
   },
   "batching": {
@@ -86,7 +86,7 @@
     "temperature": 0,
     "thinking": "disabled",
     "official_scorer": true,
-    "judge_llm": "openai/azure/gpt-4.1",
+    "judge_llm": "openai/MiniMax-M3",
     "resource_ceiling": {
       "global_model_calls": 32,
       "global_root_tool_calls": 64,
@@ -96,8 +96,8 @@
       "max_parallel_dispatches": 4,
       "official_task_max_steps": 25
     },
-    "source_head": "fc81e5e59cabf3bafff20346b097aa660439d0fd",
-    "source_tree": "148bad46b9b3547cd32ecc42846a25acad58424b",
+    "source_head": "83b74b6b23106c97e26972a27c63ea31ff9c69ea",
+    "source_tree": "c18fad986e2f8405771e69911fdfb0072051231e",
     "acesevals_commit": "17135140d0fdf52c2264a1fc248cf01e16b23a79",
     "acesevals_tree": "4d5dea0db0073189210d5cdf1d56eab86780ce0e",
     "saber_resource_limit_patch_sha256": "93d847dfa0c3f0976f412ae74652df139c5415351e395b9a9031e08db8d8fe6f",
@@ -108,7 +108,7 @@
     {
       "batch_id": "batch_001",
       "path": "publication/batch_001/manifest.json",
-      "sha256": "f37c2c5ae21efebd5ef3f4cb86384b581199c2123c26fd2de3443d5e892fd714",
+      "sha256": "0950acf37be0b453ac95cb266bfcb7d28cb1aadbb344c68abb8c7f6232589d78",
       "task_count": 12,
       "incident_counts": {
         "5": 2,
@@ -124,7 +124,7 @@
     {
       "batch_id": "batch_002",
       "path": "publication/batch_002/manifest.json",
-      "sha256": "f32488baf7fec833b04796f0e22a2dafc677bfbf4ad77758cd309c169a846422",
+      "sha256": "0d500c092035f915f5ffe7758c6b6360a15f2199e16138d4c77997ddaf411485",
       "task_count": 12,
       "incident_counts": {
         "55": 2,
@@ -140,7 +140,7 @@
     {
       "batch_id": "batch_003",
       "path": "publication/batch_003/manifest.json",
-      "sha256": "36217bfa551c164b1a5248b0f8802a6512b794ac01a426ce203758fd9206f94b",
+      "sha256": "18d0f3dc72edeaa22dff27d03efdf483f9ec753c1a45086b52a1830ed5063b80",
       "task_count": 12,
       "incident_counts": {
         "5": 2,
@@ -156,7 +156,7 @@
     {
       "batch_id": "batch_004",
       "path": "publication/batch_004/manifest.json",
-      "sha256": "87e31866657c7fc8258e509530268f70ef009db5ab1d897391136ac2b5909ced",
+      "sha256": "b27a684652b9e77cd4e27b1091a0bc2b193bd85032ab08f828da58d1b568031c",
       "task_count": 12,
       "incident_counts": {
         "55": 2,
@@ -172,7 +172,7 @@
     {
       "batch_id": "batch_005",
       "path": "publication/batch_005/manifest.json",
-      "sha256": "cad61c64a7923c16620b71242c9fe921a06bec351c6ebf55ddf154f7675629bb",
+      "sha256": "e394c4610e038b6a1e1b4de0fc86b53cdc7c456d56d8b4b9448bbad292a98c05",
       "task_count": 12,
       "incident_counts": {
         "5": 2,
@@ -188,7 +188,7 @@
     {
       "batch_id": "batch_006",
       "path": "publication/batch_006/manifest.json",
-      "sha256": "916ce1c58f36ff1f542642258632cfc6af4347c48591c38401a00fde6977d3a3",
+      "sha256": "126663d92b509493c931432f8762080b674536dfdf18e83d597deb0415425e3a",
       "task_count": 12,
       "incident_counts": {
         "55": 2,
@@ -204,7 +204,7 @@
     {
       "batch_id": "batch_007",
       "path": "publication/batch_007/manifest.json",
-      "sha256": "a30e8f1be5612bf18d2e4449f3496a161911b3dd29734d3f7c519b950ebdd3af",
+      "sha256": "1ad9e2f2f1cea6d1148499ae0e877fcdeea0604bfb66ad9f821475d166d467e7",
       "task_count": 12,
       "incident_counts": {
         "5": 2,
@@ -220,7 +220,7 @@
     {
       "batch_id": "batch_008",
       "path": "publication/batch_008/manifest.json",
-      "sha256": "4be0832b12713bb04ee24c6e62950c8aae9a7b24140ffa759a00cbb0072b126e",
+      "sha256": "6b71afcfff78ccfb17f9e8680554ba13c22e2a9e7d54dcab1999a400fe12032c",
       "task_count": 12,
       "incident_counts": {
         "55": 2,
@@ -236,7 +236,7 @@
     {
       "batch_id": "batch_009",
       "path": "publication/batch_009/manifest.json",
-      "sha256": "e333fa2cb9cdd6d66822fade25cd045f124311270f8ac6d255a6f1d8c02c2f07",
+      "sha256": "ee7d5abfd3d1727c4dba93ab7887ec7f5d4e5fb8140ce04e86701cd468918db4",
       "task_count": 12,
       "incident_counts": {
         "5": 2,
@@ -251,7 +251,7 @@
     {
       "batch_id": "batch_010",
       "path": "publication/batch_010/manifest.json",
-      "sha256": "6e65486ec31864ef04778c64364a55659902aaf9944ca6635d9e07805ae4cb4d",
+      "sha256": "e93e275173ef435b37ec628c01afa241db72c30cb59babca3cdc6d5f02c3e9cc",
       "task_count": 12,
       "incident_counts": {
         "166": 2,
@@ -266,7 +266,7 @@
     {
       "batch_id": "batch_011",
       "path": "publication/batch_011/manifest.json",
-      "sha256": "52e2fadf664fb07fc8c708394d8110a17a4e6b1cbad5c254bbfcb765b6170221",
+      "sha256": "d00335f1087691a9c1b861ed9c7e13fc17fe22d3f33155579b7ebe81398544f9",
       "task_count": 12,
       "incident_counts": {
         "55": 2,
@@ -281,7 +281,7 @@
     {
       "batch_id": "batch_012",
       "path": "publication/batch_012/manifest.json",
-      "sha256": "b078247ed4ebee23dc09cc22b31656848779413899217bc7bc660dc3dfbd8e56",
+      "sha256": "8ebd1d59637e8c612f8a610d663719d8da66cb522a1a29eabd6a7a4811a79855",
       "task_count": 12,
       "incident_counts": {
         "34": 2,
@@ -296,7 +296,7 @@
     {
       "batch_id": "batch_013",
       "path": "publication/batch_013/manifest.json",
-      "sha256": "76432a6fd8af800dae87d02fa86a1c927579560ac9ff20bb59f9610063c4da51",
+      "sha256": "9aa58b2b8f37d71b4fac9c3e9148977ab701a309d18a3fcd4610420dcb06fdbc",
       "task_count": 12,
       "incident_counts": {
         "322": 2,
@@ -311,7 +311,7 @@
     {
       "batch_id": "batch_014",
       "path": "publication/batch_014/manifest.json",
-      "sha256": "341ef7e781472e7a718510aeb4a6125677e951922cf9e7295bec55cc1f799eed",
+      "sha256": "7cf707542c0e983cefc31c8a653c147d998c6c901897d771b4ce7016024cb7a9",
       "task_count": 12,
       "incident_counts": {
         "134": 2,
@@ -326,7 +326,7 @@
     {
       "batch_id": "batch_015",
       "path": "publication/batch_015/manifest.json",
-      "sha256": "5695db645074a4339c23631348c74545a7853c47f07ee11c633e6c982170561f",
+      "sha256": "0762e277c219491e1ec0e9f55298fb0a46d9bab71d8e14f0ee4bbfe578a23f9e",
       "task_count": 12,
       "incident_counts": {
         "39": 2,
@@ -341,7 +341,7 @@
     {
       "batch_id": "batch_016",
       "path": "publication/batch_016/manifest.json",
-      "sha256": "f501a7283f5194173377c71dbfcfd10cd713d3f77ba32843f3edeff881404a42",
+      "sha256": "02e3505091a6da1ab9c3581142cd80a64a778f7a37b7d293f4c657fdcb742ca1",
       "task_count": 12,
       "incident_counts": {
         "5": 2,
@@ -356,7 +356,7 @@
     {
       "batch_id": "batch_017",
       "path": "publication/batch_017/manifest.json",
-      "sha256": "60e44b0ec1dd39eed4046e42c82d6424c6b38253bb2c33efa0fea5f48c066492",
+      "sha256": "3183e8126013dac17593c695a54099c54ab9f3a8a30d9882f9dd7d106ad66880",
       "task_count": 12,
       "incident_counts": {
         "166": 2,
@@ -371,7 +371,7 @@
     {
       "batch_id": "batch_018",
       "path": "publication/batch_018/manifest.json",
-      "sha256": "b83bfee47114c9d35b6858dd7ee623da2236d989c956d5453cce2f43f16b958f",
+      "sha256": "755ac256c478f4da9fee6240e8c89b37dc68f95de0c8b16637707da3a0b4bfc7",
       "task_count": 12,
       "incident_counts": {
         "55": 2,
@@ -386,7 +386,7 @@
     {
       "batch_id": "batch_019",
       "path": "publication/batch_019/manifest.json",
-      "sha256": "b2a5a143fe5192fde9f11e44bd488fa9b03b62352a842f2d1e4676d4c67410ca",
+      "sha256": "886a72014660aa514da60df048c944bcdb49b8e439d3f8e9a728fdf345173b14",
       "task_count": 12,
       "incident_counts": {
         "34": 2,
@@ -401,7 +401,7 @@
     {
       "batch_id": "batch_020",
       "path": "publication/batch_020/manifest.json",
-      "sha256": "9c3923646df1ca1f2ff1c15324cfa9e287af88680ff2c49b72b62097f3409695",
+      "sha256": "b3e54174741a5731dde1046750fe9d24f92cf55ff30c76454850bfbe8bd4a97e",
       "task_count": 12,
       "incident_counts": {
         "322": 2,
@@ -416,7 +416,7 @@
     {
       "batch_id": "batch_021",
       "path": "publication/batch_021/manifest.json",
-      "sha256": "88ade4f3812c7415692044b12152a6aacea17b6071c553e9ca391d09404b31bb",
+      "sha256": "3fc31f3d9263b78e2a3a31c0fb4bc0464657b477838aa7f4c8c90d751aa9033d",
       "task_count": 12,
       "incident_counts": {
         "134": 2,
@@ -431,7 +431,7 @@
     {
       "batch_id": "batch_022",
       "path": "publication/batch_022/manifest.json",
-      "sha256": "f216b0e3ca1a5bea85560b4292eb9cf4e23f04d2a7ed33eec291d56f73726229",
+      "sha256": "802fc013e841625a42a37c56d54e9265d2aef0912d336d5f3ac243082e828809",
       "task_count": 12,
       "incident_counts": {
         "39": 2,
@@ -446,7 +446,7 @@
     {
       "batch_id": "batch_023",
       "path": "publication/batch_023/manifest.json",
-      "sha256": "6bc141a6b76701873326f298b0acf5bdde00320d35e80920b010f20344e488c6",
+      "sha256": "009212b602eb275c3fd9d881b58cbf399845d30adcb154188af56efe9753897f",
       "task_count": 12,
       "incident_counts": {
         "5": 2,
@@ -461,7 +461,7 @@
     {
       "batch_id": "batch_024",
       "path": "publication/batch_024/manifest.json",
-      "sha256": "33dce2d8e1aea6fa4815e26a2173607acbd12f8381cfdab6473d2b6efcb857da",
+      "sha256": "d3fa0f6f8953277054db3bdf636a72d72692fd2abfdc7a172e658d1d784e6fe9",
       "task_count": 12,
       "incident_counts": {
         "166": 2,
@@ -476,7 +476,7 @@
     {
       "batch_id": "batch_025",
       "path": "publication/batch_025/manifest.json",
-      "sha256": "a009fb1ea010060e4ba6554701ded6ccc030391f476c43364322d2d3e4957811",
+      "sha256": "09e50f8ad497d065d2c97743481e068ec09dccdbf432b84c121236c76e61168d",
       "task_count": 12,
       "incident_counts": {
         "55": 2,
@@ -491,7 +491,7 @@
     {
       "batch_id": "batch_026",
       "path": "publication/batch_026/manifest.json",
-      "sha256": "7157bf5b0e705bd3ce75b08cf099fe146d43cc58f1335c5ed58d980c3f1e2fd8",
+      "sha256": "981095abe9a6151c27d3f82a3c5422d704209018242ee5f7c8466e34fc71d584",
       "task_count": 12,
       "incident_counts": {
         "34": 2,
@@ -506,7 +506,7 @@
     {
       "batch_id": "batch_027",
       "path": "publication/batch_027/manifest.json",
-      "sha256": "b5032afad74f3c9821966a1c9a3c07607a601be5eb49d40befa692c821c6caa6",
+      "sha256": "ef9ef7f6477e7a8c3361424d060cfae22607dfd5ba6c767c77549a7a97e6b968",
       "task_count": 12,
       "incident_counts": {
         "322": 2,
@@ -521,7 +521,7 @@
     {
       "batch_id": "batch_028",
       "path": "publication/batch_028/manifest.json",
-      "sha256": "695a0521776b48817ab3bb97f8fb0957c25454daefd3c005d746bbc6a11e93d1",
+      "sha256": "5caadef4f5cc1c26bfe22d5ca77b3d17c74bbdc876744e18095d305aa59cac81",
       "task_count": 12,
       "incident_counts": {
         "134": 2,
@@ -536,7 +536,7 @@
     {
       "batch_id": "batch_029",
       "path": "publication/batch_029/manifest.json",
-      "sha256": "bc5df9174d6d6f9db099ad3d17944932dcfad09a5744343596086bacd2031cf8",
+      "sha256": "62862dc482c363398856a4976f749b5cc0b97a54f4bec3f854ee8ba754673f01",
       "task_count": 12,
       "incident_counts": {
         "39": 2,
@@ -551,7 +551,7 @@
     {
       "batch_id": "batch_030",
       "path": "publication/batch_030/manifest.json",
-      "sha256": "9e841f06069d4dfd52384249e68b91fcdf9445123c5bb71c41e7f77b6f373c92",
+      "sha256": "4d3a28039cff56f6acffec9b150599092ac38cd2f82570b4cdda17877ed95f93",
       "task_count": 12,
       "incident_counts": {
         "5": 2,
@@ -566,7 +566,7 @@
     {
       "batch_id": "batch_031",
       "path": "publication/batch_031/manifest.json",
-      "sha256": "8e9b6b92ce72c184b592944797f2a0ca631b7a1c0c84ed20a3647a7fef65ecab",
+      "sha256": "733b5e2f15cb60e195b812b52496ab247feff314b628beab6b495ff3215d8c4f",
       "task_count": 12,
       "incident_counts": {
         "166": 2,
@@ -581,7 +581,7 @@
     {
       "batch_id": "batch_032",
       "path": "publication/batch_032/manifest.json",
-      "sha256": "3793797008f58ead2e9b6344d38212f2532aa12cd99181dde4650df8c1d40405",
+      "sha256": "f712bb644a8c58103dfa25db763ccb785ad01fef250fe50101de42f8e81f8002",
       "task_count": 12,
       "incident_counts": {
         "55": 2,
@@ -596,7 +596,7 @@
     {
       "batch_id": "batch_033",
       "path": "publication/batch_033/manifest.json",
-      "sha256": "8ad7adfbde332371e455898874370c757a077614fb8dbe34bc883b13110a6365",
+      "sha256": "5019a351517e46ae536fcb1227f9125156ea34b7ccd26697afecea1243da9d54",
       "task_count": 12,
       "incident_counts": {
         "34": 2,
@@ -611,7 +611,7 @@
     {
       "batch_id": "batch_034",
       "path": "publication/batch_034/manifest.json",
-      "sha256": "cb5af94391715b1c35ad556cd540d3c6190f84b5a059ce34c18297f2743217e1",
+      "sha256": "3017feac89a081e16c9cfc39ff5d22ad5f3056156ec0b827d1b47d74a70b1f49",
       "task_count": 12,
       "incident_counts": {
         "322": 2,
@@ -626,7 +626,7 @@
     {
       "batch_id": "batch_035",
       "path": "publication/batch_035/manifest.json",
-      "sha256": "44de4590cc7f2a76f05b4e2b5abc417f7c3a245c3d9877a7aa0f6220a3136327",
+      "sha256": "b8dd6a0e0a1da614f23881491dbf02d3fbdf8194d5ca10a889db77585afbf694",
       "task_count": 12,
       "incident_counts": {
         "134": 2,
@@ -641,7 +641,7 @@
     {
       "batch_id": "batch_036",
       "path": "publication/batch_036/manifest.json",
-      "sha256": "8348899e2019189b87a76390fc24bcbf19d9af5926f041aa9c6c2fecb214a01a",
+      "sha256": "c5e20793904a671924e0b90f348129c88b11d3a7714e73de5a9a2ce39c02eabe",
       "task_count": 12,
       "incident_counts": {
         "55": 3,
@@ -654,7 +654,7 @@
     {
       "batch_id": "batch_037",
       "path": "publication/batch_037/manifest.json",
-      "sha256": "17c5df9bf0dac1d96c053c83bfbe444e032d94357890fe626bb8d57e0121329d",
+      "sha256": "45192bccd45daaf8c963421c878ace286a575bd687c265d96ff73b3a07742c5a",
       "task_count": 12,
       "incident_counts": {
         "5": 3,
@@ -667,7 +667,7 @@
     {
       "batch_id": "batch_038",
       "path": "publication/batch_038/manifest.json",
-      "sha256": "24e3ea10bd31c3987fa652500c48dba7bf56fc37650f5d844d30a751d69cd56c",
+      "sha256": "d891257506183d6a88ce86ff3d5b6e2d305e86829c579d994dd2c221202a8e0b",
       "task_count": 12,
       "incident_counts": {
         "39": 3,
@@ -680,7 +680,7 @@
     {
       "batch_id": "batch_039",
       "path": "publication/batch_039/manifest.json",
-      "sha256": "1cd7abb666dd972a5657511682ec5ae975701b5566bb0dbface317638ce0d000",
+      "sha256": "f097f4b61bc76181e771c7273a781705a02c73b2c487acb0918e7667c75aa56c",
       "task_count": 12,
       "incident_counts": {
         "166": 3,
@@ -693,7 +693,7 @@
     {
       "batch_id": "batch_040",
       "path": "publication/batch_040/manifest.json",
-      "sha256": "8dbec6417a9a74f825e81f2c04183150b754d9c15597f8afbf8f7affb2521222",
+      "sha256": "9504da0ebe3987dfed5962e053168075a1e185d1f7920d69995578f46877e07c",
       "task_count": 12,
       "incident_counts": {
         "34": 3,
@@ -706,7 +706,7 @@
     {
       "batch_id": "batch_041",
       "path": "publication/batch_041/manifest.json",
-      "sha256": "00458170a11a827a339740d9de1512c132bd1846450ee254bbd38fddbbd06152",
+      "sha256": "93104a0c42167b35f3a520d8022d5e04e86911a99a5e187dbf2ae65354f82ddb",
       "task_count": 12,
       "incident_counts": {
         "55": 3,
@@ -719,7 +719,7 @@
     {
       "batch_id": "batch_042",
       "path": "publication/batch_042/manifest.json",
-      "sha256": "250a006fb1ad62962a43c6ce2bc981328ea1e3a072ec49dd5215c1cecd263180",
+      "sha256": "83b79c0e7d3cf5deb39e5b9e1e0793a33d544f1d3d66d495df7a06c65ff56d2c",
       "task_count": 12,
       "incident_counts": {
         "5": 3,
@@ -732,7 +732,7 @@
     {
       "batch_id": "batch_043",
       "path": "publication/batch_043/manifest.json",
-      "sha256": "2530de83823177f650682b8f327412bfe1f990c629348897f9f770e99add3b6b",
+      "sha256": "7c27019783f30f568f602cc467a2349dd1cd8acb578ef6249d6a8d95e595b2ea",
       "task_count": 12,
       "incident_counts": {
         "39": 3,
@@ -745,7 +745,7 @@
     {
       "batch_id": "batch_044",
       "path": "publication/batch_044/manifest.json",
-      "sha256": "da1b9a53caf1f8a96bcb73e0da3216b71400486d4ccbc579e673111724fa402e",
+      "sha256": "9314e419c99566fffcda3513fb38d45515e5e2b1876564c76273df983b719fda",
       "task_count": 12,
       "incident_counts": {
         "166": 3,
@@ -758,7 +758,7 @@
     {
       "batch_id": "batch_045",
       "path": "publication/batch_045/manifest.json",
-      "sha256": "80b5e34bb2ff3de86fca631fcc7b4adb89825f7152058c86781e46eff7e29208",
+      "sha256": "264b3ef58153fa7d87d04099bf0662a8c5d6897ac1796c975156e7c791b12dd0",
       "task_count": 12,
       "incident_counts": {
         "34": 3,
@@ -771,7 +771,7 @@
     {
       "batch_id": "batch_046",
       "path": "publication/batch_046/manifest.json",
-      "sha256": "d2c960bdc428aa57977025998dd8693a2a8c19e9088447ad23288bcb630b2933",
+      "sha256": "a388caccec621b7a9fd089fb1c59eb06934b5eb107847eedc82684f699eae466",
       "task_count": 12,
       "incident_counts": {
         "55": 3,
@@ -784,7 +784,7 @@
     {
       "batch_id": "batch_047",
       "path": "publication/batch_047/manifest.json",
-      "sha256": "13a356523f5a45e9a91ff9b9e31790de161403900f617307b52632e16dd9f8a5",
+      "sha256": "61a59f08c54153b1eed3622060af037cef4452cbe3a5774121dbaca8afd2fa93",
       "task_count": 12,
       "incident_counts": {
         "5": 4,
@@ -796,7 +796,7 @@
     {
       "batch_id": "batch_048",
       "path": "publication/batch_048/manifest.json",
-      "sha256": "62a290a8651b722e8eccbf645a603d1ff4f838ae9a7f87295acf32041663488a",
+      "sha256": "689b3df10edf7aa4732465e65ae2f1eeecd4f22616781864468cba5fd67f231a",
       "task_count": 12,
       "incident_counts": {
         "39": 4,
@@ -807,7 +807,7 @@
     {
       "batch_id": "batch_049",
       "path": "publication/batch_049/manifest.json",
-      "sha256": "bc5b5cf085b48d463db7a475699485aa9f56b7a1e24ada02148b576831640789",
+      "sha256": "a34b1f417739c52fc2aa18ba0e246852f252745167f37bbaeead9bf3ddb67451",
       "task_count": 12,
       "incident_counts": {
         "39": 4,
@@ -818,7 +818,7 @@
     {
       "batch_id": "batch_050",
       "path": "publication/batch_050/manifest.json",
-      "sha256": "8b1648770d218749f0cf1d2db0dcb40fc257db669ea52421aae3ec996f57fb99",
+      "sha256": "8ed95da819cb3d817484ff4d7ccfe7fc78525488204eb44c71aa2e81e8254749",
       "task_count": 11,
       "incident_counts": {
         "39": 4,
@@ -828,5 +828,5 @@
     }
   ],
   "planned_episode_jobs": 1797,
-  "scorer_read_gate": "For each batch, all three arm evals must pass provenance/resource/completeness checks before scorer fields are read."
+  "scorer_read_gate": "Each arm's official scorer runs and may be read after that arm completes; batch interim analysis waits until all three arm evals pass provenance/resource/completeness checks."
 }
