@@ -11,8 +11,8 @@
 
 可用 arm：react（官方基线）、cyberorion_single、
 cyberorion_orchestrator_only、cyberorion_full。
-模型默认使用 openai/MiniMax-M3；judge 默认保持 ExCyTIn 官方配置
-openai/azure/gpt-4.1（可用 --model / --judge-llm 覆盖）。credentials 从环境变量
+模型和 judge 默认都使用 openai/MiniMax-M3（可用 --model / --judge-llm 覆盖）。
+credentials 从环境变量
 读取，绝不打印或提交密钥。
 """
 
@@ -231,7 +231,7 @@ def main() -> int:
               file=sys.stderr)
         return 2
 
-    judge_llm = args.judge_llm or "openai/azure/gpt-4.1"
+    judge_llm = args.judge_llm or "openai/MiniMax-M3"
     task_kwargs: dict = {
         "agent": args.arm,
         "judge_llm": judge_llm,
