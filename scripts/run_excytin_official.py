@@ -144,6 +144,8 @@ def main() -> int:
                         help="并发 sample 上限；官方共享数据库机制烟测默认串行")
     parser.add_argument("--global-tool-call-limit", type=int, default=64)
     parser.add_argument("--global-model-call-limit", type=int, default=64)
+    parser.add_argument("--max-dispatches", type=int, default=8)
+    parser.add_argument("--max-parallel-dispatches", type=int, default=4)
     args = parser.parse_args()
 
     upstream = Path(args.acesevals_dir).resolve()
@@ -201,6 +203,8 @@ def main() -> int:
         "judge_llm": judge_llm,
         "global_tool_call_limit": args.global_tool_call_limit,
         "max_model_calls": args.global_model_call_limit,
+        "max_dispatches": args.max_dispatches,
+        "max_parallel_dispatches": args.max_parallel_dispatches,
     }
     task_kwargs["task_filter"] = ",".join(task_ids)
     for item in args.task_arg:
@@ -248,6 +252,8 @@ def main() -> int:
             "max_samples": args.max_samples,
             "global_model_calls": args.global_model_call_limit,
             "global_tool_call_limit": args.global_tool_call_limit,
+            "max_dispatches": args.max_dispatches,
+            "max_parallel_dispatches": args.max_parallel_dispatches,
             "official_task_max_steps_unchanged": 25,
         })
     provenance["saber_resource_limit_patch"] = saber_patch
