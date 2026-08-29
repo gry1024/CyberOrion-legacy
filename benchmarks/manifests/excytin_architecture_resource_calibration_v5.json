@@ -1,0 +1,22 @@
+{
+  "schema": "excytin_architecture_resource_calibration_manifest_v1",
+  "selection_policy": "Fresh post-native-model-proxy resource-only calibration; three distinct incidents and one task per incident, fixed before any arm is run.",
+  "dataset": "latest_cleaned_test_set",
+  "task_ids": [
+    "incident_134_latest_cleaned_test_set_task_14",
+    "incident_55_latest_cleaned_test_set_task_14",
+    "incident_166_latest_cleaned_test_set_task_14"
+  ],
+  "model": "openai/MiniMax-M3",
+  "temperature": 0,
+  "thinking": "disabled",
+  "episodes_per_task": 1,
+  "official_scorer_executed": false,
+  "execution_order": ["single", "orchestrator_only", "full"],
+  "temporary_limits": {
+    "token_limit": 8000000,
+    "time_limit_sec": 1800,
+    "global_tool_call_limit": 256,
+    "global_model_call_limit": 256
+  }
+}

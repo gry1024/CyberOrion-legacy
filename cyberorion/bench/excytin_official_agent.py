@@ -1,23 +1,172 @@
-"""ACESEvals/SABER official agent bridge.
+"""CyberOrion agents for the official ACESEvals/SABER ExCyTIn task.
 
-Loaded by the isolated Inspect process (via ``sitecustomize``); it does not
-replace the upstream task, sandbox, telemetry backend, or scorer.
+SABER supplies the rendered official prompts and native Inspect tools. This
+bridge adds only arm-specific investigation instructions, delegation, shared
+evidence state, and audit metadata. It never reads scorer, target, or sandbox
+state and never reimplements the native model/tool loop.
+
+Inspect/SABER imports stay inside runtime functions because CyberOrion's main
+test environment does not install the pinned upstream environment.
 """
 from __future__ import annotations
 
-import inspect
+import asyncio
 import hashlib
 import json
-from typing import Any
+import time
+from dataclasses import asdict, dataclass, field
+from typing import Any, Iterable, Mapping, Sequence
 
-from .superagent_runtime import (
-    RuntimeConfig, ToolSpec, run_orchestrator_only, run_reference, run_superagent,
+
+ROLES = ("triage", "threat_hunter", "lateral_analyst", "escalation")
+_COORDINATION_TOOL_PREFIX = "dispatch_"
+_REPORT_TOOL_PREFIX = "submit_"
+_MAX_COMPACT_TEXT = 1200
+_MAX_MODEL_VISIBLE_SNAPSHOT_CHARS = 12_000
+# Native Inspect keeps the complete transcript in its audit log, while this
+# bounded compaction keeps a long but legitimate investigation from paying for
+# an ever-growing model context.  These are interface/resource controls, not
+# changes to the official task, tools, or database.
+_NATIVE_CONTEXT_COMPACTION_THRESHOLD_TOKENS = 48_000
+_NATIVE_CONTEXT_COMPACTION_PRESERVE = 0.55
+_MAX_COMMANDS = 48
+_MAX_EVIDENCE = 64
+_MAX_REPORTS = 24
+_MAX_PROVENANCE = 64
+
+ROLE_DESCRIPTIONS: dict[str, str] = {
+    "triage": (
+        "Perform initial task triage, discover the available schema and data "
+        "sources, extract first-pass entities, and route the next investigation."
+    ),
+    "threat_hunter": (
+        "Conduct deep evidence-led hunting, correlate precise records across "
+        "tables, test hypotheses, and reconstruct the incident chain."
+    ),
+    "lateral_analyst": (
+        "Trace cross-host, account, address, process, and time relationships to "
+        "determine spread, pivots, and the affected investigation scope."
+    ),
+    "escalation": (
+        "Review high-impact conclusions, correlate specialist evidence, challenge "
+        "unsupported claims, and recommend response only when evidence supports "
+        "it. Never invent environment actions ExCyTIn does not expose."
+    ),
+}
+
+_COMMON_INVESTIGATION_SOP = """
+CYBERORION EXCYTIN INVESTIGATION SOP:
+- Work only from the official task context and results returned by the official
+  tools. Never infer hidden database or scoring state.
+- Begin with schema discovery, then narrow queries using incident entities and
+  time bounds. Correlate across tables when the question requires multiple hops.
+- Prefer SHOW/DESCRIBE/INFORMATION_SCHEMA before data queries. Never use
+  SELECT * or table dumps. Select only needed columns and start with LIMIT 5
+  or LIMIT 10, COUNT, GROUP BY, targeted WHERE clauses, and time/IP/host/event
+  filters. Avoid wide JSON/text columns such as AdditionalFields, Entities,
+  Parameters, and Description until needed; use length/count or targeted
+  extraction before retrieving their contents.
+- A row LIMIT does not make a wide projection safe. Never select raw
+  AdditionalFields, Entities, Parameters, Description, UrlChain, or comparable
+  JSON/text columns across multiple rows. First select identifiers/counts or
+  LEFT(column, 500) for at most one or five targeted records; retrieve a full
+  wide field only for one exact record when it is indispensable.
+- Every non-aggregate SELECT must have a bounded LIMIT. If a result is large,
+  narrow the columns and predicate instead of repeating or expanding the query.
+- Use Python to summarize already retrieved bounded data when appropriate; do
+  not repeatedly copy raw tool output or the full database into context.
+- Every query must resolve a named open question. After two consecutive empty
+  or non-informative queries, stop broadening that branch and report the
+  uncertainty. Once the assigned mission has sufficient evidence, submit the
+  specialist report immediately. As an investigation-discipline target, keep
+  a specialist mission within about 20 official tool calls; this is not a hard
+  per-role resource ceiling, and the global sample ceilings remain authoritative.
+- Keep hypotheses separate from verified evidence. Cite concrete table names,
+  commands/queries, timestamps, identifiers, and returned values.
+- Treat tool errors and empty results as evidence about the investigation, not
+  as success. Change the query or report the uncertainty.
+- Before submitting, verify that the answer directly addresses the official
+  question and is supported by observed evidence.
+- Use native tool calls. Do not emit a second JSON action protocol.
+""".strip()
+
+SINGLE_PROMPT = f"""
+You are CyberOrion's strong monolithic ExCyTIn investigator. You own planning,
+schema discovery, multi-table correlation, targeted hunting, adversarial final
+verification, and the final answer. You have the complete official environment
+tool set. Maintain an internal evidence notebook and carry the investigation to
+a supported conclusion.
+
+{_COMMON_INVESTIGATION_SOP}
+""".strip()
+
+COMMANDER_PROMPT = f"""
+You are CyberOrion's ExCyTIn investigation commander. You own investigation
+planning, worker routing, shared-state review, and the final answer. As in the
+current production architecture, you do not directly execute environment
+investigation tools: all bash/python investigation is performed by workers.
+Delegation is natural work routing, not an optional decoration. Reports are
+bounded evidence summaries, not hidden truth.
+
+CYBERORION TEAM AVAILABLE IN FULL MODE:
+- dispatch_triage(mission): {ROLE_DESCRIPTIONS["triage"]}
+- dispatch_threat_hunter(mission): {ROLE_DESCRIPTIONS["threat_hunter"]}
+- dispatch_lateral_analyst(mission): {ROLE_DESCRIPTIONS["lateral_analyst"]}
+- dispatch_escalation(mission): {ROLE_DESCRIPTIONS["escalation"]}
+- get_investigation_summary(): Read the bounded shared workspace.
+
+DELEGATION SEMANTICS:
+- A delegated specialist automatically receives the official task context, its
+  bounded mission, the current shared investigation state, and all official
+  environment tools. Do not manually copy the whole evidence history.
+- Begin by routing initial schema/data-source discovery to triage. Route deep
+  hypothesis testing and incident reconstruction to threat_hunter; cross-entity
+  or cross-host spread to lateral_analyst; and high-impact final challenge or
+  response-oriented review to escalation.
+- Independent missions may be dispatched together in one response so they can
+  run concurrently; dependent missions should wait for the evidence they need.
+- After dispatch, inspect the complete bounded reports returned by the tools or
+  call get_investigation_summary. Do not ask workers to repeat full raw output.
+- Do not dispatch decorative or duplicate missions. You remain responsible for
+  checking reports and producing the official final answer with submit.
+
+{_COMMON_INVESTIGATION_SOP}
+""".strip()
+
+ORCHESTRATOR_ONLY_PROMPT = (
+    "You are CyberOrion's strong monolithic ExCyTIn commander/investigator. "
+    "Dispatch is disabled in this arm. You directly receive the complete "
+    "official environment tool set and own planning, investigation, evidence "
+    "verification, and the final answer.\n\n" + _COMMON_INVESTIGATION_SOP
 )
+
+
+def specialist_prompt(role: str) -> str:
+    """Return the ExCyTIn adaptation of a production CyberOrion role."""
+    if role not in ROLE_DESCRIPTIONS:
+        raise ValueError(f"unknown specialist role: {role}")
+    return f"""
+You are CyberOrion's ExCyTIn {role} specialist.
+
+ROLE DUTY:
+{ROLE_DESCRIPTIONS[role]}
+
+{_COMMON_INVESTIGATION_SOP}
+
+Complete the assigned mission independently with the official tools. Finish by
+calling the provided structured report tool. Report actual findings, evidence,
+commands/queries, confidence, uncertainties, recommended next investigation,
+and candidate answer implications. An empty report is not acceptable.
+""".strip()
 
 
 def build_official_context(*, instruction_prompt: str, assistant_prompt: str,
                            task_input: str) -> tuple[str, dict[str, Any]]:
-    """构造且审计 SABER 授权给模型的完整上下文，不加入评分答案。"""
+    """Hash complete model-visible official context without adding gold.
+
+    The serialized value is retained for backward-compatible audit tests. It is
+    not used as task input by the native bridge.
+    """
     context = {
         "instruction_prompt": str(instruction_prompt),
         "assistant_prompt": str(assistant_prompt),
@@ -25,7 +174,7 @@ def build_official_context(*, instruction_prompt: str, assistant_prompt: str,
     }
     serialized = json.dumps(context, ensure_ascii=False, sort_keys=True)
     audit = {
-        "schema": "official_model_visible_context_v1",
+        "schema": "official_model_visible_context_v2_native",
         "instruction_prompt_present": bool(instruction_prompt),
         "assistant_prompt_present": bool(assistant_prompt),
         "task_input_present": bool(task_input),
@@ -36,99 +185,1002 @@ def build_official_context(*, instruction_prompt: str, assistant_prompt: str,
         "task_input_sha256": hashlib.sha256(str(task_input).encode()).hexdigest(),
         "effective_context_sha256": hashlib.sha256(serialized.encode()).hexdigest(),
         "gold_or_scorer_context_added": False,
+        "native_inspect_tool_execution": True,
+        "custom_json_action_protocol": False,
     }
     return serialized, audit
 
 
-def _tool_spec(tool: Any) -> ToolSpec:
-    name = (getattr(tool, "name", None)
-            or getattr(tool, "__name__", None) or "official_tool")
-    description = (getattr(tool, "description", None)
-                   or getattr(tool, "__doc__", None) or "Official SABER tool")
-    input_schema = (getattr(tool, "input", None)
-                    or getattr(tool, "parameters", None))
-    if not isinstance(input_schema, dict):
-        input_schema = None
-    if input_schema is None:
-        try:
-            sig = inspect.signature(tool)
-        except (TypeError, ValueError):
-            sig = None
-        props = {p.name: {"type": "string"} for p in sig.parameters.values()
-                 if p.name != "self"} if sig else {}
-        required = [p.name for p in sig.parameters.values()
-                    if p.default is inspect.Parameter.empty and p.name != "self"] \
-            if sig else []
-        input_schema = {"type": "object", "properties": props,
-                        "required": required, "additionalProperties": False}
-    return ToolSpec(str(name), tool, str(description), input_schema)
+def _tool_name(tool: Any) -> str:
+    """Resolve a model-visible native Inspect tool name without wrapping it."""
+    try:
+        from inspect_ai._util.registry import registry_info
+        return str(registry_info(tool).name).rsplit("/", 1)[-1]
+    except Exception:  # noqa: BLE001 - pure metadata fallback
+        for value in (
+            getattr(tool, "name", None), getattr(tool, "__name__", None)
+        ):
+            if value:
+                return str(value)
+        return type(tool).__name__
 
 
-def create_agent(*, arm: str = "single", **_factory_kwargs: Any):
-    """Return the two-level factory expected by ``saber.create_saber_solver``."""
-    def create_with_prompts(*, instruction_prompt: str = "", assistant_prompt: str = "",
-                            tools=None, max_steps: int = 30, **_kwargs: Any):
+def official_tool_names(tools: Sequence[Any] | None) -> tuple[str, ...]:
+    """Return exact official tool names supplied by SABER."""
+    return tuple(_tool_name(tool) for tool in (tools or ()))
+
+
+def arm_tool_contract(arm: str, tools: Sequence[Any] | None) -> dict[str, Any]:
+    """Mechanically expose environment-tool fairness for tests and artifacts."""
+    if arm not in {"single", "orchestrator_only", "full"}:
+        raise ValueError(f"unknown arm: {arm}")
+    names = official_tool_names(tools)
+    full = arm == "full"
+    return {
+        "arm": arm,
+        "official_environment_tools": list(names),
+        "commander_environment_tools": [] if full else list(names),
+        "worker_environment_tools": (
+            {role: list(names) for role in ROLES} if full else {}
+        ),
+        "delegation_tools": (
+            [f"{_COORDINATION_TOOL_PREFIX}{role}" for role in ROLES]
+            if full else []
+        ),
+        "commander_state_tools": (
+            ["get_investigation_summary"] if full else []
+        ),
+        "final_answer_tool": "submit",
+        "investigation_tool_union": list(names),
+        "official_tool_union": list(names),
+    }
+
+
+def _message_content(message: Any) -> str:
+    content = getattr(message, "content", "")
+    if isinstance(content, str):
+        return content
+    parts: list[str] = []
+    for item in content or ():
+        text = getattr(item, "text", None)
+        if text:
+            parts.append(str(text))
+    return "\n".join(parts)
+
+
+def _task_input(state: Any) -> str:
+    """Read only sample input already visible to every official arm."""
+    visible = getattr(state, "input", None)
+    if visible:
+        return str(visible)
+    for message in getattr(state, "messages", ()):
+        if str(getattr(message, "role", "")) == "user":
+            text = _message_content(message)
+            if text:
+                return text
+    return ""
+
+
+def _compact_text(value: Any, limit: int = _MAX_COMPACT_TEXT) -> dict[str, Any]:
+    """Create deterministic bounded evidence while preserving raw audit identity."""
+    text = str(value or "")
+    if len(text) <= limit:
+        compact = text
+        truncated = False
+    else:
+        head = limit * 3 // 4
+        tail = limit - head
+        compact = text[:head] + "\n...[bounded shared-state omission]...\n" + text[-tail:]
+        truncated = True
+    return {
+        "text": compact,
+        "raw_chars": len(text),
+        "raw_sha256": hashlib.sha256(text.encode()).hexdigest(),
+        "shared_state_truncated": truncated,
+    }
+
+
+def _bounded_arguments(value: Any) -> dict[str, Any]:
+    """Bound command/query arguments without altering the official tool call."""
+    serialized = json.dumps(value or {}, ensure_ascii=False, sort_keys=True,
+                            default=str)
+    return _compact_text(serialized, 800)
+
+
+def _tail(rows: list[Any], limit: int) -> list[Any]:
+    return rows[-limit:]
+
+
+@dataclass
+class SpecialistReport:
+    role: str
+    findings: list[str]
+    evidence: list[dict[str, str]]
+    commands_or_queries: list[str]
+    confidence: str
+    uncertainties: list[str]
+    recommended_next_investigation: list[str]
+    candidate_answer_implications: list[str]
+
+    def validate(self) -> None:
+        if self.role not in ROLES:
+            raise ValueError(f"invalid report role: {self.role}")
+        if self.confidence not in {"low", "medium", "high"}:
+            raise ValueError("confidence must be low, medium, or high")
+        if not any((self.findings, self.evidence, self.commands_or_queries,
+                    self.uncertainties, self.recommended_next_investigation,
+                    self.candidate_answer_implications)):
+            raise ValueError("empty specialist report")
+
+
+def parse_specialist_report(
+    raw: Any, role: str,
+) -> tuple[str, dict[str, Any] | None, str | None]:
+    """Classify a specialist result without accepting malformed output."""
+    try:
+        value = raw if isinstance(raw, Mapping) else json.loads(str(raw or ""))
+    except (TypeError, ValueError, json.JSONDecodeError) as exc:
+        return "parse_failure", None, f"{type(exc).__name__}: {exc}"
+    if not isinstance(value, Mapping):
+        return "parse_failure", None, "report is not an object"
+    try:
+        def text_list(name: str) -> list[str]:
+            raw_field = value.get(name)
+            if raw_field is None:
+                return []
+            if isinstance(raw_field, str):
+                return [raw_field] if raw_field.strip() else []
+            if isinstance(raw_field, list):
+                return [str(item) for item in raw_field]
+            raise ValueError(f"{name} must be text or a text list")
+
+        evidence = []
+        for item in value.get("evidence") or []:
+            if not isinstance(item, Mapping):
+                raise ValueError("evidence item is not an object")
+            evidence.append({str(k): str(v) for k, v in item.items()})
+        report = SpecialistReport(
+            role=role,
+            findings=text_list("findings"),
+            evidence=evidence,
+            commands_or_queries=text_list("commands_or_queries"),
+            confidence=str(value.get("confidence") or "").lower(),
+            uncertainties=text_list("uncertainties"),
+            recommended_next_investigation=text_list(
+                "recommended_next_investigation"),
+            candidate_answer_implications=text_list(
+                "candidate_answer_implications"),
+        )
+        report.validate()
+    except (TypeError, ValueError) as exc:
+        status = (
+            "empty_report" if "empty specialist report" in str(exc)
+            else "parse_failure"
+        )
+        return status, None, f"{type(exc).__name__}: {exc}"
+    return "successful_report", asdict(report), None
+
+
+@dataclass
+class InvestigationState:
+    """Shared state containing only model-visible investigation data."""
+
+    task_context_sha256: str
+    discovered_schema: list[dict[str, Any]] = field(default_factory=list)
+    executed_commands: list[dict[str, Any]] = field(default_factory=list)
+    evidence: list[dict[str, Any]] = field(default_factory=list)
+    hypotheses: list[dict[str, Any]] = field(default_factory=list)
+    unresolved_questions: list[dict[str, Any]] = field(default_factory=list)
+    specialist_reports: list[dict[str, Any]] = field(default_factory=list)
+    provenance: list[dict[str, Any]] = field(default_factory=list)
+    report_counts: dict[str, int] = field(default_factory=lambda: {
+        "successful_report": 0,
+        "empty_report": 0,
+        "parse_failure": 0,
+        "role_budget_exhaustion": 0,
+        "tool_failure": 0,
+    })
+    model_calls: int = 0
+    official_tool_calls: int = 0
+    dispatches: int = 0
+    workspace_omissions: dict[str, int] = field(default_factory=lambda: {
+        "commands": 0, "evidence": 0, "reports": 0, "provenance": 0,
+    })
+    _seen_messages: set[str] = field(default_factory=set, repr=False)
+    _pending_calls: dict[str, dict[str, Any]] = field(
+        default_factory=dict, repr=False)
+    _sequence: int = field(default=0, repr=False)
+
+    def _next(self) -> int:
+        self._sequence += 1
+        return self._sequence
+
+    def ingest_messages(self, messages: Iterable[Any], *, role: str,
+                        official_names: set[str]) -> None:
+        """Extract real native model/tool messages into the notebook."""
+        for message in messages:
+            message_id = str(getattr(message, "id", "") or id(message))
+            if message_id in self._seen_messages:
+                continue
+            self._seen_messages.add(message_id)
+            message_role = str(getattr(message, "role", ""))
+            if message_role == "assistant":
+                self.model_calls += 1
+                for call in getattr(message, "tool_calls", None) or ():
+                    self._pending_calls[str(getattr(call, "id", ""))] = {
+                        "tool": str(getattr(call, "function", "")),
+                        "arguments": getattr(call, "arguments", {}) or {},
+                    }
+            elif message_role == "tool":
+                call_id = str(getattr(message, "tool_call_id", ""))
+                function = str(getattr(message, "function", ""))
+                call = self._pending_calls.pop(
+                    call_id, {"tool": function, "arguments": {}})
+                if call["tool"] not in official_names:
+                    continue
+                error = getattr(message, "error", None)
+                row = {
+                    "id": f"CMD-{self._next()}",
+                    "sequence": self._sequence,
+                    "role": role,
+                    "tool": call["tool"],
+                    "arguments": _bounded_arguments(call["arguments"]),
+                    "tool_call_id": call_id,
+                    "error": None if error is None else str(error),
+                }
+                self.executed_commands.append(row)
+                if len(self.executed_commands) > _MAX_COMMANDS:
+                    self.workspace_omissions["commands"] += 1
+                    self.executed_commands = _tail(
+                        self.executed_commands, _MAX_COMMANDS)
+                self.official_tool_calls += 1
+                if error is not None:
+                    self.report_counts["tool_failure"] += 1
+                else:
+                    compact = _compact_text(_message_content(message))
+                    self.evidence.append({
+                        "id": f"E-{self._next()}",
+                        "sequence": self._sequence,
+                        "role": role,
+                        "source": call["tool"],
+                        "tool_call_id": call_id,
+                        "query_or_command": row["arguments"],
+                        "snippet": compact["text"],
+                        "raw_chars": compact["raw_chars"],
+                        "raw_sha256": compact["raw_sha256"],
+                        "shared_state_truncated": compact[
+                            "shared_state_truncated"],
+                    })
+                    if len(self.evidence) > _MAX_EVIDENCE:
+                        self.workspace_omissions["evidence"] += 1
+                        self.evidence = _tail(self.evidence, _MAX_EVIDENCE)
+
+    def record_dispatch(self, role: str, mission: str) -> None:
+        self.dispatches += 1
+        self.provenance.append({
+            "id": f"D-{self._next()}", "sequence": self._sequence,
+            "kind": "dispatch", "role": role,
+            "mission": _compact_text(mission, 800),
+        })
+        if len(self.provenance) > _MAX_PROVENANCE:
+            self.workspace_omissions["provenance"] += 1
+            self.provenance = _tail(self.provenance, _MAX_PROVENANCE)
+
+    def record_report(self, *, status: str, role: str, mission: str,
+                      report: dict[str, Any] | None, error: str | None,
+                      raw: str | None = None) -> None:
+        if status not in self.report_counts:
+            self.report_counts[status] = 0
+        self.report_counts[status] += 1
+        bounded_report = None
+        if report is not None:
+            bounded_report = {
+                "role": role,
+                "findings": [
+                    _compact_text(item)["text"]
+                    for item in report.get("findings", [])[:16]
+                ],
+                "evidence": [
+                    {
+                        str(key): _compact_text(value, 800)["text"]
+                        for key, value in item.items()
+                    }
+                    for item in report.get("evidence", [])[:24]
+                ],
+                "commands_or_queries": [
+                    _compact_text(item, 800)["text"]
+                    for item in report.get("commands_or_queries", [])[:24]
+                ],
+                "confidence": report.get("confidence"),
+                "uncertainties": [
+                    _compact_text(item)["text"]
+                    for item in report.get("uncertainties", [])[:16]
+                ],
+                "recommended_next_investigation": [
+                    _compact_text(item)["text"]
+                    for item in report.get(
+                        "recommended_next_investigation", [])[:16]
+                ],
+                "candidate_answer_implications": [
+                    _compact_text(item)["text"]
+                    for item in report.get(
+                        "candidate_answer_implications", [])[:16]
+                ],
+            }
+            self.hypotheses.extend({
+                "id": f"H-{self._next()}", "sequence": self._sequence,
+                "role": role, "text": item,
+            } for item in bounded_report["candidate_answer_implications"])
+            self.unresolved_questions.extend({
+                "id": f"Q-{self._next()}", "sequence": self._sequence,
+                "role": role, "text": item,
+            } for item in (
+                bounded_report["uncertainties"]
+                + bounded_report["recommended_next_investigation"]
+            ))
+            self.hypotheses = _tail(self.hypotheses, 48)
+            self.unresolved_questions = _tail(self.unresolved_questions, 48)
+        raw_identity = (
+            {
+                "raw_chars": len(raw),
+                "raw_sha256": hashlib.sha256(raw.encode()).hexdigest(),
+            }
+            if raw else None
+        )
+        self.specialist_reports.append({
+            "id": f"R-{self._next()}", "sequence": self._sequence,
+            "status": status, "role": role,
+            "mission": _compact_text(mission, 800),
+            "report": bounded_report, "error": error,
+            "raw_report_identity": raw_identity,
+        })
+        if len(self.specialist_reports) > _MAX_REPORTS:
+            self.workspace_omissions["reports"] += 1
+            self.specialist_reports = _tail(
+                self.specialist_reports, _MAX_REPORTS)
+
+    def public_snapshot(self) -> dict[str, Any]:
+        """Small recency window safe to provide to another agent."""
+        visible = {
+            "discovered_schema": 8,
+            "executed_commands": 5,
+            "evidence": 5,
+            "hypotheses": 8,
+            "unresolved_questions": 8,
+            "specialist_reports": 2,
+            "provenance": 12,
+        }
+
+        def report_summary(row: dict[str, Any]) -> dict[str, Any]:
+            report = row.get("report") or {}
+            return {
+                "id": row.get("id"),
+                "sequence": row.get("sequence"),
+                "status": row.get("status"),
+                "role": row.get("role"),
+                "mission": row.get("mission"),
+                "report": {
+                    "findings": [
+                        _compact_text(item, 300)["text"]
+                        for item in report.get("findings", [])[:3]
+                    ],
+                    "evidence": [
+                        {
+                            str(key): _compact_text(value, 250)["text"]
+                            for key, value in item.items()
+                        }
+                        for item in report.get("evidence", [])[:3]
+                    ],
+                    "commands_or_queries": [
+                        _compact_text(item, 250)["text"]
+                        for item in report.get("commands_or_queries", [])[:3]
+                    ],
+                    "confidence": report.get("confidence"),
+                    "uncertainties": [
+                        _compact_text(item, 300)["text"]
+                        for item in report.get("uncertainties", [])[:2]
+                    ],
+                    "recommended_next_investigation": [
+                        _compact_text(item, 300)["text"]
+                        for item in report.get(
+                            "recommended_next_investigation", [])[:2]
+                    ],
+                    "candidate_answer_implications": [
+                        _compact_text(item, 300)["text"]
+                        for item in report.get(
+                            "candidate_answer_implications", [])[:3]
+                    ],
+                } if report else None,
+                "error": row.get("error"),
+            }
+
+        def command_summary(row: dict[str, Any]) -> dict[str, Any]:
+            value = dict(row)
+            arguments = value.get("arguments") or {}
+            value["arguments"] = {
+                **arguments,
+                "text": _compact_text(arguments.get("text"), 400)["text"],
+            }
+            return value
+
+        def evidence_summary(row: dict[str, Any]) -> dict[str, Any]:
+            value = dict(row)
+            value["snippet"] = _compact_text(value.get("snippet"), 600)["text"]
+            arguments = value.get("query_or_command") or {}
+            value["query_or_command"] = {
+                **arguments,
+                "text": _compact_text(arguments.get("text"), 400)["text"],
+            }
+            return value
+
+        def text_fact_summary(row: dict[str, Any]) -> dict[str, Any]:
+            value = dict(row)
+            value["text"] = _compact_text(value.get("text"), 300)["text"]
+            return value
+        omissions = dict(self.workspace_omissions)
+        omissions.update({
+            "model_visible_commands": max(
+                0, len(self.executed_commands) - visible["executed_commands"]),
+            "model_visible_evidence": max(
+                0, len(self.evidence) - visible["evidence"]),
+            "model_visible_reports": max(
+                0, len(self.specialist_reports) - visible["specialist_reports"]),
+            "model_visible_provenance": max(
+                0, len(self.provenance) - visible["provenance"]),
+        })
+        snapshot = {
+            "task_context_sha256": self.task_context_sha256,
+            "discovered_schema": _tail(
+                self.discovered_schema, visible["discovered_schema"]),
+            "executed_commands": _tail(
+                [command_summary(row) for row in self.executed_commands],
+                visible["executed_commands"]),
+            "evidence": _tail(
+                [evidence_summary(row) for row in self.evidence],
+                visible["evidence"]),
+            "hypotheses": _tail(
+                [text_fact_summary(row) for row in self.hypotheses],
+                visible["hypotheses"]),
+            "unresolved_questions": _tail(
+                [text_fact_summary(row) for row in self.unresolved_questions],
+                visible["unresolved_questions"]),
+            "specialist_reports": _tail(
+                [report_summary(row) for row in self.specialist_reports],
+                visible["specialist_reports"]),
+            "provenance": _tail(self.provenance, visible["provenance"]),
+            "workspace_omissions": omissions,
+        }
+        def snapshot_size() -> int:
+            return len(json.dumps(snapshot, ensure_ascii=False, default=str))
+
+        # Keep the model-visible notebook below the native Inspect prompt/tool
+        # scale. Raw evidence remains in audit_snapshot and the Inspect log;
+        # this only drops the oldest compact rows from the shared view.
+        bound_applied = False
+        for key in (
+            "provenance", "unresolved_questions", "hypotheses",
+            "specialist_reports", "evidence", "executed_commands",
+            "discovered_schema",
+        ):
+            rows = snapshot[key]
+            while snapshot_size() > _MAX_MODEL_VISIBLE_SNAPSHOT_CHARS and rows:
+                rows.pop(0)
+                bound_applied = True
+            if snapshot_size() <= _MAX_MODEL_VISIBLE_SNAPSHOT_CHARS:
+                break
+        if bound_applied:
+            snapshot["workspace_omissions"][
+                "model_visible_snapshot_bound_applied"] = True
+        if snapshot_size() > _MAX_MODEL_VISIBLE_SNAPSHOT_CHARS:
+            for key in (
+                "provenance", "unresolved_questions", "hypotheses",
+                "specialist_reports", "evidence", "executed_commands",
+                "discovered_schema",
+            ):
+                snapshot[key] = []
+                snapshot["workspace_omissions"][
+                    "model_visible_snapshot_bound_applied"] = True
+                if snapshot_size() <= _MAX_MODEL_VISIBLE_SNAPSHOT_CHARS:
+                    break
+        return snapshot
+
+    def audit_snapshot(self) -> dict[str, Any]:
+        public = self.public_snapshot()
+        value = {
+            "task_context_sha256": self.task_context_sha256,
+            "discovered_schema": self.discovered_schema,
+            "executed_commands": self.executed_commands,
+            "evidence": self.evidence,
+            "hypotheses": self.hypotheses,
+            "unresolved_questions": self.unresolved_questions,
+            "specialist_reports": self.specialist_reports,
+            "provenance": self.provenance,
+            "workspace_omissions": dict(self.workspace_omissions),
+        }
+        value.update({
+            "report_counts": dict(self.report_counts),
+            "model_calls": self.model_calls,
+            "official_tool_calls": self.official_tool_calls,
+            "dispatches": self.dispatches,
+            "bounds": {
+                "max_compact_text_chars": _MAX_COMPACT_TEXT,
+                "max_commands": _MAX_COMMANDS,
+                "max_evidence": _MAX_EVIDENCE,
+                "max_reports": _MAX_REPORTS,
+                "max_provenance": _MAX_PROVENANCE,
+                "max_model_visible_snapshot_chars": (
+                    _MAX_MODEL_VISIBLE_SNAPSHOT_CHARS),
+                "model_visible_snapshot_chars": len(json.dumps(
+                    public, ensure_ascii=False, default=str)),
+            },
+        })
+        return value
+
+
+def _combined_instructions(official: str, addition: str) -> str:
+    """Preserve official instructions verbatim and append arm semantics."""
+    return f"{official}\n\n{addition}" if official else addition
+
+
+def _native_context_compaction() -> Any:
+    """Use pinned Inspect's deterministic, non-LLM transcript compaction."""
+    from inspect_ai.model import CompactionTrim
+
+    return CompactionTrim(
+        threshold=_NATIVE_CONTEXT_COMPACTION_THRESHOLD_TOKENS,
+        preserve=_NATIVE_CONTEXT_COMPACTION_PRESERVE,
+        memory=False,
+    )
+
+
+def _report_tool(role: str) -> Any:
+    """Build a native Inspect submit tool with deterministic report schema."""
+    from inspect_ai.tool import ToolDef
+
+    async def submit_report(
+        findings: str,
+        evidence: list[dict[str, str]],
+        commands_or_queries: str,
+        confidence: str,
+        uncertainties: str,
+        recommended_next_investigation: str,
+        candidate_answer_implications: str,
+    ) -> str:
+        """Submit the specialist's structured investigation report.
+
+        Args:
+          findings: Concise verified findings, using bullets inside one text value.
+          evidence: Claim/source/snippet records from official tool results.
+          commands_or_queries: Commands/queries actually executed, one per line.
+          confidence: One of low, medium, or high.
+          uncertainties: Remaining uncertainty and unsupported claims as text.
+          recommended_next_investigation: Concrete next steps as one text value.
+          candidate_answer_implications: Evidence-bearing answer implications.
+        """
+        return json.dumps({
+            "role": role,
+            "findings": findings,
+            "evidence": evidence,
+            "commands_or_queries": commands_or_queries,
+            "confidence": confidence,
+            "uncertainties": uncertainties,
+            "recommended_next_investigation": recommended_next_investigation,
+            "candidate_answer_implications": candidate_answer_implications,
+        }, ensure_ascii=False)
+
+    return ToolDef(
+        submit_report,
+        name=f"{_REPORT_TOOL_PREFIX}{role}_report",
+        description=f"Submit the required structured {role} report.",
+    )
+
+
+class _DispatchController:
+    """Sample-scoped native dispatch and shared-state controller."""
+
+    def __init__(self, *, task_context: str, instruction_prompt: str,
+                 assistant_prompt: str, official_tools: Sequence[Any],
+                 commander_messages: list[Any], max_dispatches: int,
+                 max_parallel_dispatches: int,
+                 model_gate: "_GlobalModelGate") -> None:
+        self.task_context = task_context
+        self.instruction_prompt = instruction_prompt
+        self.assistant_prompt = assistant_prompt
+        self.official_tools = list(official_tools)
+        self.official_names = set(official_tool_names(official_tools))
+        self.commander_messages = commander_messages
+        self.max_dispatches = max_dispatches
+        self.model_gate = model_gate
+        self.state = InvestigationState(
+            hashlib.sha256(task_context.encode()).hexdigest())
+        self._lock = asyncio.Lock()
+        self._parallel = asyncio.Semaphore(max_parallel_dispatches)
+
+    async def _reserve(self, role: str, mission: str) -> dict[str, Any]:
+        from inspect_ai.tool import ToolError
+        async with self._lock:
+            self.state.ingest_messages(
+                self.commander_messages, role="orchestrator",
+                official_names=self.official_names)
+            if self.state.dispatches >= self.max_dispatches:
+                raise ToolError(
+                    f"global dispatch ceiling reached: {self.max_dispatches}")
+            self.state.record_dispatch(role, mission)
+            return json.loads(json.dumps(
+                self.state.public_snapshot(), ensure_ascii=False, default=str))
+
+    async def dispatch(self, role: str, mission: str) -> str:
+        """Run one isolated native Inspect specialist and return its report."""
+        from inspect_ai.agent import AgentPrompt, AgentSubmit, react, run
+        from inspect_ai.util import LimitExceededError
+
+        shared_snapshot = await self._reserve(role, mission)
+        report_tool = _report_tool(role)
+        child = react(
+            name=f"cyberorion_excytin_{role}",
+            description=ROLE_DESCRIPTIONS[role],
+            prompt=AgentPrompt(
+                instructions=_combined_instructions(
+                    self.instruction_prompt, specialist_prompt(role)),
+                assistant_prompt=self.assistant_prompt or None,
+                handoff_prompt=None,
+                submit_prompt=None,
+            ),
+            tools=self.official_tools,
+            model=self.model_gate.agent(role),
+            submit=AgentSubmit(
+                tool=report_tool,
+                name=f"{_REPORT_TOOL_PREFIX}{role}_report",
+                description=f"Submit the structured {role} report.",
+                answer_only=True,
+                keep_in_messages=True,
+            ),
+            compaction=_native_context_compaction(),
+            truncation="auto",
+        )
+        child_input = (
+            "OFFICIAL TASK CONTEXT (identical information available to Single):\n"
+            f"{self.task_context}\n\n"
+            f"SPECIALIST MISSION:\n{mission}\n\n"
+            "CURRENT SHARED INVESTIGATION STATE:\n"
+            + json.dumps(shared_snapshot, ensure_ascii=False, default=str)
+        )
+        status = "parse_failure"
+        report: dict[str, Any] | None = None
+        error: str | None = None
+        raw = ""
+        child_state = None
+        async with self._parallel:
+            try:
+                child_state = await run(child, input=child_input, name=role)
+                raw = str(child_state.output.completion or "")
+                status, report, error = parse_specialist_report(raw, role)
+            except LimitExceededError:
+                # Inspect sample limits are global across commander and child.
+                # They are hard limits, not a recoverable per-role outcome.
+                raise
+            except Exception as exc:  # noqa: BLE001 - classified for audit
+                status = "parse_failure"
+                error = f"{type(exc).__name__}: {exc}"
+        async with self._lock:
+            if child_state is not None:
+                self.state.ingest_messages(
+                    child_state.messages, role=role,
+                    official_names=self.official_names)
+            self.state.record_report(
+                status=status, role=role, mission=mission, report=report,
+                error=error, raw=raw if status != "successful_report" else None)
+            commander_report = self.state.specialist_reports[-1]["report"]
+        return json.dumps({
+            "status": status,
+            "role": role,
+            "mission": mission,
+            "report": commander_report,
+            "error": error,
+            "audit": {
+                "official_tool_calls": self.state.official_tool_calls,
+                "tool_failures": self.state.report_counts["tool_failure"],
+            },
+        }, ensure_ascii=False, default=str)
+
+    def tools(self) -> list[Any]:
+        """Create production-parity state-query and dispatch tools."""
+        from inspect_ai.tool import ToolDef
+
+        async def get_investigation_summary() -> str:
+            """Read the current bounded shared investigation workspace."""
+            async with self._lock:
+                return json.dumps(
+                    self.state.public_snapshot(), ensure_ascii=False,
+                    default=str)
+
+        result = [ToolDef(
+            get_investigation_summary,
+            name="get_investigation_summary",
+            description=(
+                "Read compact shared findings, evidence provenance, prior "
+                "specialist reports, hypotheses, and unresolved questions."
+            ),
+        )]
+        for role in ROLES:
+            def make_delegate(selected_role: str):
+                async def delegate(mission: str) -> str:
+                    """Delegate an independent investigation mission.
+
+                    Args:
+                      mission: Bounded specialist mission and expected evidence.
+                    """
+                    return await self.dispatch(selected_role, mission)
+
+                return delegate
+
+            result.append(ToolDef(
+                make_delegate(role),
+                name=f"{_COORDINATION_TOOL_PREFIX}{role}",
+                description=(
+                    f"Dispatch the production {role} worker: "
+                    f"{ROLE_DESCRIPTIONS[role]} "
+                    "The specialist automatically receives official task context, "
+                    "bounded shared evidence, and the official bash/python tools."
+                ),
+                parallel=True,
+            ))
+        return result
+
+
+class _GlobalModelGate:
+    """Concurrency-safe hard model-call ceiling shared by commander/children."""
+
+    def __init__(self, limit: int) -> None:
+        if limit <= 0:
+            raise ValueError("model-call limit must be positive")
+        self.limit = limit
+        self.calls = 0
+        self.by_role: dict[str, int] = {}
+        self._lock = asyncio.Lock()
+
+    def agent(self, role: str):
+        """Return a transparent Inspect Model with shared call accounting.
+
+        Returning an Inspect ``Model`` (rather than an Agent-shaped callable)
+        is important: pinned ``react`` otherwise treats the callable as a
+        custom agent and intentionally disables its native compaction handler.
+        """
+        from inspect_ai._util.notgiven import NOT_GIVEN
+        from inspect_ai.model import GenerateConfig, Model, get_model
+
+        gate = self
+        underlying = get_model()
+
+        class _BudgetedModel(Model):
+            def __init__(self) -> None:
+                # Reuse the active provider/client; this proxy must not create
+                # a second credentialed model or alter its wire configuration.
+                super().__init__(underlying.api, underlying.config,
+                                 underlying.model_args)
+                self._underlying = underlying
+
+            async def generate(
+                self, input, tools=(), tool_choice=None,
+                config: GenerateConfig | None = None, cache=NOT_GIVEN,
+            ):
+                async with gate._lock:
+                    if gate.calls >= gate.limit:
+                        from inspect_ai.util import LimitExceededError
+                        raise LimitExceededError(
+                            "custom", value=gate.calls, limit=gate.limit,
+                            message=(
+                                "CyberOrion global model-call ceiling reached: "
+                                f"{gate.calls}/{gate.limit}"),
+                        )
+                    gate.calls += 1
+                    gate.by_role[role] = gate.by_role.get(role, 0) + 1
+                return await self._underlying.generate(
+                    input=input, tools=tools, tool_choice=tool_choice,
+                    config=config or GenerateConfig(), cache=cache,
+                )
+
+        return _BudgetedModel()
+
+    def snapshot(self) -> dict[str, Any]:
+        return {
+            "limit": self.limit,
+            "calls": self.calls,
+            "remaining": max(0, self.limit - self.calls),
+            "by_role": dict(sorted(self.by_role.items())),
+        }
+
+
+def _usage_snapshot() -> dict[str, Any]:
+    """Read Inspect global sample usage without exposing model responses."""
+    try:
+        from inspect_ai.model._model import sample_model_usage, sample_role_usage
+        from inspect_ai.util import sample_limits
+
+        limits = sample_limits()
+        limit_usage = {}
+        for name in ("token", "tool_call", "time", "working"):
+            item = getattr(limits, name)
+            try:
+                usage = item.usage
+            except (NotImplementedError, RuntimeError):
+                usage = None
+            limit_usage[name] = {
+                "limit": item.limit,
+                "usage": usage,
+            }
+        return {
+            "model_usage": {
+                name: usage.model_dump()
+                for name, usage in sample_model_usage().items()
+            },
+            "role_usage": {
+                name: usage.model_dump()
+                for name, usage in sample_role_usage().items()
+            },
+            "sample_root_limits": limit_usage,
+        }
+    except Exception as exc:  # noqa: BLE001 - audit cannot break official run
+        return {"usage_error": f"{type(exc).__name__}: {exc}"}
+
+
+def create_agent(*, arm: str = "single", **factory_kwargs: Any):
+    """Return the two-level factory expected by ``create_saber_solver``."""
+    if arm not in {"single", "orchestrator_only", "full"}:
+        raise ValueError(f"unknown arm: {arm}")
+    max_dispatches = int(factory_kwargs.get("max_dispatches", 8))
+    max_parallel = int(factory_kwargs.get("max_parallel_dispatches", 4))
+    max_model_calls = int(factory_kwargs.get("max_model_calls", 64))
+    global_tool_call_limit = int(
+        factory_kwargs.get("global_tool_call_limit", 64))
+    if any(value <= 0 for value in (
+            max_dispatches, max_parallel, max_model_calls,
+            global_tool_call_limit)):
+        raise ValueError("resource and dispatch limits must be positive")
+
+    def create_with_prompts(*, instruction_prompt: str = "",
+                            assistant_prompt: str = "", tools=None,
+                            max_steps: int = 25, **_kwargs: Any):
+        official_tools = list(tools or ())
+
         async def solve(state, _generate):
-            from inspect_ai.model import ChatMessageSystem, ChatMessageUser, get_model
+            from inspect_ai.agent import AgentPrompt, AgentState, react
             from inspect_ai.util import store
 
-            official_tools = {spec.name: spec
-                              for spec in (_tool_spec(t) for t in (tools or []))}
-            messages = []
-            for message in getattr(state, "messages", [])[-12:]:
-                content = getattr(message, "content", "")
-                if content:
-                    messages.append({"role": getattr(message, "role", "user"),
-                                     "content": str(content)[:12000]})
-            visible = getattr(state, "input", "") or (messages[-1]["content"] if messages else "")
-            official_context_json, context_audit = build_official_context(
+            started = time.perf_counter()
+            # SABER's task metadata keeps the pinned upstream max_steps intact.
+            # CyberOrion applies one explicit global diagnostic/publication
+            # tool ceiling uniformly to all three arms so coordination and
+            # child official-tool calls cannot bypass accounting.
+            state.tool_call_limit = global_tool_call_limit
+            task_context = _task_input(state)
+            _, context_audit = build_official_context(
                 instruction_prompt=instruction_prompt,
-                assistant_prompt=assistant_prompt, task_input=str(visible))
-            tools_json = [{"name": t.name, "description": t.description,
-                           "input_schema": t.input_schema}
-                          for t in official_tools.values()]
+                assistant_prompt=assistant_prompt,
+                task_input=task_context,
+            )
+            contract = arm_tool_contract(arm, official_tools)
+            model_gate = _GlobalModelGate(max_model_calls)
+            shared = InvestigationState(
+                hashlib.sha256(task_context.encode()).hexdigest())
+            agent_state = AgentState(messages=state.messages)
+            arm_addition = SINGLE_PROMPT if arm == "single" else (
+                ORCHESTRATOR_ONLY_PROMPT if arm == "orchestrator_only"
+                else COMMANDER_PROMPT)
+            native_tools = list(official_tools)
+            if arm == "full":
+                controller = _DispatchController(
+                    task_context=task_context,
+                    instruction_prompt=instruction_prompt,
+                    assistant_prompt=assistant_prompt,
+                    official_tools=official_tools,
+                    commander_messages=agent_state.messages,
+                    max_dispatches=max_dispatches,
+                    max_parallel_dispatches=max_parallel,
+                    model_gate=model_gate,
+                )
+                shared = controller.state
+                # Production V2 commander delegates investigation and does not
+                # directly own environment investigation tools.
+                native_tools = controller.tools()
 
-            async def llm(system: str, user: str) -> str:
-                prompt = (system + "\n\nOfficial SABER instruction:\n"
-                          + str(instruction_prompt)
-                          + "\n\nOfficial SABER assistant prompt:\n"
-                          + str(assistant_prompt)
-                          + "\n\nOfficial task context:\n" + str(visible)[:12000]
-                          + "\nConversation:\n" + json.dumps(messages, ensure_ascii=False)
-                          + "\nAvailable official tools:\n" + json.dumps(tools_json, ensure_ascii=False)
-                          + "\nRuntime request:\n" + user)
-                from inspect_ai.model import GenerateConfig
-                response = await get_model().generate(
-                    [ChatMessageSystem(
-                        content="You are CyberOrion's auditable ExCyTIn investigator. Return only the requested JSON decision."),
-                     ChatMessageUser(content=prompt)],
-                    config=GenerateConfig(temperature=0))
-                return response.completion
-
-            cfg = RuntimeConfig(max_steps=min(int(max_steps), 30), max_llm_calls=min(int(max_steps), 30),
-                                max_tool_calls=min(int(max_steps), 30), max_dispatches=8, max_role_steps=6)
-            runners = {"single": run_reference,
-                       "orchestrator_only": run_orchestrator_only,
-                       "full": run_superagent}
-            result = await runners[arm](
-                task=official_context_json, llm=llm, tools=official_tools, config=cfg)
+            native_agent = react(
+                name=f"cyberorion_excytin_{arm}",
+                prompt=AgentPrompt(
+                    instructions=_combined_instructions(
+                        instruction_prompt, arm_addition),
+                    assistant_prompt=assistant_prompt or None,
+                    handoff_prompt=None,
+                ),
+                tools=native_tools,
+                model=model_gate.agent(
+                    "single" if arm == "single" else "orchestrator"),
+                submit=True,
+                compaction=_native_context_compaction(),
+                truncation="auto",
+            )
+            agent_state = await native_agent(agent_state)
+            state.messages = agent_state.messages
+            state.output = agent_state.output
+            shared.ingest_messages(
+                state.messages,
+                role="single" if arm == "single" else "orchestrator",
+                official_names=set(contract["official_environment_tools"]),
+            )
+            trace = {
+                "schema": "cyberorion_excytin_native_trace_v1",
+                "arm": arm,
+                "max_steps_from_official_task": int(max_steps),
+                "global_tool_call_limit": global_tool_call_limit,
+                "official_tool_contract": contract,
+                "full_tool_topology": {
+                    "commander_environment_tools": contract[
+                        "commander_environment_tools"],
+                    "commander_coordination_tools": (
+                        contract["commander_state_tools"]
+                        + contract["delegation_tools"]
+                    ),
+                    "worker_environment_tools": contract[
+                        "worker_environment_tools"],
+                    "final_answer_owner": "commander",
+                    "final_answer_tool": "submit",
+                },
+                "context_audit": context_audit,
+                "shared_investigation_state": shared.audit_snapshot(),
+                "inspect_usage": _usage_snapshot(),
+                "global_model_call_budget": model_gate.snapshot(),
+                "wall_clock_sec": time.perf_counter() - started,
+                "native_inspect_tool_execution": True,
+                "custom_json_action_protocol": False,
+                "output_or_context_truncation_by_bridge": False,
+                "native_context_management": {
+                    "strategy": "CompactionTrim",
+                    "threshold_tokens": (
+                        _NATIVE_CONTEXT_COMPACTION_THRESHOLD_TOKENS),
+                    "preserve_fraction": _NATIVE_CONTEXT_COMPACTION_PRESERVE,
+                    "raw_inspect_transcript_retained": True,
+                },
+                "bounded_workspace": {
+                    "raw_outputs_retained_in_inspect_audit": True,
+                    "model_visible_raw_transcripts": False,
+                    "compacted_evidence_count": sum(
+                        bool(item.get("shared_state_truncated"))
+                        for item in shared.evidence
+                    ),
+                    "max_raw_tool_output_chars": max(
+                        (int(item.get("raw_chars", 0))
+                         for item in shared.evidence), default=0),
+                },
+            }
             store().set("cyberorion_arm", arm)
-            store().set("cyberorion_runtime_trace", result)
+            store().set("cyberorion_runtime_trace", trace)
             store().set("cyberorion_context_audit", context_audit)
-            from inspect_ai.model import ModelOutput
-            state.output = ModelOutput.from_content(
-                get_model().name, str(result.get("output") or ""))
             return state
+
         return solve
+
     return create_with_prompts
 
 
 def register_official_agents() -> None:
+    """Register three CyberOrion arms without changing SABER itself."""
     from saber.agents import AgentRegistry
+
     for name, arm in (
         ("cyberorion_single", "single"),
         ("cyberorion_orchestrator_only", "orchestrator_only"),
         ("cyberorion_full", "full"),
     ):
         if AgentRegistry.get(name) is None:
-            AgentRegistry.register(name, lambda _arm=arm, **kw: create_agent(arm=_arm, **kw))
+            AgentRegistry.register(
+                name, lambda _arm=arm, **kwargs: create_agent(
+                    arm=_arm, **kwargs))
+
+
+__all__ = [
+    "COMMANDER_PROMPT", "InvestigationState", "ORCHESTRATOR_ONLY_PROMPT",
+    "ROLE_DESCRIPTIONS", "ROLES", "SINGLE_PROMPT", "SpecialistReport",
+    "arm_tool_contract", "build_official_context", "create_agent",
+    "official_tool_names", "parse_specialist_report",
+    "register_official_agents", "specialist_prompt",
+]

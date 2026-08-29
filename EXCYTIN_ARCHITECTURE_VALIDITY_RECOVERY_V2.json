@@ -1,0 +1,96 @@
+{
+  "schema": "excytin_architecture_validity_recovery_v2",
+  "generated_at": "2026-08-29",
+  "overall": "FAIL",
+  "large_performance_run_authorized": false,
+  "scorer_executed": false,
+  "reward_inspected": false,
+  "failure_reasons": [
+    "Full did not complete the final-source resource calibration because the official incident-55 SABER service failed its healthcheck during permanent-service startup.",
+    "No common three-arm publication resource ceiling can be frozen from incomplete calibration evidence."
+  ],
+  "provenance": {
+    "cyberorion_head": "2de01ff1c448b805a81d46184f5bffaf195bc375",
+    "cyberorion_head_tree": "079d0ec5ea583c8cc23e3f3bf565eeb1cafec203",
+    "tracked_dirty_diff_sha256": "c7eb371091aa67a749c08c2f5228638c89f67bcb8f298d65009a70a73e49b9fd",
+    "resource_manifest": "benchmarks/manifests/excytin_architecture_resource_calibration_v5.json",
+    "resource_manifest_sha256": "6adcaec758b14cfb4eaa5fdf3507f7020adbe38c87e052bb131e2f186528284c",
+    "acesevals_commit": "17135140d0fdf52c2264a1fc248cf01e16b23a79",
+    "inspect_commit": "f94a85b6b3a246d2e4417b49bdda96fd8f04b93a",
+    "saber_commit": "a9bdce1343fd1c331aafda3119cbf0d48f215382",
+    "saber_correctness_patch_sha256": "93d847dfa0c3f0976f412ae74652df139c5415351e395b9a9031e08db8d8fe6f"
+  },
+  "settings": {
+    "model": "openai/MiniMax-M3",
+    "temperature": 0,
+    "thinking": "disabled",
+    "episodes_per_task": 1,
+    "official_scorer_executed": false,
+    "diagnostic_limits": {
+      "token_limit": 8000000,
+      "time_limit_sec": 1800,
+      "global_tool_call_limit": 256,
+      "global_model_call_limit": 256
+    }
+  },
+  "architecture_gate": {
+    "native_inspect_tool_path": "PASS",
+    "official_task_tools_scorer_unchanged": "PASS",
+    "no_scorer_or_gold_leakage": "PASS",
+    "single_full_environment_tool_union": "PASS",
+    "scripted_delegation_and_global_accounting": "PASS",
+    "real_model_full_mechanism": "PARTIAL_EVIDENCE",
+    "three_arm_resource_calibration": "FAIL"
+  },
+  "resource_calibration": {
+    "single": {
+      "status": "success",
+      "samples": 3,
+      "official_tool_calls": 57,
+      "llm_calls": 60,
+      "provider_tokens": 667341,
+      "wall_clock_sec_total": 222.979,
+      "max_single_sample": {
+        "official_tool_calls": 41,
+        "llm_calls": 42,
+        "provider_tokens": 576952,
+        "wall_clock_sec": 177.309
+      },
+      "contract_errors": 0,
+      "truncation_events": 0,
+      "hard_limit_events": 0
+    },
+    "orchestrator_only": {
+      "status": "success_after_infrastructure_retry",
+      "samples": 3,
+      "dispatches": 0,
+      "official_tool_calls": 29,
+      "llm_calls": 28,
+      "provider_tokens": 150276,
+      "wall_clock_sec_total": 201.316,
+      "max_single_sample": {
+        "official_tool_calls": 11,
+        "llm_calls": 12,
+        "provider_tokens": 72100,
+        "wall_clock_sec": 132.532
+      },
+      "contract_errors": 0,
+      "truncation_events": 0,
+      "hard_limit_events": 0
+    },
+    "full": {
+      "status": "blocked_by_official_service_startup",
+      "samples": 0,
+      "model_calls": 0,
+      "official_tool_calls": 0,
+      "reason": "incident-55 permanent service failed SABER healthcheck; no eval artifact"
+    }
+  },
+  "performance": {
+    "started": false,
+    "publication_budget_frozen": false
+  },
+  "artifact_roots": [
+    "/tmp/cyberorion_cage_runs/excytin_architecture_recovery_restart2_20260829/resource_calibration_v5/"
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "schema": "excytin_architecture_validity_v1",
+  "generated_at": "2026-08-28",
+  "overall": "FAIL",
+  "large_performance_run_authorized": false,
+  "failure_reasons": [
+    "Full made zero delegate_* requests across all nine fresh real-model mechanism samples and behaved as a monolithic commander.",
+    "The final generous diagnostic run hit the 1000000-token sample ceiling at 1006504 tokens, followed by a 1008588-token fallback event.",
+    "Native Inspect truncated representative official tool outputs to 16384 bytes; truncation occurred in eight of nine real-model samples."
+  ],
+  "provenance": {
+    "cyberorion_head": "60438fbd0ea7dbdba71a0da13241e11c8af18a37",
+    "cyberorion_tree": "eb89fc8071b2794a81ea6154a515dc2a304fb78c",
+    "runtime_source_git_diff_sha256": "1afbc876a7f99b04d6978a326642d2426ecd288eaa5bcda9dac6ab663553ab7e",
+    "bridge_sha256": "061b304e9d77c7997d3d8abe4593d602b702cd2cb83f9618907844598014fed9",
+    "acesevals_head": "17135140d0fdf52c2264a1fc248cf01e16b23a79",
+    "acesevals_tree": "4d5dea0db0073189210d5cdf1d56eab86780ce0e",
+    "saber_pin": "a9bdce1343fd1c331aafda3119cbf0d48f215382",
+    "inspect_pin": "f94a85b6b3a246d2e4417b49bdda96fd8f04b93a",
+    "upstream_tracked_changes": false
+  },
+  "settings": {
+    "model": "openai/MiniMax-M3",
+    "temperature": 0,
+    "thinking": "disabled",
+    "official_scorer_executed_in_mechanism_smoke": false,
+    "episodes_per_task_arm": 1,
+    "max_samples": 1
+  },
+  "mandatory_items": {
+    "A_official_task_scorer_tools_unchanged": "PASS",
+    "B_no_scorer_or_gold_leakage": "PASS",
+    "C_single_complete_official_tool_set": "PASS",
+    "D_full_team_tool_union_equals_single": "PASS",
+    "E_commander_four_roles_and_dispatch_semantics": "PASS",
+    "F_specialist_receives_task_mission_shared_state_tools": "PASS",
+    "G_specialist_native_official_tool_and_evidence": "PASS_OFFLINE_NATIVE_PROBE",
+    "H_commander_receives_report_and_continues": "PASS_OFFLINE_NATIVE_PROBE",
+    "I_independent_parallel_specialists": "PASS_OFFLINE_NATIVE_PROBE",
+    "J_shared_child_budget_accounting": "PASS_OFFLINE_NATIVE_PROBE",
+    "K_no_representative_truncation_or_budget_binding": "FAIL",
+    "L_contract_and_parser_errors_zero": "PASS",
+    "M_no_extra_hidden_information": "PASS"
+  },
+  "offline_native_probe": {
+    "model": "Inspect mock model",
+    "official_tools": ["bash", "python"],
+    "native_tool_execution": true,
+    "dispatches": 3,
+    "roles": ["watcher", "analyst", "hunter"],
+    "successful_reports": 3,
+    "empty_reports": 0,
+    "parse_failures": 0,
+    "role_budget_exhaustions": 0,
+    "tool_failures": 0,
+    "parallel_watcher_analyst_overlap": true,
+    "shared_evidence_propagated_to_hunter": true,
+    "commander_reports_intact": true,
+    "global_model_calls": 9,
+    "inspect_root_tool_usage": 10,
+    "inspect_root_token_usage": 1350,
+    "representative_12001_character_output_preserved": true,
+    "custom_json_action_protocol": false,
+    "bridge_truncation": false
+  },
+  "real_model_attempts": [
+    {
+      "name": "attempt1",
+      "manifest_sha256": "6bf4a9234c71b42514ca2b8185ceb085e0385d3d70d7169004b121f10df9590c",
+      "task_count": 3,
+      "completed": 3,
+      "natural_dispatches": 0,
+      "official_tool_calls_or_events": [15, 9, 9],
+      "model_calls": [7, 10, 8],
+      "root_token_usage": [77196, 58199, 67610],
+      "root_tool_usage": [16, 10, 10],
+      "wall_time_sec": [40.610, 41.372, 29.360],
+      "tool_outputs_truncated": [1, 0, 1],
+      "contract_or_tool_errors": 0
+    },
+    {
+      "name": "attempt2",
+      "manifest_sha256": "84d47cc75ce33ce616cc7cbb2517cc78ca35d8a5348b0681989ebf0702f5b21c",
+      "task_count": 3,
+      "completed": 3,
+      "natural_dispatches": 0,
+      "official_tool_events": [8, 25, 11],
+      "tool_limit_event": "value 26 / limit 25",
+      "tool_outputs_truncated": [1, 1, 3],
+      "contract_or_tool_errors": 0
+    },
+    {
+      "name": "attempt3_final",
+      "manifest_sha256": "8e741da6dc1524100e2af018b9fa9ded662c65325dbc25d23aa103eecc48b510",
+      "task_count": 3,
+      "completed": 3,
+      "natural_dispatches": 0,
+      "official_tool_events": [13, 46, 23],
+      "model_events": [8, 48, 23],
+      "completed_trace_root_token_usage": [75448, null, 433850],
+      "completed_trace_root_tool_usage": [13, null, 23],
+      "completed_trace_wall_time_sec": [38.391, null, 74.477],
+      "token_limit_events": [1006504, 1008588],
+      "token_limit": 1000000,
+      "global_tool_call_limit": 64,
+      "tool_outputs_truncated": [1, 1, 1],
+      "contract_or_tool_errors": 0
+    }
+  ],
+  "tests": {
+    "targeted": "54 passed",
+    "git_diff_check": "PASS",
+    "full_suite": "600 passed, 1 skipped, 10 failed",
+    "full_suite_failure_classification": "unrelated pre-existing environment/project assertions: missing sibling cai-latest files plus server/docs/reportlab/scenario tests"
+  },
+  "proposed_frozen_performance_budget": null,
+  "stop_reason": "Architecture-validity and non-binding-resource gates failed before performance."
+}

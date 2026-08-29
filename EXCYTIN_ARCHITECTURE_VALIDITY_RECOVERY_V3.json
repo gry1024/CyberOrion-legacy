@@ -1,0 +1,130 @@
+{
+  "schema": "excytin_architecture_validity_recovery_v3",
+  "generated_at": "2026-08-29",
+  "architecture_validity": "PASS",
+  "performance_started": false,
+  "performance_authorized": false,
+  "scorer_executed": false,
+  "reward_inspected": false,
+  "provenance": {
+    "cyberorion_head": "2de01ff1c448b805a81d46184f5bffaf195bc375",
+    "cyberorion_head_tree": "079d0ec5ea583c8cc23e3f3bf565eeb1cafec203",
+    "acesevals_commit": "17135140d0fdf52c2264a1fc248cf01e16b23a79",
+    "inspect_commit": "f94a85b6b3a246d2e4417b49bdda96fd8f04b93a",
+    "saber_commit": "a9bdce1343fd1c331aafda3119cbf0d48f215382",
+    "saber_resource_limit_patch_sha256": "93d847dfa0c3f0976f412ae74652df139c5415351e395b9a9031e08db8d8fe6f",
+    "saber_startup_retry_patch_sha256": "c9d7e6423ea4864448febd56128ebdb73acb4dc21ffe7dddbf2136fd5b6056de",
+    "saber_patched_sandbox_sha256": "0abfa204d9050b3569256b3c7c8f8df6b3669455ac6bbe3b3129465d8a32e8a8",
+    "resource_manifest": "benchmarks/manifests/excytin_architecture_resource_calibration_v5.json",
+    "resource_manifest_sha256": "6adcaec758b14cfb4eaa5fdf3507f7020adbe38c87e052bb131e2f186528284c"
+  },
+  "settings": {
+    "model": "openai/MiniMax-M3",
+    "temperature": 0,
+    "thinking": "disabled",
+    "episodes_per_task": 1,
+    "official_scorer_executed": false,
+    "resource_calibration_limits": {
+      "token_limit": 8000000,
+      "time_limit_sec": 1800,
+      "global_model_call_limit": 256,
+      "global_tool_call_limit": 256
+    }
+  },
+  "mandatory_gates": {
+    "official_task_tools_scorer_unchanged": "PASS",
+    "no_scorer_or_gold_leakage": "PASS",
+    "single_full_environment_tool_union": "PASS",
+    "commander_role_catalog_and_dispatch": "PASS",
+    "worker_context_tools_and_structured_reports": "PASS",
+    "scripted_parallel_delegation": "PASS",
+    "natural_full_delegation": "PASS",
+    "natural_worker_investigation": "PASS",
+    "natural_evidence_reports_consumed": "PASS",
+    "contract_errors": 0,
+    "sixteen_kib_truncation_events": 0,
+    "resource_limit_events": 0,
+    "resource_calibration_all_arms": "PASS"
+  },
+  "natural_full_mechanism": {
+    "samples": 3,
+    "dispatches": 4,
+    "official_environment_tool_calls": 44,
+    "valid_reports": 4,
+    "evidence_bearing_reports": 4,
+    "reports_consumed": 4,
+    "model_invalid_actions": 1,
+    "contract_errors": 0,
+    "truncation_events": 0
+  },
+  "resource_calibration": {
+    "single": {
+      "samples": 3,
+      "model_calls_total": 31,
+      "root_tool_events_total": 36,
+      "official_environment_tools_total": 33,
+      "provider_tokens_total": 170780,
+      "wall_time_total_sec": 115.207,
+      "max_model_calls": 13,
+      "max_root_tool_events": 14,
+      "max_provider_tokens": 76268,
+      "max_wall_time_sec": 60.728,
+      "contract_errors": 0,
+      "truncation_events": 0,
+      "resource_limit_events": 0
+    },
+    "orchestrator_only": {
+      "samples": 3,
+      "model_calls_total": 28,
+      "root_tool_events_total": 32,
+      "official_environment_tools_total": 29,
+      "provider_tokens_total": 150276,
+      "wall_time_total_sec": 201.316,
+      "max_model_calls": 12,
+      "max_root_tool_events": 12,
+      "max_provider_tokens": 72100,
+      "max_wall_time_sec": 132.532,
+      "dispatches": 0,
+      "contract_errors": 0,
+      "truncation_events": 0,
+      "resource_limit_events": 0
+    },
+    "full": {
+      "samples": 3,
+      "model_calls_total": 45,
+      "root_tool_events_total": 58,
+      "official_environment_tools_total": 44,
+      "provider_tokens_total": 383800,
+      "wall_time_total_sec": 241.395,
+      "max_model_calls": 19,
+      "max_root_tool_events": 29,
+      "max_provider_tokens": 171864,
+      "max_wall_time_sec": 123.913,
+      "dispatches": 4,
+      "max_dispatches_per_sample": 2,
+      "contract_errors": 0,
+      "model_invalid_actions": 1,
+      "truncation_events": 0,
+      "resource_limit_events": 0
+    }
+  },
+  "proposed_frozen_common_resource_budget": {
+    "global_model_calls": 32,
+    "global_tool_call_limit": 64,
+    "token_limit": 262144,
+    "time_limit_sec": 180,
+    "max_dispatches": 4,
+    "max_parallel_dispatches": 4,
+    "derived_from_resource_data_only": true,
+    "applied_to_performance": false
+  },
+  "test_status": {
+    "targeted_architecture_and_saber": "126 passed, 1 skipped",
+    "startup_patch": "11 passed, 1 skipped",
+    "full_suite": "613 passed, 2 skipped, 10 failed",
+    "git_diff_check": "PASS"
+  },
+  "artifact_roots": [
+    "/tmp/cyberorion_cage_runs/excytin_architecture_recovery_restart2_20260829/resource_calibration_v5/"
+  ]
+}

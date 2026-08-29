@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ast
 import asyncio
 import io
 import json
@@ -593,30 +594,30 @@ def test_excytin_official_agent_bridge_factory_shape() -> None:
         assert inspect.iscoroutinefunction(solver)
 
 
-def test_excytin_official_agent_tool_spec_prefers_attributes() -> None:
-    from cyberorion.bench.excytin_official_agent import _tool_spec
+def test_excytin_official_agent_keeps_native_tools_and_fair_union() -> None:
+    from types import SimpleNamespace
+    from cyberorion.bench.excytin_official_agent import arm_tool_contract
 
-    async def official_call(x: str) -> str:
-        """query telemetry"""
-        return x
-
-    official_call.name = "run_query"  # type: ignore[attr-defined]
-    official_call.description = "Run a read-only SQL query"  # type: ignore[attr-defined]
-    official_call.input = {"type": "object",  # type: ignore[attr-defined]
-                           "properties": {"x": {"type": "string"}},
-                           "required": ["x"]}
-    spec = _tool_spec(official_call)
-    assert spec.name == "run_query"
-    assert spec.description == "Run a read-only SQL query"
-    assert spec.input_schema["required"] == ["x"]
-    # 无属性回退到签名/docstring 自省
-    async def plain(y: str) -> str:
-        """plain tool"""
-        return y
-
-    spec2 = _tool_spec(plain)
-    assert spec2.name == "plain"
-    assert spec2.input_schema["required"] == ["y"]
+    tools = [SimpleNamespace(name="bash"), SimpleNamespace(name="python")]
+    contracts = {
+        arm: arm_tool_contract(arm, tools)
+        for arm in ("single", "orchestrator_only", "full")
+    }
+    assert all(row["official_environment_tools"] == ["bash", "python"]
+               for row in contracts.values())
+    assert all(row["official_tool_union"] == ["bash", "python"]
+               for row in contracts.values())
+    assert contracts["single"]["delegation_tools"] == []
+    assert contracts["orchestrator_only"]["delegation_tools"] == []
+    assert contracts["full"]["delegation_tools"] == [
+        "dispatch_triage", "dispatch_threat_hunter",
+        "dispatch_lateral_analyst", "dispatch_escalation",
+    ]
+    assert contracts["full"]["commander_environment_tools"] == []
+    assert all(
+        names == ["bash", "python"]
+        for names in contracts["full"]["worker_environment_tools"].values()
+    )
 
 
 def test_official_runner_provenance_is_explicit(tmp_path: Path) -> None:
@@ -625,17 +626,48 @@ def test_official_runner_provenance_is_explicit(tmp_path: Path) -> None:
         upstream=tmp_path, repo=tmp_path, arm="cyberorion_single",
         model="openai/m", judge_llm="openai/j", task_ids=["task-1", "task-2"],
         manifest_sha256="a" * 64,
-        extra_task_args={}, started=1.0, finished=2.0, log_dir=tmp_path / "logs")
+        extra_task_args={}, started=1.0, finished=2.0,
+        log_dir=tmp_path / "logs", mechanism_only=True,
+        resource_limits={"token_limit": 1000})
     assert provenance["official_execution"] is True
     assert provenance["sqlite_projection_involved"] is False
     assert provenance["upstream"] == "microsoft/ACESEvals"
     assert provenance["arm"] == "cyberorion_single"
     assert provenance["task_ids"] == ["task-1", "task-2"]
     assert provenance["task_manifest_sha256"] == "a" * 64
-    assert provenance["decoding_config"] == {"temperature": 0}
+    assert provenance["decoding_config"] == {
+        "temperature": 0,
+        "thinking": "disabled",
+        "extra_body": {"thinking": {"type": "disabled"}},
+    }
     assert provenance["judge_config"] == {"model": "openai/j"}
+    assert provenance["mechanism_only"] is True
+    assert provenance["official_scorer_executed"] is False
+    assert provenance["resource_limits"] == {"token_limit": 1000}
     assert set(provenance["cyberorion_source"]) == {
-        "git_head", "git_tree_sha", "git_dirty", "git_diff_sha256"}
+        "git_head", "git_tree_sha", "git_dirty", "git_diff_sha256",
+        "untracked_paths", "working_tree_fingerprint_sha256"}
+
+
+def test_official_runner_applies_declared_global_tool_limit_at_eval_root() -> None:
+    source = (Path(__file__).resolve().parents[1] / "scripts" /
+              "run_excytin_official.py").read_text(
+        encoding="utf-8")
+    tree = ast.parse(source)
+    eval_calls = [
+        node for node in ast.walk(tree)
+        if isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Attribute)
+        and node.func.attr == "eval"
+    ]
+    assert len(eval_calls) == 1
+    keywords = {item.arg: item.value for item in eval_calls[0].keywords}
+    value = keywords["tool_call_limit"]
+    assert isinstance(value, ast.Attribute)
+    assert isinstance(value.value, ast.Name) and value.value.id == "args"
+    assert value.attr == "global_tool_call_limit"
+    assert '"max_model_calls": args.global_model_call_limit' in source
+    assert '"global_model_calls": args.global_model_call_limit' in source
 
 
 def test_excytin_sql_tools_have_explicit_required_schemas(tmp_path: Path) -> None:

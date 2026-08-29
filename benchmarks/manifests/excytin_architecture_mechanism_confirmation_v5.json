@@ -1,0 +1,21 @@
+{
+  "schema": "excytin_architecture_mechanism_manifest_v1",
+  "selection_policy": "Fresh post-native-model-proxy mechanism-only confirmation; three distinct incidents and one task per incident, fixed before model calls.",
+  "dataset": "latest_cleaned_test_set",
+  "task_ids": [
+    "incident_134_latest_cleaned_test_set_task_13",
+    "incident_55_latest_cleaned_test_set_task_13",
+    "incident_166_latest_cleaned_test_set_task_13"
+  ],
+  "model": "openai/MiniMax-M3",
+  "temperature": 0,
+  "thinking": "disabled",
+  "episodes_per_task": 1,
+  "official_scorer_executed": false,
+  "temporary_limits": {
+    "token_limit": 8000000,
+    "time_limit_sec": 1800,
+    "global_tool_call_limit": 256,
+    "global_model_call_limit": 256
+  }
+}

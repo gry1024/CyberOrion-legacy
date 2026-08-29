@@ -1,0 +1,15 @@
+{
+  "schema": "excytin_architecture_mechanism_manifest_v1",
+  "selection_policy": "Fresh post-restart mechanism-only smoke; three distinct incidents, fixed before model calls; task_6 IDs are excluded because their YAML answer-example comments were read during setup diagnosis.",
+  "dataset": "latest_cleaned_test_set",
+  "task_ids": [
+    "incident_134_latest_cleaned_test_set_task_7",
+    "incident_55_latest_cleaned_test_set_task_7",
+    "incident_166_latest_cleaned_test_set_task_7"
+  ],
+  "model": "openai/MiniMax-M3",
+  "temperature": 0,
+  "thinking": "disabled",
+  "episodes_per_task": 1,
+  "official_scorer_executed": false
+}
