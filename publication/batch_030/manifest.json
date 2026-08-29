@@ -1,0 +1,67 @@
+{
+  "schema": "excytin_official_performance_batch_manifest_v1",
+  "status": "FROZEN_BEFORE_SCORER",
+  "batch_id": "batch_030",
+  "batch_index": 30,
+  "master_manifest": "publication/master_manifest.json",
+  "master_manifest_sha256": "c32b810bd53223964b0c385366ebb3771f969e00e2164b2b5d2f306133634fa1",
+  "dataset": "latest_cleaned_test_set",
+  "task_ids": [
+    "incident_5_latest_cleaned_test_set_task_49",
+    "incident_34_latest_cleaned_test_set_task_49",
+    "incident_39_latest_cleaned_test_set_task_49",
+    "incident_55_latest_cleaned_test_set_task_49",
+    "incident_134_latest_cleaned_test_set_task_49",
+    "incident_166_latest_cleaned_test_set_task_49",
+    "incident_322_latest_cleaned_test_set_task_49",
+    "incident_5_latest_cleaned_test_set_task_50",
+    "incident_34_latest_cleaned_test_set_task_50",
+    "incident_39_latest_cleaned_test_set_task_50",
+    "incident_55_latest_cleaned_test_set_task_50",
+    "incident_134_latest_cleaned_test_set_task_50"
+  ],
+  "task_count": 12,
+  "incident_counts": {
+    "5": 2,
+    "34": 2,
+    "39": 2,
+    "55": 2,
+    "134": 2,
+    "166": 1,
+    "322": 1
+  },
+  "protocol": {
+    "arms": [
+      "cyberorion_single",
+      "cyberorion_orchestrator_only",
+      "cyberorion_full"
+    ],
+    "execution_order": [
+      "cyberorion_single",
+      "cyberorion_orchestrator_only",
+      "cyberorion_full"
+    ],
+    "same_task_ids_per_arm": true,
+    "episodes_per_task": 1,
+    "model": "openai/MiniMax-M3",
+    "temperature": 0,
+    "thinking": "disabled",
+    "official_scorer": true,
+    "judge_llm": "openai/azure/gpt-4.1",
+    "resource_ceiling": {
+      "global_model_calls": 32,
+      "global_root_tool_calls": 64,
+      "provider_tokens": 320000,
+      "wall_time_sec": 240,
+      "max_dispatches": 4,
+      "max_parallel_dispatches": 4,
+      "official_task_max_steps": 25
+    },
+    "source_head": "6ef40d74c7df138c2a4e6c913beb2c265702e7fa",
+    "source_tree": "e4b96b48ec53f75670e4b9ab7265573918acfc96",
+    "acesevals_commit": "17135140d0fdf52c2264a1fc248cf01e16b23a79",
+    "acesevals_tree": "4d5dea0db0073189210d5cdf1d56eab86780ce0e",
+    "saber_resource_limit_patch_sha256": "93d847dfa0c3f0976f412ae74652df139c5415351e395b9a9031e08db8d8fe6f",
+    "saber_startup_retry_patch_sha256": "c9d7e6423ea4864448febd56128ebdb73acb4dc21ffe7dddbf2136fd5b6056de"
+  }
+}

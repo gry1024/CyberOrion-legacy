@@ -1,0 +1,832 @@
+{
+  "schema": "excytin_official_performance_manifest_index_v1",
+  "status": "FROZEN_BEFORE_FIRST_SCORER_RESULT",
+  "frozen_at": "2026-08-29",
+  "master": {
+    "path": "publication/master_manifest.json",
+    "sha256": "c32b810bd53223964b0c385366ebb3771f969e00e2164b2b5d2f306133634fa1",
+    "task_count": 599
+  },
+  "batching": {
+    "batch_size": 12,
+    "batch_count": 50,
+    "order_is_frozen": true,
+    "batch_paths": [
+      "publication/batch_001/manifest.json",
+      "publication/batch_002/manifest.json",
+      "publication/batch_003/manifest.json",
+      "publication/batch_004/manifest.json",
+      "publication/batch_005/manifest.json",
+      "publication/batch_006/manifest.json",
+      "publication/batch_007/manifest.json",
+      "publication/batch_008/manifest.json",
+      "publication/batch_009/manifest.json",
+      "publication/batch_010/manifest.json",
+      "publication/batch_011/manifest.json",
+      "publication/batch_012/manifest.json",
+      "publication/batch_013/manifest.json",
+      "publication/batch_014/manifest.json",
+      "publication/batch_015/manifest.json",
+      "publication/batch_016/manifest.json",
+      "publication/batch_017/manifest.json",
+      "publication/batch_018/manifest.json",
+      "publication/batch_019/manifest.json",
+      "publication/batch_020/manifest.json",
+      "publication/batch_021/manifest.json",
+      "publication/batch_022/manifest.json",
+      "publication/batch_023/manifest.json",
+      "publication/batch_024/manifest.json",
+      "publication/batch_025/manifest.json",
+      "publication/batch_026/manifest.json",
+      "publication/batch_027/manifest.json",
+      "publication/batch_028/manifest.json",
+      "publication/batch_029/manifest.json",
+      "publication/batch_030/manifest.json",
+      "publication/batch_031/manifest.json",
+      "publication/batch_032/manifest.json",
+      "publication/batch_033/manifest.json",
+      "publication/batch_034/manifest.json",
+      "publication/batch_035/manifest.json",
+      "publication/batch_036/manifest.json",
+      "publication/batch_037/manifest.json",
+      "publication/batch_038/manifest.json",
+      "publication/batch_039/manifest.json",
+      "publication/batch_040/manifest.json",
+      "publication/batch_041/manifest.json",
+      "publication/batch_042/manifest.json",
+      "publication/batch_043/manifest.json",
+      "publication/batch_044/manifest.json",
+      "publication/batch_045/manifest.json",
+      "publication/batch_046/manifest.json",
+      "publication/batch_047/manifest.json",
+      "publication/batch_048/manifest.json",
+      "publication/batch_049/manifest.json",
+      "publication/batch_050/manifest.json"
+    ]
+  },
+  "protocol": {
+    "arms": [
+      "cyberorion_single",
+      "cyberorion_orchestrator_only",
+      "cyberorion_full"
+    ],
+    "arm_labels": {
+      "cyberorion_single": "Single",
+      "cyberorion_orchestrator_only": "Orchestrator-only",
+      "cyberorion_full": "Full"
+    },
+    "execution_order": [
+      "cyberorion_single",
+      "cyberorion_orchestrator_only",
+      "cyberorion_full"
+    ],
+    "same_task_ids_per_arm": true,
+    "episodes_per_task": 1,
+    "model": "openai/MiniMax-M3",
+    "temperature": 0,
+    "thinking": "disabled",
+    "official_scorer": true,
+    "judge_llm": "openai/azure/gpt-4.1",
+    "resource_ceiling": {
+      "global_model_calls": 32,
+      "global_root_tool_calls": 64,
+      "provider_tokens": 320000,
+      "wall_time_sec": 240,
+      "max_dispatches": 4,
+      "max_parallel_dispatches": 4,
+      "official_task_max_steps": 25
+    },
+    "source_head": "6ef40d74c7df138c2a4e6c913beb2c265702e7fa",
+    "source_tree": "e4b96b48ec53f75670e4b9ab7265573918acfc96",
+    "acesevals_commit": "17135140d0fdf52c2264a1fc248cf01e16b23a79",
+    "acesevals_tree": "4d5dea0db0073189210d5cdf1d56eab86780ce0e",
+    "saber_resource_limit_patch_sha256": "93d847dfa0c3f0976f412ae74652df139c5415351e395b9a9031e08db8d8fe6f",
+    "saber_startup_retry_patch_sha256": "c9d7e6423ea4864448febd56128ebdb73acb4dc21ffe7dddbf2136fd5b6056de",
+    "no_architecture_or_benchmark_semantics_changes_after_freeze": true
+  },
+  "batch_manifests": [
+    {
+      "batch_id": "batch_001",
+      "path": "publication/batch_001/manifest.json",
+      "sha256": "35c627bd828ef9263d99dd68b6ce5ff1e841a0caeb5045dd46cc9f7e9f907de7",
+      "task_count": 12,
+      "incident_counts": {
+        "5": 2,
+        "34": 2,
+        "38": 2,
+        "39": 2,
+        "55": 1,
+        "134": 1,
+        "166": 1,
+        "322": 1
+      }
+    },
+    {
+      "batch_id": "batch_002",
+      "path": "publication/batch_002/manifest.json",
+      "sha256": "38dea17f880ad8296f0b059e52bf1e36559cabc0ee0cde9d498644bbf5546d89",
+      "task_count": 12,
+      "incident_counts": {
+        "55": 2,
+        "134": 2,
+        "166": 2,
+        "322": 2,
+        "5": 1,
+        "34": 1,
+        "38": 1,
+        "39": 1
+      }
+    },
+    {
+      "batch_id": "batch_003",
+      "path": "publication/batch_003/manifest.json",
+      "sha256": "e7559398e6ae70d5dab0f822fc6cc87768bf64740873f986b5597b02ebaacbd1",
+      "task_count": 12,
+      "incident_counts": {
+        "5": 2,
+        "34": 2,
+        "38": 2,
+        "39": 2,
+        "55": 1,
+        "134": 1,
+        "166": 1,
+        "322": 1
+      }
+    },
+    {
+      "batch_id": "batch_004",
+      "path": "publication/batch_004/manifest.json",
+      "sha256": "5a2ed9fe4155bd797668601cb248eb95547d92212e5e848a5d391db6b954f114",
+      "task_count": 12,
+      "incident_counts": {
+        "55": 2,
+        "134": 2,
+        "166": 2,
+        "322": 2,
+        "5": 1,
+        "34": 1,
+        "38": 1,
+        "39": 1
+      }
+    },
+    {
+      "batch_id": "batch_005",
+      "path": "publication/batch_005/manifest.json",
+      "sha256": "d0214027205a1bdb98401e92796e89c5b23940df2e31f263663a1cc5d3f0c122",
+      "task_count": 12,
+      "incident_counts": {
+        "5": 2,
+        "34": 2,
+        "38": 2,
+        "39": 2,
+        "55": 1,
+        "134": 1,
+        "166": 1,
+        "322": 1
+      }
+    },
+    {
+      "batch_id": "batch_006",
+      "path": "publication/batch_006/manifest.json",
+      "sha256": "f06daa86642ef83cac7359e68379a6c89529d146b4ec8772a8ae11cbdc72f64e",
+      "task_count": 12,
+      "incident_counts": {
+        "55": 2,
+        "134": 2,
+        "166": 2,
+        "322": 2,
+        "5": 1,
+        "34": 1,
+        "38": 1,
+        "39": 1
+      }
+    },
+    {
+      "batch_id": "batch_007",
+      "path": "publication/batch_007/manifest.json",
+      "sha256": "a9302e58aab33564ee415d8edd33f370e11ad9fb63a088527438357f9d7fd3b0",
+      "task_count": 12,
+      "incident_counts": {
+        "5": 2,
+        "34": 2,
+        "38": 2,
+        "39": 2,
+        "55": 1,
+        "134": 1,
+        "166": 1,
+        "322": 1
+      }
+    },
+    {
+      "batch_id": "batch_008",
+      "path": "publication/batch_008/manifest.json",
+      "sha256": "82b25fb98a9dd883defac6427a09e59b6dfc26a1a75e5e91282953570cf23f64",
+      "task_count": 12,
+      "incident_counts": {
+        "55": 2,
+        "134": 2,
+        "166": 2,
+        "322": 2,
+        "5": 1,
+        "34": 1,
+        "38": 1,
+        "39": 1
+      }
+    },
+    {
+      "batch_id": "batch_009",
+      "path": "publication/batch_009/manifest.json",
+      "sha256": "7f767768ee6b92b5b4483fbf723301c807e0cc65a410d001ade629f678196985",
+      "task_count": 12,
+      "incident_counts": {
+        "5": 2,
+        "34": 2,
+        "39": 2,
+        "55": 2,
+        "134": 2,
+        "166": 1,
+        "322": 1
+      }
+    },
+    {
+      "batch_id": "batch_010",
+      "path": "publication/batch_010/manifest.json",
+      "sha256": "5ccc693fded336a818e864d2b53808161d9df07ba2c0ca154f1b96243ad4bb0b",
+      "task_count": 12,
+      "incident_counts": {
+        "166": 2,
+        "322": 2,
+        "5": 2,
+        "34": 2,
+        "39": 2,
+        "55": 1,
+        "134": 1
+      }
+    },
+    {
+      "batch_id": "batch_011",
+      "path": "publication/batch_011/manifest.json",
+      "sha256": "52c507a079bd2d275741aa095651fc7ad60590b50e92e52560be30885e9a2342",
+      "task_count": 12,
+      "incident_counts": {
+        "55": 2,
+        "134": 2,
+        "166": 2,
+        "322": 2,
+        "5": 2,
+        "34": 1,
+        "39": 1
+      }
+    },
+    {
+      "batch_id": "batch_012",
+      "path": "publication/batch_012/manifest.json",
+      "sha256": "fe22cd07a31f1f77719c58d1ccb24589e940bafcf907d4aa623a3384678fc887",
+      "task_count": 12,
+      "incident_counts": {
+        "34": 2,
+        "39": 2,
+        "55": 2,
+        "134": 2,
+        "166": 2,
+        "322": 1,
+        "5": 1
+      }
+    },
+    {
+      "batch_id": "batch_013",
+      "path": "publication/batch_013/manifest.json",
+      "sha256": "6fe6849dcaa4ba385ec6615af38f4f10ad7c8dedeab9275db195a2c5a760087a",
+      "task_count": 12,
+      "incident_counts": {
+        "322": 2,
+        "5": 2,
+        "34": 2,
+        "39": 2,
+        "55": 2,
+        "134": 1,
+        "166": 1
+      }
+    },
+    {
+      "batch_id": "batch_014",
+      "path": "publication/batch_014/manifest.json",
+      "sha256": "e232499f3f2bb97289bb8db5e694e9d7adc14974c10fe6851af21fa4c71ea31d",
+      "task_count": 12,
+      "incident_counts": {
+        "134": 2,
+        "166": 2,
+        "322": 2,
+        "5": 2,
+        "34": 2,
+        "39": 1,
+        "55": 1
+      }
+    },
+    {
+      "batch_id": "batch_015",
+      "path": "publication/batch_015/manifest.json",
+      "sha256": "0ef1f7a5dc907a53225964bc3bbab446f598e415973ae3f5a5e94147195cef69",
+      "task_count": 12,
+      "incident_counts": {
+        "39": 2,
+        "55": 2,
+        "134": 2,
+        "166": 2,
+        "322": 2,
+        "5": 1,
+        "34": 1
+      }
+    },
+    {
+      "batch_id": "batch_016",
+      "path": "publication/batch_016/manifest.json",
+      "sha256": "795f2212ff6194074c9b5c601b44874504660e6819154cba6fb3cb939daecf66",
+      "task_count": 12,
+      "incident_counts": {
+        "5": 2,
+        "34": 2,
+        "39": 2,
+        "55": 2,
+        "134": 2,
+        "166": 1,
+        "322": 1
+      }
+    },
+    {
+      "batch_id": "batch_017",
+      "path": "publication/batch_017/manifest.json",
+      "sha256": "cedf964292232baa8d8a1dca7af8a492300572683fa4777b73716d3357700152",
+      "task_count": 12,
+      "incident_counts": {
+        "166": 2,
+        "322": 2,
+        "5": 2,
+        "34": 2,
+        "39": 2,
+        "55": 1,
+        "134": 1
+      }
+    },
+    {
+      "batch_id": "batch_018",
+      "path": "publication/batch_018/manifest.json",
+      "sha256": "ac045357674483de8bd724b3c7e10a581b3e944756551d3c7563958a0ed65e2a",
+      "task_count": 12,
+      "incident_counts": {
+        "55": 2,
+        "134": 2,
+        "166": 2,
+        "322": 2,
+        "5": 2,
+        "34": 1,
+        "39": 1
+      }
+    },
+    {
+      "batch_id": "batch_019",
+      "path": "publication/batch_019/manifest.json",
+      "sha256": "b697108cc942821584da32953123854e81a92961165f8fb48d87f2edad3937e9",
+      "task_count": 12,
+      "incident_counts": {
+        "34": 2,
+        "39": 2,
+        "55": 2,
+        "134": 2,
+        "166": 2,
+        "322": 1,
+        "5": 1
+      }
+    },
+    {
+      "batch_id": "batch_020",
+      "path": "publication/batch_020/manifest.json",
+      "sha256": "886a826e3dbf46914054068478730aca76bcddf13c5ac93ae8d16b2a5acd100a",
+      "task_count": 12,
+      "incident_counts": {
+        "322": 2,
+        "5": 2,
+        "34": 2,
+        "39": 2,
+        "55": 2,
+        "134": 1,
+        "166": 1
+      }
+    },
+    {
+      "batch_id": "batch_021",
+      "path": "publication/batch_021/manifest.json",
+      "sha256": "15c1895b9b70b4281e30656fde5d0c3899db50f7a7628ebaac51b03fc9dfd287",
+      "task_count": 12,
+      "incident_counts": {
+        "134": 2,
+        "166": 2,
+        "322": 2,
+        "5": 2,
+        "34": 2,
+        "39": 1,
+        "55": 1
+      }
+    },
+    {
+      "batch_id": "batch_022",
+      "path": "publication/batch_022/manifest.json",
+      "sha256": "be1f07b84a2ef3f5f38b8e8dfe28383bc8c11418d89c46a5d6805d194c9af74b",
+      "task_count": 12,
+      "incident_counts": {
+        "39": 2,
+        "55": 2,
+        "134": 2,
+        "166": 2,
+        "322": 2,
+        "5": 1,
+        "34": 1
+      }
+    },
+    {
+      "batch_id": "batch_023",
+      "path": "publication/batch_023/manifest.json",
+      "sha256": "99c81ec63e9d2d59fd8632177b5cde82fa84e249335b1878c10e9d1b12510f38",
+      "task_count": 12,
+      "incident_counts": {
+        "5": 2,
+        "34": 2,
+        "39": 2,
+        "55": 2,
+        "134": 2,
+        "166": 1,
+        "322": 1
+      }
+    },
+    {
+      "batch_id": "batch_024",
+      "path": "publication/batch_024/manifest.json",
+      "sha256": "4418e8e00a854abbd38df88387b271b8db52fce0141f63fb1354c0b57b6cfd05",
+      "task_count": 12,
+      "incident_counts": {
+        "166": 2,
+        "322": 2,
+        "5": 2,
+        "34": 2,
+        "39": 2,
+        "55": 1,
+        "134": 1
+      }
+    },
+    {
+      "batch_id": "batch_025",
+      "path": "publication/batch_025/manifest.json",
+      "sha256": "ba33cfec69b06551813a83825ff6aa9fb6c0a374d7443c522535399d84ba3387",
+      "task_count": 12,
+      "incident_counts": {
+        "55": 2,
+        "134": 2,
+        "166": 2,
+        "322": 2,
+        "5": 2,
+        "34": 1,
+        "39": 1
+      }
+    },
+    {
+      "batch_id": "batch_026",
+      "path": "publication/batch_026/manifest.json",
+      "sha256": "0a2ca1b711e267d828f83827577385bf33e5e680e21623477b0e3836f40b0065",
+      "task_count": 12,
+      "incident_counts": {
+        "34": 2,
+        "39": 2,
+        "55": 2,
+        "134": 2,
+        "166": 2,
+        "322": 1,
+        "5": 1
+      }
+    },
+    {
+      "batch_id": "batch_027",
+      "path": "publication/batch_027/manifest.json",
+      "sha256": "19383a1f36a61c05cf181fde58e32c44f85d6bde90fac6d2caa8c863571d77b0",
+      "task_count": 12,
+      "incident_counts": {
+        "322": 2,
+        "5": 2,
+        "34": 2,
+        "39": 2,
+        "55": 2,
+        "134": 1,
+        "166": 1
+      }
+    },
+    {
+      "batch_id": "batch_028",
+      "path": "publication/batch_028/manifest.json",
+      "sha256": "935d36b3e63eaa7579e8dc6acb461317c7e0a23d02f65e72c227282b34469be2",
+      "task_count": 12,
+      "incident_counts": {
+        "134": 2,
+        "166": 2,
+        "322": 2,
+        "5": 2,
+        "34": 2,
+        "39": 1,
+        "55": 1
+      }
+    },
+    {
+      "batch_id": "batch_029",
+      "path": "publication/batch_029/manifest.json",
+      "sha256": "3ade071cbeaf683f7e634eb8d7266a7a4cbd5d5a8b9fafdbd7c6117b3f28b923",
+      "task_count": 12,
+      "incident_counts": {
+        "39": 2,
+        "55": 2,
+        "134": 2,
+        "166": 2,
+        "322": 2,
+        "5": 1,
+        "34": 1
+      }
+    },
+    {
+      "batch_id": "batch_030",
+      "path": "publication/batch_030/manifest.json",
+      "sha256": "00f784772942cc9b076b96a5b7843a7b3542aa88f568191673a2798a22c45b46",
+      "task_count": 12,
+      "incident_counts": {
+        "5": 2,
+        "34": 2,
+        "39": 2,
+        "55": 2,
+        "134": 2,
+        "166": 1,
+        "322": 1
+      }
+    },
+    {
+      "batch_id": "batch_031",
+      "path": "publication/batch_031/manifest.json",
+      "sha256": "c77a1265e57f23496cb52d83c914d232e6c6ba5e643e737481db340815c6ccb0",
+      "task_count": 12,
+      "incident_counts": {
+        "166": 2,
+        "322": 2,
+        "5": 2,
+        "34": 2,
+        "39": 2,
+        "55": 1,
+        "134": 1
+      }
+    },
+    {
+      "batch_id": "batch_032",
+      "path": "publication/batch_032/manifest.json",
+      "sha256": "83609e7ee7ddb5dd3cf7e64341af7ef5fe38a5db2532949d7dcbe07ac882bab2",
+      "task_count": 12,
+      "incident_counts": {
+        "55": 2,
+        "134": 2,
+        "166": 2,
+        "322": 2,
+        "5": 2,
+        "34": 1,
+        "39": 1
+      }
+    },
+    {
+      "batch_id": "batch_033",
+      "path": "publication/batch_033/manifest.json",
+      "sha256": "66fb46a460e5fd6083f071e104d7fe6f317d71cf31448b340c5662064c9e60c9",
+      "task_count": 12,
+      "incident_counts": {
+        "34": 2,
+        "39": 2,
+        "55": 2,
+        "134": 2,
+        "166": 2,
+        "322": 1,
+        "5": 1
+      }
+    },
+    {
+      "batch_id": "batch_034",
+      "path": "publication/batch_034/manifest.json",
+      "sha256": "f29f56cf61866dbca48b3b3c4aa90d26a62a2a608312f425b89e6c5b120b2985",
+      "task_count": 12,
+      "incident_counts": {
+        "322": 2,
+        "5": 2,
+        "34": 2,
+        "39": 2,
+        "55": 2,
+        "134": 1,
+        "166": 1
+      }
+    },
+    {
+      "batch_id": "batch_035",
+      "path": "publication/batch_035/manifest.json",
+      "sha256": "ec4a7874bb12061d0061abfafbfd29b725f5fa065d4fc4e7af480c50d76c02bb",
+      "task_count": 12,
+      "incident_counts": {
+        "134": 2,
+        "166": 2,
+        "322": 1,
+        "5": 2,
+        "34": 2,
+        "39": 2,
+        "55": 1
+      }
+    },
+    {
+      "batch_id": "batch_036",
+      "path": "publication/batch_036/manifest.json",
+      "sha256": "8d9e813ee768a19f14602d815aaa49868b4ef3a25d8bee771b8422406f0392ea",
+      "task_count": 12,
+      "incident_counts": {
+        "55": 3,
+        "166": 3,
+        "5": 2,
+        "34": 2,
+        "39": 2
+      }
+    },
+    {
+      "batch_id": "batch_037",
+      "path": "publication/batch_037/manifest.json",
+      "sha256": "29ac4bd55d6ef6059e55bf3df6cd3de2269b660959ddbce3516814d938504bd2",
+      "task_count": 12,
+      "incident_counts": {
+        "5": 3,
+        "34": 3,
+        "39": 2,
+        "55": 2,
+        "166": 2
+      }
+    },
+    {
+      "batch_id": "batch_038",
+      "path": "publication/batch_038/manifest.json",
+      "sha256": "d57e9044b6912acfbfd16d5f3e0051d4a468a78bdaa23682df9ec31670ccc112",
+      "task_count": 12,
+      "incident_counts": {
+        "39": 3,
+        "55": 3,
+        "166": 2,
+        "5": 2,
+        "34": 2
+      }
+    },
+    {
+      "batch_id": "batch_039",
+      "path": "publication/batch_039/manifest.json",
+      "sha256": "de207d596a88f1b092349b3e45e30a8df6089399e968233425a9601a1f17e01a",
+      "task_count": 12,
+      "incident_counts": {
+        "166": 3,
+        "5": 3,
+        "34": 2,
+        "39": 2,
+        "55": 2
+      }
+    },
+    {
+      "batch_id": "batch_040",
+      "path": "publication/batch_040/manifest.json",
+      "sha256": "2d9aec4e8a707b9fea6ee910e210e6c7c35cb46df90ba16aabdd3bcc25e48d62",
+      "task_count": 12,
+      "incident_counts": {
+        "34": 3,
+        "39": 3,
+        "55": 2,
+        "166": 2,
+        "5": 2
+      }
+    },
+    {
+      "batch_id": "batch_041",
+      "path": "publication/batch_041/manifest.json",
+      "sha256": "000b4e1b5c76a81ee9272b3e0760c116a9ea5b8e3fc84fd37281c445c76d29b7",
+      "task_count": 12,
+      "incident_counts": {
+        "55": 3,
+        "166": 3,
+        "5": 2,
+        "34": 2,
+        "39": 2
+      }
+    },
+    {
+      "batch_id": "batch_042",
+      "path": "publication/batch_042/manifest.json",
+      "sha256": "be80d80dbb03cb8503373a6e6a27818a8a676bc624649280d0d06bddb0fd6b04",
+      "task_count": 12,
+      "incident_counts": {
+        "5": 3,
+        "34": 3,
+        "39": 2,
+        "55": 2,
+        "166": 2
+      }
+    },
+    {
+      "batch_id": "batch_043",
+      "path": "publication/batch_043/manifest.json",
+      "sha256": "0d744c26800c0c17578c192f95e3ea93b94533b938bfcf08c3399de1b692f286",
+      "task_count": 12,
+      "incident_counts": {
+        "39": 3,
+        "55": 3,
+        "166": 2,
+        "5": 2,
+        "34": 2
+      }
+    },
+    {
+      "batch_id": "batch_044",
+      "path": "publication/batch_044/manifest.json",
+      "sha256": "de5cd4fdd6819176e681fb25f57c8e9c2832a7fd24178417be49a82c6ffab952",
+      "task_count": 12,
+      "incident_counts": {
+        "166": 3,
+        "5": 3,
+        "34": 2,
+        "39": 2,
+        "55": 2
+      }
+    },
+    {
+      "batch_id": "batch_045",
+      "path": "publication/batch_045/manifest.json",
+      "sha256": "2395a6cba0ddff84cf2ca8ac50edbee48ad89b9d6ae6b1fb855ea4a1cce77de6",
+      "task_count": 12,
+      "incident_counts": {
+        "34": 3,
+        "39": 3,
+        "55": 2,
+        "166": 2,
+        "5": 2
+      }
+    },
+    {
+      "batch_id": "batch_046",
+      "path": "publication/batch_046/manifest.json",
+      "sha256": "3fd14b65a152123ca92c3e18a22f8579f5b0eaa0220e9e7445233b89b0b720e3",
+      "task_count": 12,
+      "incident_counts": {
+        "55": 3,
+        "166": 3,
+        "5": 2,
+        "34": 2,
+        "39": 2
+      }
+    },
+    {
+      "batch_id": "batch_047",
+      "path": "publication/batch_047/manifest.json",
+      "sha256": "5ccdf7dac7c0bf84296cd4f6fdef4c0347ca97faeac6c09e493b2bdb142c3bf4",
+      "task_count": 12,
+      "incident_counts": {
+        "5": 4,
+        "39": 3,
+        "55": 3,
+        "166": 2
+      }
+    },
+    {
+      "batch_id": "batch_048",
+      "path": "publication/batch_048/manifest.json",
+      "sha256": "71ae6701191c85088abfe456dd18c42ccca969fdb7ca3ed6233802dca56253db",
+      "task_count": 12,
+      "incident_counts": {
+        "39": 4,
+        "55": 4,
+        "5": 4
+      }
+    },
+    {
+      "batch_id": "batch_049",
+      "path": "publication/batch_049/manifest.json",
+      "sha256": "67c9a77a4d0848ed483a79f15fede6d2d9ed0764aeea8d655217ffc814eadfe7",
+      "task_count": 12,
+      "incident_counts": {
+        "39": 4,
+        "55": 4,
+        "5": 4
+      }
+    },
+    {
+      "batch_id": "batch_050",
+      "path": "publication/batch_050/manifest.json",
+      "sha256": "bfc3d370f7f1ee3ba95b29dabc17ea66815fb35fb59735770e0d702ca6779209",
+      "task_count": 11,
+      "incident_counts": {
+        "39": 4,
+        "55": 4,
+        "5": 3
+      }
+    }
+  ],
+  "planned_episode_jobs": 1797,
+  "scorer_read_gate": "For each batch, all three arm evals must pass provenance/resource/completeness checks before scorer fields are read."
+}
