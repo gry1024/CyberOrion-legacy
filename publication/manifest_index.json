@@ -4,7 +4,7 @@
   "frozen_at": "2026-08-29",
   "master": {
     "path": "publication/master_manifest.json",
-    "sha256": "99a3afc74c52c4829c3ee83da92f52e1545eaa70bd2443e884b5cdea802b7bd1",
+    "sha256": "1e7b244e170716b16c2787c2738fdc0850c68c6b0c2b9063f9e521872a5afc48",
     "task_count": 599
   },
   "batching": {
@@ -96,8 +96,8 @@
       "max_parallel_dispatches": 4,
       "official_task_max_steps": 25
     },
-    "source_head": "bb9582d174a621a929caad2936e8a4ee4a9c8adc",
-    "source_tree": "9535db27bc2b20ec3844e4c3562a11c83d07fdbf",
+    "source_head": "fc81e5e59cabf3bafff20346b097aa660439d0fd",
+    "source_tree": "148bad46b9b3547cd32ecc42846a25acad58424b",
     "acesevals_commit": "17135140d0fdf52c2264a1fc248cf01e16b23a79",
     "acesevals_tree": "4d5dea0db0073189210d5cdf1d56eab86780ce0e",
     "saber_resource_limit_patch_sha256": "93d847dfa0c3f0976f412ae74652df139c5415351e395b9a9031e08db8d8fe6f",
@@ -108,7 +108,7 @@
     {
       "batch_id": "batch_001",
       "path": "publication/batch_001/manifest.json",
-      "sha256": "3a7171e849dc14c7d330a043bab3b1abcc92cb7717fb3778a158b688c4bb0ae9",
+      "sha256": "f37c2c5ae21efebd5ef3f4cb86384b581199c2123c26fd2de3443d5e892fd714",
       "task_count": 12,
       "incident_counts": {
         "5": 2,
@@ -124,7 +124,7 @@
     {
       "batch_id": "batch_002",
       "path": "publication/batch_002/manifest.json",
-      "sha256": "64501c5b40052dcf885c73991ea0eab3ea75ed0e75dc2e8ae656505a088a146f",
+      "sha256": "f32488baf7fec833b04796f0e22a2dafc677bfbf4ad77758cd309c169a846422",
       "task_count": 12,
       "incident_counts": {
         "55": 2,
@@ -140,7 +140,7 @@
     {
       "batch_id": "batch_003",
       "path": "publication/batch_003/manifest.json",
-      "sha256": "26810b4c569bc851a03f1c125dda5276dbbd1ca9ebc293f6e59983c8864f18dd",
+      "sha256": "36217bfa551c164b1a5248b0f8802a6512b794ac01a426ce203758fd9206f94b",
       "task_count": 12,
       "incident_counts": {
         "5": 2,
@@ -156,7 +156,7 @@
     {
       "batch_id": "batch_004",
       "path": "publication/batch_004/manifest.json",
-      "sha256": "354d5a9a9264173b1640fc187f2208111d0ff7d01c422680102fbbe46c2df6b8",
+      "sha256": "87e31866657c7fc8258e509530268f70ef009db5ab1d897391136ac2b5909ced",
       "task_count": 12,
       "incident_counts": {
         "55": 2,
@@ -172,7 +172,7 @@
     {
       "batch_id": "batch_005",
       "path": "publication/batch_005/manifest.json",
-      "sha256": "796ab4f30c0fab3b4afb16b8ac8faf653121a945f5dc7db2f694780b1158943a",
+      "sha256": "cad61c64a7923c16620b71242c9fe921a06bec351c6ebf55ddf154f7675629bb",
       "task_count": 12,
       "incident_counts": {
         "5": 2,
@@ -188,7 +188,7 @@
     {
       "batch_id": "batch_006",
       "path": "publication/batch_006/manifest.json",
-      "sha256": "f1482f28eccbf3b9847e57e8c4bba560d1529c0e87c00bded876c239fe1ba30e",
+      "sha256": "916ce1c58f36ff1f542642258632cfc6af4347c48591c38401a00fde6977d3a3",
       "task_count": 12,
       "incident_counts": {
         "55": 2,
@@ -204,7 +204,7 @@
     {
       "batch_id": "batch_007",
       "path": "publication/batch_007/manifest.json",
-      "sha256": "419c42f45bb609aa0406f27178cd411b1bd3eb00889088c949957596c0779bb0",
+      "sha256": "a30e8f1be5612bf18d2e4449f3496a161911b3dd29734d3f7c519b950ebdd3af",
       "task_count": 12,
       "incident_counts": {
         "5": 2,
@@ -220,7 +220,7 @@
     {
       "batch_id": "batch_008",
       "path": "publication/batch_008/manifest.json",
-      "sha256": "50eb1961e22b4e7949a1ecaa2812a01a5f244de5a8bd0573984c75852626e9d4",
+      "sha256": "4be0832b12713bb04ee24c6e62950c8aae9a7b24140ffa759a00cbb0072b126e",
       "task_count": 12,
       "incident_counts": {
         "55": 2,
@@ -236,7 +236,7 @@
     {
       "batch_id": "batch_009",
       "path": "publication/batch_009/manifest.json",
-      "sha256": "483669c85a0b901a2d5eb2d6c31948e32351b4e27abae4d438c38ce39c0dc29c",
+      "sha256": "e333fa2cb9cdd6d66822fade25cd045f124311270f8ac6d255a6f1d8c02c2f07",
       "task_count": 12,
       "incident_counts": {
         "5": 2,
@@ -251,7 +251,7 @@
     {
       "batch_id": "batch_010",
       "path": "publication/batch_010/manifest.json",
-      "sha256": "d7453da85500892b812d495000325dfa3374d27cce56c57ae535bf70a76d074a",
+      "sha256": "6e65486ec31864ef04778c64364a55659902aaf9944ca6635d9e07805ae4cb4d",
       "task_count": 12,
       "incident_counts": {
         "166": 2,
@@ -266,7 +266,7 @@
     {
       "batch_id": "batch_011",
       "path": "publication/batch_011/manifest.json",
-      "sha256": "f8fc2e36ab603efbd191e661bc51566ce6a7e515b854a49fc991012b7fa5e0ff",
+      "sha256": "52e2fadf664fb07fc8c708394d8110a17a4e6b1cbad5c254bbfcb765b6170221",
       "task_count": 12,
       "incident_counts": {
         "55": 2,
@@ -281,7 +281,7 @@
     {
       "batch_id": "batch_012",
       "path": "publication/batch_012/manifest.json",
-      "sha256": "68b1e94e076518de127d7012db4ba6dc591ff87d733ba22cd0a4eb76a4fe7777",
+      "sha256": "b078247ed4ebee23dc09cc22b31656848779413899217bc7bc660dc3dfbd8e56",
       "task_count": 12,
       "incident_counts": {
         "34": 2,
@@ -296,7 +296,7 @@
     {
       "batch_id": "batch_013",
       "path": "publication/batch_013/manifest.json",
-      "sha256": "06e3e865b2b23f9bbe8abdf7b7ed9a7b295a5b4d24e29c4f6a45c958412b829e",
+      "sha256": "76432a6fd8af800dae87d02fa86a1c927579560ac9ff20bb59f9610063c4da51",
       "task_count": 12,
       "incident_counts": {
         "322": 2,
@@ -311,7 +311,7 @@
     {
       "batch_id": "batch_014",
       "path": "publication/batch_014/manifest.json",
-      "sha256": "7a7ed063ca80719ade117b43ccb5791fb16f6e035afae049823b2aab4671e80e",
+      "sha256": "341ef7e781472e7a718510aeb4a6125677e951922cf9e7295bec55cc1f799eed",
       "task_count": 12,
       "incident_counts": {
         "134": 2,
@@ -326,7 +326,7 @@
     {
       "batch_id": "batch_015",
       "path": "publication/batch_015/manifest.json",
-      "sha256": "d25fd59611f46a5c9078233d36cd3ed868e9682942e51fa639c3dd007b7577ae",
+      "sha256": "5695db645074a4339c23631348c74545a7853c47f07ee11c633e6c982170561f",
       "task_count": 12,
       "incident_counts": {
         "39": 2,
@@ -341,7 +341,7 @@
     {
       "batch_id": "batch_016",
       "path": "publication/batch_016/manifest.json",
-      "sha256": "036a61ea5c2a632c066a7d6a28e63b3f3998f2c957ab86299c98c5ddc1b3cbd6",
+      "sha256": "f501a7283f5194173377c71dbfcfd10cd713d3f77ba32843f3edeff881404a42",
       "task_count": 12,
       "incident_counts": {
         "5": 2,
@@ -356,7 +356,7 @@
     {
       "batch_id": "batch_017",
       "path": "publication/batch_017/manifest.json",
-      "sha256": "0f3631dedb03e4adba1bc00956a23a3cc67e2ac4db24e0d31ceb2013adc4edb0",
+      "sha256": "60e44b0ec1dd39eed4046e42c82d6424c6b38253bb2c33efa0fea5f48c066492",
       "task_count": 12,
       "incident_counts": {
         "166": 2,
@@ -371,7 +371,7 @@
     {
       "batch_id": "batch_018",
       "path": "publication/batch_018/manifest.json",
-      "sha256": "488c3a71ce24d461835703c0415c2ba9b65b984aa6389cef419b9698407bd4ca",
+      "sha256": "b83bfee47114c9d35b6858dd7ee623da2236d989c956d5453cce2f43f16b958f",
       "task_count": 12,
       "incident_counts": {
         "55": 2,
@@ -386,7 +386,7 @@
     {
       "batch_id": "batch_019",
       "path": "publication/batch_019/manifest.json",
-      "sha256": "2e9e68d53f717b28a34f491607d20cf1f1a725effb623f76132c288d7a31c2c5",
+      "sha256": "b2a5a143fe5192fde9f11e44bd488fa9b03b62352a842f2d1e4676d4c67410ca",
       "task_count": 12,
       "incident_counts": {
         "34": 2,
@@ -401,7 +401,7 @@
     {
       "batch_id": "batch_020",
       "path": "publication/batch_020/manifest.json",
-      "sha256": "1199855c26bffcdf11e8888b1b963a06ac1998f1baccc8419601c79dc9352c5c",
+      "sha256": "9c3923646df1ca1f2ff1c15324cfa9e287af88680ff2c49b72b62097f3409695",
       "task_count": 12,
       "incident_counts": {
         "322": 2,
@@ -416,7 +416,7 @@
     {
       "batch_id": "batch_021",
       "path": "publication/batch_021/manifest.json",
-      "sha256": "130fefa09ed7f43add77a053b3d27a1c537b7ea7ac2821ac22e36d30460fb555",
+      "sha256": "88ade4f3812c7415692044b12152a6aacea17b6071c553e9ca391d09404b31bb",
       "task_count": 12,
       "incident_counts": {
         "134": 2,
@@ -431,7 +431,7 @@
     {
       "batch_id": "batch_022",
       "path": "publication/batch_022/manifest.json",
-      "sha256": "b36e39cdd7eacaf01e2abdd17a6a6fd9b4a478efe043eaffa83b9a4a75235b1c",
+      "sha256": "f216b0e3ca1a5bea85560b4292eb9cf4e23f04d2a7ed33eec291d56f73726229",
       "task_count": 12,
       "incident_counts": {
         "39": 2,
@@ -446,7 +446,7 @@
     {
       "batch_id": "batch_023",
       "path": "publication/batch_023/manifest.json",
-      "sha256": "50e5a2e0749e6906f164b8bb9db9b451578b8974ab6d7babf70d8e6f66823bfc",
+      "sha256": "6bc141a6b76701873326f298b0acf5bdde00320d35e80920b010f20344e488c6",
       "task_count": 12,
       "incident_counts": {
         "5": 2,
@@ -461,7 +461,7 @@
     {
       "batch_id": "batch_024",
       "path": "publication/batch_024/manifest.json",
-      "sha256": "9e4badb82b5cb8833d9fb5791c8001b21a36708e7e595432e9716f8d3c42dbb8",
+      "sha256": "33dce2d8e1aea6fa4815e26a2173607acbd12f8381cfdab6473d2b6efcb857da",
       "task_count": 12,
       "incident_counts": {
         "166": 2,
@@ -476,7 +476,7 @@
     {
       "batch_id": "batch_025",
       "path": "publication/batch_025/manifest.json",
-      "sha256": "07d32928151d70c39732506e3bec6401e305a000dd00797a3d27ce36ec362dad",
+      "sha256": "a009fb1ea010060e4ba6554701ded6ccc030391f476c43364322d2d3e4957811",
       "task_count": 12,
       "incident_counts": {
         "55": 2,
@@ -491,7 +491,7 @@
     {
       "batch_id": "batch_026",
       "path": "publication/batch_026/manifest.json",
-      "sha256": "7598f4660a9d1dbeea54218482be1ccec0a5eaad68adcf2dabff98268df063f3",
+      "sha256": "7157bf5b0e705bd3ce75b08cf099fe146d43cc58f1335c5ed58d980c3f1e2fd8",
       "task_count": 12,
       "incident_counts": {
         "34": 2,
@@ -506,7 +506,7 @@
     {
       "batch_id": "batch_027",
       "path": "publication/batch_027/manifest.json",
-      "sha256": "70163262076937e65239907fd0cd9062f720aefd0cc599b74cdd7332b79e9f7c",
+      "sha256": "b5032afad74f3c9821966a1c9a3c07607a601be5eb49d40befa692c821c6caa6",
       "task_count": 12,
       "incident_counts": {
         "322": 2,
@@ -521,7 +521,7 @@
     {
       "batch_id": "batch_028",
       "path": "publication/batch_028/manifest.json",
-      "sha256": "1491a3f5ad3847d73d4c8f305fcc66c2f749714a66497453c840221e63111a52",
+      "sha256": "695a0521776b48817ab3bb97f8fb0957c25454daefd3c005d746bbc6a11e93d1",
       "task_count": 12,
       "incident_counts": {
         "134": 2,
@@ -536,7 +536,7 @@
     {
       "batch_id": "batch_029",
       "path": "publication/batch_029/manifest.json",
-      "sha256": "0420e6da3745e315fbedf5e42c896f57f646c7df0038104b9fd768184945ba35",
+      "sha256": "bc5df9174d6d6f9db099ad3d17944932dcfad09a5744343596086bacd2031cf8",
       "task_count": 12,
       "incident_counts": {
         "39": 2,
@@ -551,7 +551,7 @@
     {
       "batch_id": "batch_030",
       "path": "publication/batch_030/manifest.json",
-      "sha256": "3f3e89c35fa0a4c44417d2a62bf8c42772f7acbc9ad74898c22f08f062f9b93c",
+      "sha256": "9e841f06069d4dfd52384249e68b91fcdf9445123c5bb71c41e7f77b6f373c92",
       "task_count": 12,
       "incident_counts": {
         "5": 2,
@@ -566,7 +566,7 @@
     {
       "batch_id": "batch_031",
       "path": "publication/batch_031/manifest.json",
-      "sha256": "cbda88c883f12086fa5405cf9c445d656c5339be23c3df41a324a821617707d4",
+      "sha256": "8e9b6b92ce72c184b592944797f2a0ca631b7a1c0c84ed20a3647a7fef65ecab",
       "task_count": 12,
       "incident_counts": {
         "166": 2,
@@ -581,7 +581,7 @@
     {
       "batch_id": "batch_032",
       "path": "publication/batch_032/manifest.json",
-      "sha256": "828cfe63e3978e8ad68fe590535f4aded5a6ca54988dfb5427412e0e1b968c96",
+      "sha256": "3793797008f58ead2e9b6344d38212f2532aa12cd99181dde4650df8c1d40405",
       "task_count": 12,
       "incident_counts": {
         "55": 2,
@@ -596,7 +596,7 @@
     {
       "batch_id": "batch_033",
       "path": "publication/batch_033/manifest.json",
-      "sha256": "34767e87d70ed5a396eefc93489ca1d68d797cd6e7135da9f548f5b4bf6152a8",
+      "sha256": "8ad7adfbde332371e455898874370c757a077614fb8dbe34bc883b13110a6365",
       "task_count": 12,
       "incident_counts": {
         "34": 2,
@@ -611,7 +611,7 @@
     {
       "batch_id": "batch_034",
       "path": "publication/batch_034/manifest.json",
-      "sha256": "384f9d42f2c02b8e331c8dac686966f28803d390e272b91dbc85810633494bc1",
+      "sha256": "cb5af94391715b1c35ad556cd540d3c6190f84b5a059ce34c18297f2743217e1",
       "task_count": 12,
       "incident_counts": {
         "322": 2,
@@ -626,7 +626,7 @@
     {
       "batch_id": "batch_035",
       "path": "publication/batch_035/manifest.json",
-      "sha256": "a9595290b8fcbdacf76414c00086a7b8bfb6c70612f5c37fe95423353c62e6ae",
+      "sha256": "44de4590cc7f2a76f05b4e2b5abc417f7c3a245c3d9877a7aa0f6220a3136327",
       "task_count": 12,
       "incident_counts": {
         "134": 2,
@@ -641,7 +641,7 @@
     {
       "batch_id": "batch_036",
       "path": "publication/batch_036/manifest.json",
-      "sha256": "dabf78e4a43eab867106430e62b6c6d4ece84a95c6733b72e1f56ec239ea872f",
+      "sha256": "8348899e2019189b87a76390fc24bcbf19d9af5926f041aa9c6c2fecb214a01a",
       "task_count": 12,
       "incident_counts": {
         "55": 3,
@@ -654,7 +654,7 @@
     {
       "batch_id": "batch_037",
       "path": "publication/batch_037/manifest.json",
-      "sha256": "ebe73eb403ef0bb0de44bd144a7ff7cdd0a5830081619f86b1373ee60691beb1",
+      "sha256": "17c5df9bf0dac1d96c053c83bfbe444e032d94357890fe626bb8d57e0121329d",
       "task_count": 12,
       "incident_counts": {
         "5": 3,
@@ -667,7 +667,7 @@
     {
       "batch_id": "batch_038",
       "path": "publication/batch_038/manifest.json",
-      "sha256": "a4364155d8bf2e9fed2f8dd29765d1e231b366a60ecd24b39fbbfe3e2a12c17c",
+      "sha256": "24e3ea10bd31c3987fa652500c48dba7bf56fc37650f5d844d30a751d69cd56c",
       "task_count": 12,
       "incident_counts": {
         "39": 3,
@@ -680,7 +680,7 @@
     {
       "batch_id": "batch_039",
       "path": "publication/batch_039/manifest.json",
-      "sha256": "773925721c3e18e70c59c10dd89215ce9a53848cf9c798f4228bc3b7be3ad71c",
+      "sha256": "1cd7abb666dd972a5657511682ec5ae975701b5566bb0dbface317638ce0d000",
       "task_count": 12,
       "incident_counts": {
         "166": 3,
@@ -693,7 +693,7 @@
     {
       "batch_id": "batch_040",
       "path": "publication/batch_040/manifest.json",
-      "sha256": "e2781493782696f0a9cf9c3f41166738e1969bde7987df19951775d766bfa9c1",
+      "sha256": "8dbec6417a9a74f825e81f2c04183150b754d9c15597f8afbf8f7affb2521222",
       "task_count": 12,
       "incident_counts": {
         "34": 3,
@@ -706,7 +706,7 @@
     {
       "batch_id": "batch_041",
       "path": "publication/batch_041/manifest.json",
-      "sha256": "124f721665b5390591e896fae20ec8b614b4d2eeb35bf3cb98025c6b5e2cde6d",
+      "sha256": "00458170a11a827a339740d9de1512c132bd1846450ee254bbd38fddbbd06152",
       "task_count": 12,
       "incident_counts": {
         "55": 3,
@@ -719,7 +719,7 @@
     {
       "batch_id": "batch_042",
       "path": "publication/batch_042/manifest.json",
-      "sha256": "2b5c0ae7ba904220d9de2e181ebe5bf1a9ec81223dbe3ae6c5ba6fab767fd29a",
+      "sha256": "250a006fb1ad62962a43c6ce2bc981328ea1e3a072ec49dd5215c1cecd263180",
       "task_count": 12,
       "incident_counts": {
         "5": 3,
@@ -732,7 +732,7 @@
     {
       "batch_id": "batch_043",
       "path": "publication/batch_043/manifest.json",
-      "sha256": "eada9156d9771b5a1fbfff607b855165a15b9c6a1409593df7409bab8a7208e4",
+      "sha256": "2530de83823177f650682b8f327412bfe1f990c629348897f9f770e99add3b6b",
       "task_count": 12,
       "incident_counts": {
         "39": 3,
@@ -745,7 +745,7 @@
     {
       "batch_id": "batch_044",
       "path": "publication/batch_044/manifest.json",
-      "sha256": "fb2953c5f3df6cb96b0eade12fe120e011a0a17ad8c08c3b89d00ad0885335eb",
+      "sha256": "da1b9a53caf1f8a96bcb73e0da3216b71400486d4ccbc579e673111724fa402e",
       "task_count": 12,
       "incident_counts": {
         "166": 3,
@@ -758,7 +758,7 @@
     {
       "batch_id": "batch_045",
       "path": "publication/batch_045/manifest.json",
-      "sha256": "2e490af2d1bc88af45f0627e319a2e6d846c57b6a2a9ca68a13fc54a3a549acc",
+      "sha256": "80b5e34bb2ff3de86fca631fcc7b4adb89825f7152058c86781e46eff7e29208",
       "task_count": 12,
       "incident_counts": {
         "34": 3,
@@ -771,7 +771,7 @@
     {
       "batch_id": "batch_046",
       "path": "publication/batch_046/manifest.json",
-      "sha256": "4379b8e372c5e902f60e086820d1c9813285040169418b9bb51066df336cc57c",
+      "sha256": "d2c960bdc428aa57977025998dd8693a2a8c19e9088447ad23288bcb630b2933",
       "task_count": 12,
       "incident_counts": {
         "55": 3,
@@ -784,7 +784,7 @@
     {
       "batch_id": "batch_047",
       "path": "publication/batch_047/manifest.json",
-      "sha256": "c8552dd1b025b9953412a912fdd5567687af79deb8f8c2b1c29f3313bde0365b",
+      "sha256": "13a356523f5a45e9a91ff9b9e31790de161403900f617307b52632e16dd9f8a5",
       "task_count": 12,
       "incident_counts": {
         "5": 4,
@@ -796,7 +796,7 @@
     {
       "batch_id": "batch_048",
       "path": "publication/batch_048/manifest.json",
-      "sha256": "23ceffbf3856965ef2eab60e82758a124e6faa1d3486dc15a14d7b573b8edf2b",
+      "sha256": "62a290a8651b722e8eccbf645a603d1ff4f838ae9a7f87295acf32041663488a",
       "task_count": 12,
       "incident_counts": {
         "39": 4,
@@ -807,7 +807,7 @@
     {
       "batch_id": "batch_049",
       "path": "publication/batch_049/manifest.json",
-      "sha256": "31a91d18b1a42429fffcf69f49273b59a2bbb18cece45478cddd96ce6fc34c73",
+      "sha256": "bc5b5cf085b48d463db7a475699485aa9f56b7a1e24ada02148b576831640789",
       "task_count": 12,
       "incident_counts": {
         "39": 4,
@@ -818,7 +818,7 @@
     {
       "batch_id": "batch_050",
       "path": "publication/batch_050/manifest.json",
-      "sha256": "022423955d77a1f18490d12a40bbd4847ce6ae1c6507bb26c5795456cc534d4f",
+      "sha256": "8b1648770d218749f0cf1d2db0dcb40fc257db669ea52421aae3ec996f57fb99",
       "task_count": 11,
       "incident_counts": {
         "39": 4,

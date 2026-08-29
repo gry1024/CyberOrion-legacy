@@ -4,7 +4,7 @@
   "batch_id": "batch_018",
   "batch_index": 18,
   "master_manifest": "publication/master_manifest.json",
-  "master_manifest_sha256": "99a3afc74c52c4829c3ee83da92f52e1545eaa70bd2443e884b5cdea802b7bd1",
+  "master_manifest_sha256": "1e7b244e170716b16c2787c2738fdc0850c68c6b0c2b9063f9e521872a5afc48",
   "dataset": "latest_cleaned_test_set",
   "task_ids": [
     "incident_55_latest_cleaned_test_set_task_28",
@@ -57,8 +57,8 @@
       "max_parallel_dispatches": 4,
       "official_task_max_steps": 25
     },
-    "source_head": "bb9582d174a621a929caad2936e8a4ee4a9c8adc",
-    "source_tree": "9535db27bc2b20ec3844e4c3562a11c83d07fdbf",
+    "source_head": "fc81e5e59cabf3bafff20346b097aa660439d0fd",
+    "source_tree": "148bad46b9b3547cd32ecc42846a25acad58424b",
     "acesevals_commit": "17135140d0fdf52c2264a1fc248cf01e16b23a79",
     "acesevals_tree": "4d5dea0db0073189210d5cdf1d56eab86780ce0e",
     "saber_resource_limit_patch_sha256": "93d847dfa0c3f0976f412ae74652df139c5415351e395b9a9031e08db8d8fe6f",
