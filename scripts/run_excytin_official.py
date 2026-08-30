@@ -236,6 +236,8 @@ def main() -> int:
         "agent": args.arm,
         "judge_llm": judge_llm,
         "global_tool_call_limit": args.global_tool_call_limit,
+        "global_token_limit": args.token_limit,
+        "global_time_limit": args.time_limit,
         "max_model_calls": args.global_model_call_limit,
         "max_dispatches": args.max_dispatches,
         "max_parallel_dispatches": args.max_parallel_dispatches,

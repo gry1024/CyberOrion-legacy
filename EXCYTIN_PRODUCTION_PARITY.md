@@ -120,15 +120,50 @@ alert mutation or host isolation. ESCALATION becomes evidence review and
 response-oriented recommendation only; it must not invent environment actions.
 This changes surface tools, not role ownership or organization.
 
-## Current ExCyTIn parity gaps
+## Historical ExCyTIn parity gaps (before mechanism recovery)
 
-- The current bridge gives official `bash`/`python` directly to Full commander.
+- The bridge at that time gave official `bash`/`python` directly to Full commander.
 - It uses legacy watcher/analyst/hunter/responder names and semantics.
 - Its shared state stores full raw official outputs, amplifying 16 KiB
   truncation and context growth instead of exposing a bounded summary.
 - Four role-specific `delegate_*` tools do not match the current V2 dispatch
   API or the external single-dispatch contract.
 
-Therefore the current bridge does not reproduce current production
-CyberOrion. Mechanism recovery must correct these topology gaps before another
+Therefore that bridge did not reproduce current production CyberOrion. The
+mechanism-recovery work below corrected these topology gaps before another
 real-model call.
+
+## 2026-08-29 resource-delegation protocol addendum
+
+The native bridge now preserves the topology above and adds explicit,
+auditable resource delegation without changing official ExCyTIn tools, task,
+database, or scorer:
+
+- Single and Orchestrator-only receive the complete official investigation-tool
+  union directly. Full commander receives only coordination and final-submit
+  tools; Full workers receive the same official investigation-tool union.
+- Every root-agent model request gets an ephemeral global balance containing
+  provider tokens, root tool calls, model calls, wall/working time, messages,
+  and cost when Inspect exposes them. In Full, only the commander sees this
+  global balance.
+- Every Full dispatch requires a positive worker-local token, tool-call,
+  model-call, and wall-time allocation. The allocation is a nested hard limit,
+  not additional compute, and all child usage remains counted globally.
+- Full atomically reserves additive worker allocations under a lock and protects
+  a fixed commander finishing reserve. Independent dispatch tools remain
+  parallel-capable under the bounded semaphore; unsafe over-allocation is
+  rejected before a worker starts.
+- Workers receive only their local balance on every model request. A worker that
+  exhausts it stops with `role_budget_exhaustion`; the bridge preserves any
+  native tool evidence but does not synthesize a report the worker failed to
+  submit.
+- TRIAGE, THREAT_HUNTER, LATERAL_ANALYST, and ESCALATION have non-overlapping
+  mission contracts covering routing, targeted hypothesis testing, cross-entity
+  spread, and adversarial claim verification respectively. The Full commander
+  retains final answer ownership.
+
+The offline native-Inspect mechanism probe covers dynamic balance visibility,
+real nested limits, report return, local exhaustion without forced reporting,
+pre-start rejection of unsafe allocations, and overlapping independent worker
+execution. This addendum describes a new protocol version and does not make old
+performance samples comparable with future runs.

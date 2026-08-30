@@ -692,6 +692,9 @@ def test_official_runner_applies_declared_global_tool_limit_at_eval_root() -> No
     assert isinstance(value.value, ast.Name) and value.value.id == "args"
     assert value.attr == "global_tool_call_limit"
     assert '"max_model_calls": args.global_model_call_limit' in source
+    assert '"--global-model-call-limit", type=int, default=64' in source
+    assert '"global_token_limit": args.token_limit' in source
+    assert '"global_time_limit": args.time_limit' in source
     assert '"global_model_calls": args.global_model_call_limit' in source
     assert '"max_dispatches": args.max_dispatches' in source
     assert '"max_parallel_dispatches": args.max_parallel_dispatches' in source

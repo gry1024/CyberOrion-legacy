@@ -35,17 +35,22 @@ def test_official_bridge_does_not_import_parallel_json_runtime() -> None:
     assert "custom_json_action_protocol\": False" in source
 
 
-def test_official_upstream_and_lock_pins_are_unchanged() -> None:
+def test_official_upstream_and_lock_pins_have_only_approved_judge_override() -> None:
     if not (UPSTREAM / ".git").exists():
         pytest.skip("pinned ACESEvals checkout is unavailable")
     head = subprocess.run(
         ["git", "rev-parse", "HEAD"], cwd=UPSTREAM, check=True,
         capture_output=True, text=True).stdout.strip()
     assert head == "17135140d0fdf52c2264a1fc248cf01e16b23a79"
-    subprocess.run(
-        ["git", "diff", "--quiet", "HEAD", "--", "domains/excytin",
-         "uv.lock", "pyproject.toml"],
-        cwd=UPSTREAM, check=True)
+    official_diff = subprocess.run(
+        ["git", "diff", "HEAD", "--", "domains/excytin", "uv.lock",
+         "pyproject.toml"], cwd=UPSTREAM, check=True,
+        capture_output=True).stdout
+    # A clean checkout and the previously approved MiniMax judge-default-only
+    # override are both valid. Any other official task/tool/scorer/lock delta
+    # fails closed.
+    assert not official_diff or hashlib.sha256(official_diff).hexdigest() == (
+        "2745085e043a402a17761fb9cec074ea759dc315a36eb0de12d021d98417d442")
     lock = (UPSTREAM / "uv.lock").read_text(encoding="utf-8")
     assert "#a9bdce1343fd1c331aafda3119cbf0d48f215382" in lock
     assert "#f94a85b6b3a246d2e4417b49bdda96fd8f04b93a" in lock
@@ -83,14 +88,17 @@ def test_prompts_define_strong_arms_and_all_four_excytin_roles() -> None:
     assert "LIMIT 5" in bridge.SINGLE_PROMPT
     assert "row LIMIT does not make a wide projection safe" in bridge.SINGLE_PROMPT
     assert "LEFT(column, 500)" in bridge.SINGLE_PROMPT
-    assert "about 20 official tool calls" in bridge.SINGLE_PROMPT
+    assert "runtime resource balance" in bridge.SINGLE_PROMPT
     assert "AdditionalFields" in bridge.SINGLE_PROMPT
     assert "Dispatch is disabled" in bridge.ORCHESTRATOR_ONLY_PROMPT
     assert "do not directly execute" in bridge.COMMANDER_PROMPT
     assert "automatically receives the official task context" in bridge.COMMANDER_PROMPT
-    assert "run concurrently" in bridge.COMMANDER_PROMPT
+    assert "parallel tool calls" in bridge.COMMANDER_PROMPT
+    assert "current GLOBAL resource balance" in bridge.COMMANDER_PROMPT
+    assert "hard local token" in bridge.COMMANDER_PROMPT
+    assert "parallel tool calls" in bridge.COMMANDER_PROMPT
     assert all(
-        f"dispatch_{role}(mission)" in bridge.COMMANDER_PROMPT
+        f"dispatch_{role}(mission, token_limit" in bridge.COMMANDER_PROMPT
         for role in bridge.ROLES
     )
     assert set(bridge.ROLE_DESCRIPTIONS) == set(bridge.ROLES)
@@ -101,9 +109,13 @@ def test_prompts_define_strong_arms_and_all_four_excytin_roles() -> None:
     )
     prompts = {role: bridge.specialist_prompt(role) for role in bridge.ROLES}
     assert "schema" in prompts["triage"]
-    assert "incident chain" in prompts["threat_hunter"]
+    assert "incident-chain" in prompts["threat_hunter"]
     assert "cross-host" in prompts["lateral_analyst"]
-    assert "Never invent environment actions" in prompts["escalation"]
+    assert "invent environment actions" in prompts["escalation"]
+    assert all("LOCAL resource balance" in prompt for prompt in prompts.values())
+    assert all(
+        bridge.ROLE_MISSION_CONTRACTS[role] in prompts[role]
+        for role in bridge.ROLES)
     irrelevant = ("iptables", "docker exec", "remove_file", "kill_process")
     assert not any(term in "\n".join(prompts.values()) for term in irrelevant)
 
@@ -131,11 +143,32 @@ def test_specialist_reports_are_structured_and_fail_closed() -> None:
 
 def test_dispatch_propagates_global_inspect_limits_before_generic_errors() -> None:
     source = inspect.getsource(bridge._DispatchController.dispatch)
-    hard_limit = source.index("except LimitExceededError:")
-    propagation = source.index("raise", hard_limit)
-    generic_error = source.index("except Exception", propagation)
-    assert hard_limit < propagation < generic_error
-    assert "status = \"role_budget_exhaustion\"" not in source
+    assert "limits=[token_budget, tool_budget, time_budget, model_budget]" in source
+    assert "status = \"role_budget_exhaustion\"" in source
+    assert "if isinstance(exc, LimitExceededError):" in source
+    assert "raise" in source[source.index(
+        "if isinstance(exc, LimitExceededError):"):]
+
+
+def test_worker_allocations_are_positive_and_auditable() -> None:
+    allocation = bridge.WorkerAllocation(
+        token_limit=20_000, tool_call_limit=4,
+        model_call_limit=3, wall_time_sec=30)
+    assert allocation.as_dict() == {
+        "token_limit": 20_000,
+        "tool_call_limit": 4,
+        "model_call_limit": 3,
+        "wall_time_sec": 30,
+    }
+    with pytest.raises(ValueError, match="must be positive"):
+        bridge.WorkerAllocation(
+            token_limit=0, tool_call_limit=4,
+            model_call_limit=3, wall_time_sec=30).validate()
+
+
+def test_new_protocol_defaults_to_64_global_model_calls() -> None:
+    source = inspect.getsource(bridge.create_agent)
+    assert 'factory_kwargs.get("max_model_calls", 64)' in source
 
 
 def test_native_agents_use_pinned_inspect_context_compaction() -> None:
@@ -315,8 +348,10 @@ def test_native_inspect_multi_agent_mechanism_probe(tmp_path: Path) -> None:
                 "XDG_DATA_HOME": str(state_root / "xdg_data"),
             }, timeout=90)
     probe = json.loads(result_path.read_text(encoding="utf-8"))
-    assert probe["full_status"] == probe["single_status"] == "success"
-    assert probe["full_error"] is probe["single_error"] is None
+    assert (probe["full_status"] == probe["single_status"]
+            == probe["orchestrator_only_status"] == "success")
+    assert (probe["full_error"] is probe["single_error"]
+            is probe["orchestrator_only_error"] is None)
     assert probe["single_official_tool_visible"] is True
     assert probe["full_official_tool_union"] == probe["single_official_tool_union"]
     assert probe["full_commander_has_no_environment_tools"] is True
@@ -328,6 +363,84 @@ def test_native_inspect_multi_agent_mechanism_probe(tmp_path: Path) -> None:
     assert all(all(flags.values()) for flags in probe["specialist_context"].values())
     assert probe["shared_evidence_propagated_to_lateral_analyst"] is True
     assert probe["parallel_dispatch_overlap"] is True
+    assert probe["resource_balance_scopes"] == {
+        "full_commander": ["global"],
+        "lateral_analyst": ["worker_allocation"],
+        "orchestrator_only": ["global"],
+        "single": ["global"],
+        "threat_hunter": ["worker_allocation"],
+        "triage": ["worker_allocation"],
+    }
+    expected_root_resources = sorted([
+        "provider_tokens", "tool_calls", "model_calls", "wall_time_sec",
+        "working_time_sec", "messages", "cost_usd"])
+    assert all(
+        keys == expected_root_resources
+        for keys in probe["root_balance_resource_keys"].values())
+    expected_worker_resources = sorted([
+        "provider_tokens", "tool_calls", "model_calls", "wall_time_sec"])
+    assert all(
+        keys == expected_worker_resources
+        for keys in probe["worker_balance_resource_keys"].values())
+    assert all(
+        values["provider_tokens"]["limit"] == 20_000
+        and values["tool_calls"]["limit"] == 4
+        and values["model_calls"]["limit"] == 4
+        and values["wall_time_sec"]["limit"] == 10
+        for values in probe["worker_local_balance_limits"].values())
+    assert probe["root_balance_updates_each_call"] is True
+    assert probe["resource_balance_message_counts"] == {
+        "full_commander": 3,
+        "lateral_analyst": 2,
+        "orchestrator_only": 2,
+        "single": 2,
+        "threat_hunter": 2,
+        "triage": 2,
+    }
+    exhaustion = probe["local_exhaustion"]
+    assert exhaustion["run_status"] == "success"
+    assert exhaustion["sample_error"] is None
+    assert exhaustion["worker_model_callbacks"] == 1
+    assert exhaustion["worker_report_calls"] == 0
+    assert exhaustion["commander_received_exhaustion"] is True
+    assert exhaustion["report_counts"]["role_budget_exhaustion"] == 1
+    assert exhaustion["report_counts"]["successful_report"] == 0
+    assert exhaustion["global_model_calls"]["by_role"] == {
+        "orchestrator": 2, "triage": 1}
+    assert "without report" in exhaustion["final_output"]
+    rejection = probe["allocation_rejection"]
+    assert rejection["run_status"] == "success"
+    assert rejection["sample_error"] is None
+    assert rejection["worker_callbacks"] == 0
+    assert rejection["dispatches_started"] == 0
+    expected_dispatch_parameters = sorted([
+        "mission", "token_limit", "tool_call_limit",
+        "model_call_limit", "wall_time_sec"])
+    assert set(probe["dispatch_tool_required_parameters"]) == {
+        f"dispatch_{role}" for role in bridge.ROLES}
+    assert all(
+        parameters == expected_dispatch_parameters
+        for parameters in probe[
+            "dispatch_tool_required_parameters"].values())
+    nested_limits = probe["nested_limit_matrix"]
+    assert set(nested_limits) == {"token", "tool_call"}
+    for limit_type, row in nested_limits.items():
+        assert row["run_status"] == "success"
+        assert row["sample_error"] is None
+        assert row["report_counts"]["role_budget_exhaustion"] == 1
+        assert row["report_counts"]["successful_report"] == 0
+        assert json.loads(row["limit_error"])["type"] == limit_type
+    assert nested_limits["token"]["worker_callbacks"] == 1
+    assert nested_limits["tool_call"]["worker_callbacks"] == 2
+    race = probe["cumulative_parallel_allocation_race"]
+    assert race["run_status"] == "success"
+    assert race["sample_error"] is None
+    assert len(race["worker_roles_started"]) == 1
+    assert set(race["worker_roles_started"]).issubset({
+        "triage", "threat_hunter"})
+    assert race["allocation_errors"] == 1
+    assert race["dispatches_started"] == 1
+    assert race["successful_reports"] == 1
     assert probe["commander_reports_intact"] is True
     assert probe["full_dispatches"] == 3
     assert probe["full_successful_reports"] == 3

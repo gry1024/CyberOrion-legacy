@@ -15,6 +15,7 @@ import hashlib
 import json
 import time
 from dataclasses import asdict, dataclass, field
+from types import TracebackType
 from typing import Any, Iterable, Mapping, Sequence
 
 
@@ -33,26 +34,189 @@ _MAX_COMMANDS = 48
 _MAX_EVIDENCE = 64
 _MAX_REPORTS = 24
 _MAX_PROVENANCE = 64
+_RESOURCE_BALANCE_MARKER = "CYBERORION RUNTIME RESOURCE BALANCE"
+# Full must never let one child allocation consume the resources needed for
+# commander synthesis and final submission. These are scheduler reserves, not
+# extra resources: all usage still counts against the shared sample ceilings.
+_COMMANDER_MODEL_CALL_RESERVE = 4
+_COMMANDER_TOOL_CALL_RESERVE = 4
+_COMMANDER_TOKEN_RESERVE = 16_384
+_COMMANDER_WALL_TIME_RESERVE_SEC = 15.0
 
 ROLE_DESCRIPTIONS: dict[str, str] = {
     "triage": (
-        "Perform initial task triage, discover the available schema and data "
-        "sources, extract first-pass entities, and route the next investigation."
+        "Map only the relevant schema and data sources, identify the first "
+        "bounded set of incident entities and time pivots, and hand off a "
+        "prioritized investigation map. Do not reconstruct the whole incident."
     ),
     "threat_hunter": (
-        "Conduct deep evidence-led hunting, correlate precise records across "
-        "tables, test hypotheses, and reconstruct the incident chain."
+        "Test one explicit evidence-backed hypothesis at a time, correlate "
+        "targeted records across the already identified sources, and return "
+        "the supported or refuted incident-chain segment."
     ),
     "lateral_analyst": (
-        "Trace cross-host, account, address, process, and time relationships to "
-        "determine spread, pivots, and the affected investigation scope."
+        "Start from named pivots and trace only cross-host, account, address, "
+        "process, and time relationships needed to establish spread or scope. "
+        "Do not repeat initial schema triage."
     ),
     "escalation": (
-        "Review high-impact conclusions, correlate specialist evidence, challenge "
-        "unsupported claims, and recommend response only when evidence supports "
-        "it. Never invent environment actions ExCyTIn does not expose."
+        "Adversarially verify a small set of candidate-answer claims, challenge "
+        "contradictions or missing provenance, and report whether the answer is "
+        "supported. Do not restart broad investigation or invent environment actions."
     ),
 }
+
+ROLE_MISSION_CONTRACTS: dict[str, str] = {
+    "triage": (
+        "Deliver the relevant table/field map, bounded time range, initial "
+        "entities, and no more than three prioritized next hypotheses. Stop "
+        "when that routing map is sufficient; leave deep correlation to hunters."
+    ),
+    "threat_hunter": (
+        "Receive one named hypothesis and its pivots. Deliver concrete supporting "
+        "or refuting records and the incident-chain implication. Stop after the "
+        "hypothesis is resolved or two targeted branches add no evidence."
+    ),
+    "lateral_analyst": (
+        "Receive explicit source and destination pivots. Deliver confirmed cross-"
+        "entity links, affected scope, and unresolved gaps. Stop without performing "
+        "general schema discovery or unrelated hunting."
+    ),
+    "escalation": (
+        "Receive candidate claims and their provenance. Verify only the highest-"
+        "impact unsupported or conflicting claims, then return a pass/challenge "
+        "assessment and any narrowly required correction."
+    ),
+}
+
+
+@dataclass(frozen=True)
+class WorkerAllocation:
+    """Commander-assigned hard limits for one isolated worker run."""
+
+    token_limit: int
+    tool_call_limit: int
+    model_call_limit: int
+    wall_time_sec: float
+
+    def validate(self) -> None:
+        values = {
+            "token_limit": self.token_limit,
+            "tool_call_limit": self.tool_call_limit,
+            "model_call_limit": self.model_call_limit,
+            "wall_time_sec": self.wall_time_sec,
+        }
+        invalid = [name for name, value in values.items() if value <= 0]
+        if invalid:
+            raise ValueError(
+                "worker allocation values must be positive: "
+                + ", ".join(invalid))
+
+    def as_dict(self) -> dict[str, int | float]:
+        self.validate()
+        return asdict(self)
+
+
+class _WorkerModelCallLimit:
+    """Inspect-compatible worker-local model-call limit.
+
+    The global model gate remains authoritative. This nested source is passed
+    to ``inspect_ai.agent.run`` so only this worker's exhaustion is caught and
+    classified locally; unknown or root/global limit exceptions still escape.
+    """
+
+    def __init__(self, limit: int) -> None:
+        if limit <= 0:
+            raise ValueError("worker model-call limit must be positive")
+        self._limit = limit
+        self._usage = 0
+        self._entered = False
+
+    @property
+    def limit(self) -> int:
+        return self._limit
+
+    @property
+    def usage(self) -> int:
+        return self._usage
+
+    @property
+    def remaining(self) -> int:
+        return max(0, self._limit - self._usage)
+
+    def __enter__(self) -> "_WorkerModelCallLimit":
+        if self._entered:
+            raise RuntimeError("worker model-call limit cannot be reused")
+        self._entered = True
+        return self
+
+    def __exit__(
+        self, exc_type: type[BaseException] | None,
+        exc_val: BaseException | None, exc_tb: TracebackType | None,
+    ) -> None:
+        return None
+
+    def consume(self) -> None:
+        if self._usage >= self._limit:
+            from inspect_ai.util import LimitExceededError
+            raise LimitExceededError(
+                "custom", value=self._usage, limit=self._limit,
+                message=(
+                    "CyberOrion worker-local model-call ceiling reached: "
+                    f"{self._usage}/{self._limit}"),
+                source=self,
+            )
+        self._usage += 1
+
+
+def _resource_row(*, limit: int | float | None,
+                  usage: int | float | None) -> dict[str, Any]:
+    remaining = None
+    if limit is not None and usage is not None:
+        remaining = max(0, limit - usage)
+    return {"limit": limit, "used": usage, "remaining": remaining}
+
+
+def _sample_resource_rows(
+    *, token_limit_value: int, tool_call_limit_value: int,
+    wall_time_limit_value: float,
+) -> dict[str, dict[str, Any]]:
+    """Read root Inspect balances, falling back only for unavailable usage."""
+    declared = {
+        "provider_tokens": token_limit_value,
+        "tool_calls": tool_call_limit_value,
+        "wall_time_sec": wall_time_limit_value,
+        "working_time_sec": None,
+        "messages": None,
+        "cost_usd": None,
+    }
+    try:
+        from inspect_ai.util import sample_limits
+        limits = sample_limits()
+        mapped = {
+            "provider_tokens": limits.token,
+            "tool_calls": limits.tool_call,
+            "wall_time_sec": limits.time,
+            "working_time_sec": limits.working,
+            "messages": limits.message,
+            "cost_usd": limits.cost,
+        }
+        rows = {}
+        for name, item in mapped.items():
+            try:
+                usage = item.usage
+            except (NotImplementedError, RuntimeError):
+                usage = None
+            rows[name] = _resource_row(
+                limit=item.limit if item.limit is not None else declared[name],
+                usage=usage,
+            )
+        return rows
+    except RuntimeError:
+        return {
+            name: _resource_row(limit=limit, usage=None)
+            for name, limit in declared.items()
+        }
 
 _COMMON_INVESTIGATION_SOP = """
 CYBERORION EXCYTIN INVESTIGATION SOP:
@@ -78,9 +242,9 @@ CYBERORION EXCYTIN INVESTIGATION SOP:
 - Every query must resolve a named open question. After two consecutive empty
   or non-informative queries, stop broadening that branch and report the
   uncertainty. Once the assigned mission has sufficient evidence, submit the
-  specialist report immediately. As an investigation-discipline target, keep
-  a specialist mission within about 20 official tool calls; this is not a hard
-  per-role resource ceiling, and the global sample ceilings remain authoritative.
+  result immediately. Treat the runtime resource balance attached to every
+  model request as authoritative and preserve enough balance to submit before
+  any hard ceiling is reached.
 - Keep hypotheses separate from verified evidence. Cite concrete table names,
   commands/queries, timestamps, identifiers, and returned values.
 - Treat tool errors and empty results as evidence about the investigation, not
@@ -95,7 +259,9 @@ You are CyberOrion's strong monolithic ExCyTIn investigator. You own planning,
 schema discovery, multi-table correlation, targeted hunting, adversarial final
 verification, and the final answer. You have the complete official environment
 tool set. Maintain an internal evidence notebook and carry the investigation to
-a supported conclusion.
+a supported conclusion. Every model request includes the current GLOBAL
+resource balance. Use it to control investigation depth and reserve calls,
+tokens, tools, and time for final verification and submit.
 
 {_COMMON_INVESTIGATION_SOP}
 """.strip()
@@ -109,22 +275,40 @@ Delegation is natural work routing, not an optional decoration. Reports are
 bounded evidence summaries, not hidden truth.
 
 CYBERORION TEAM AVAILABLE IN FULL MODE:
-- dispatch_triage(mission): {ROLE_DESCRIPTIONS["triage"]}
-- dispatch_threat_hunter(mission): {ROLE_DESCRIPTIONS["threat_hunter"]}
-- dispatch_lateral_analyst(mission): {ROLE_DESCRIPTIONS["lateral_analyst"]}
-- dispatch_escalation(mission): {ROLE_DESCRIPTIONS["escalation"]}
+- dispatch_triage(mission, token_limit, tool_call_limit, model_call_limit,
+  wall_time_sec): {ROLE_DESCRIPTIONS["triage"]}
+- dispatch_threat_hunter(mission, token_limit, tool_call_limit,
+  model_call_limit, wall_time_sec): {ROLE_DESCRIPTIONS["threat_hunter"]}
+- dispatch_lateral_analyst(mission, token_limit, tool_call_limit,
+  model_call_limit, wall_time_sec): {ROLE_DESCRIPTIONS["lateral_analyst"]}
+- dispatch_escalation(mission, token_limit, tool_call_limit, model_call_limit,
+  wall_time_sec): {ROLE_DESCRIPTIONS["escalation"]}
 - get_investigation_summary(): Read the bounded shared workspace.
 
 DELEGATION SEMANTICS:
+- Every commander model request includes the current GLOBAL resource balance,
+  including safely allocatable worker capacity after active reservations and
+  the protected commander finishing reserve. Workers never see that global
+  balance.
+- You control each worker's hard local token, native-tool-call, model-call, and
+  wall-time ceilings through the dispatch arguments. The tool-call allocation
+  includes the worker's final report-tool call, so reserve at least one. Allocate enough for the
+  bounded mission but keep sufficient global balance for dependent work,
+  evidence review, final synthesis, and submit. These allocations are subsets
+  of—not additions to—the global sample resources.
 - A delegated specialist automatically receives the official task context, its
-  bounded mission, the current shared investigation state, and all official
-  environment tools. Do not manually copy the whole evidence history.
+  bounded mission, its assigned LOCAL resource balance, the current shared
+  investigation state, and all official environment tools. Explicitly make the
+  mission small enough that the worker can submit its report before its local
+  balance is exhausted. Do not manually copy the whole evidence history.
 - Begin by routing initial schema/data-source discovery to triage. Route deep
   hypothesis testing and incident reconstruction to threat_hunter; cross-entity
   or cross-host spread to lateral_analyst; and high-impact final challenge or
   response-oriented review to escalation.
-- Independent missions may be dispatched together in one response so they can
-  run concurrently; dependent missions should wait for the evidence they need.
+- Independent missions may be dispatched together as parallel tool calls in one
+  response. Their allocations are reserved atomically and each conversation is
+  isolated; dependent missions must wait for the evidence they need. Never
+  over-allocate the available worker balance.
 - After dispatch, inspect the complete bounded reports returned by the tools or
   call get_investigation_summary. Do not ask workers to repeat full raw output.
 - Do not dispatch decorative or duplicate missions. You remain responsible for
@@ -137,7 +321,9 @@ ORCHESTRATOR_ONLY_PROMPT = (
     "You are CyberOrion's strong monolithic ExCyTIn commander/investigator. "
     "Dispatch is disabled in this arm. You directly receive the complete "
     "official environment tool set and own planning, investigation, evidence "
-    "verification, and the final answer.\n\n" + _COMMON_INVESTIGATION_SOP
+    "verification, and the final answer. Every model request includes the "
+    "current GLOBAL resource balance; preserve enough for final verification "
+    "and submit.\n\n" + _COMMON_INVESTIGATION_SOP
 )
 
 
@@ -151,9 +337,17 @@ You are CyberOrion's ExCyTIn {role} specialist.
 ROLE DUTY:
 {ROLE_DESCRIPTIONS[role]}
 
+MISSION BOUNDARY:
+{ROLE_MISSION_CONTRACTS[role]}
+
 {_COMMON_INVESTIGATION_SOP}
 
-Complete the assigned mission independently with the official tools. Finish by
+Complete only the assigned mission independently with the official tools. Every
+model request includes your assigned LOCAL resource balance, never the global
+team balance. Plan backward from those hard limits and call the report tool
+before tokens, official-tool calls, model calls, or wall time are exhausted. If
+you consume the allocation first, execution stops and no report is synthesized.
+Finish by
 calling the provided structured report tool. Report actual findings, evidence,
 commands/queries, confidence, uncertainties, recommended next investigation,
 and candidate answer implications. An empty report is not acceptable.
@@ -455,20 +649,27 @@ class InvestigationState:
                         self.workspace_omissions["evidence"] += 1
                         self.evidence = _tail(self.evidence, _MAX_EVIDENCE)
 
-    def record_dispatch(self, role: str, mission: str) -> None:
+    def record_dispatch(self, role: str, mission: str,
+                        allocation: WorkerAllocation) -> str:
         self.dispatches += 1
+        dispatch_id = f"D-{self._next()}"
         self.provenance.append({
-            "id": f"D-{self._next()}", "sequence": self._sequence,
+            "id": dispatch_id, "sequence": self._sequence,
             "kind": "dispatch", "role": role,
             "mission": _compact_text(mission, 800),
+            "worker_allocation": allocation.as_dict(),
         })
         if len(self.provenance) > _MAX_PROVENANCE:
             self.workspace_omissions["provenance"] += 1
             self.provenance = _tail(self.provenance, _MAX_PROVENANCE)
+        return dispatch_id
 
     def record_report(self, *, status: str, role: str, mission: str,
                       report: dict[str, Any] | None, error: str | None,
-                      raw: str | None = None) -> None:
+                      raw: str | None = None,
+                      allocation: WorkerAllocation | None = None,
+                      local_usage: Mapping[str, Any] | None = None,
+                      dispatch_id: str | None = None) -> None:
         if status not in self.report_counts:
             self.report_counts[status] = 0
         self.report_counts[status] += 1
@@ -533,6 +734,10 @@ class InvestigationState:
             "mission": _compact_text(mission, 800),
             "report": bounded_report, "error": error,
             "raw_report_identity": raw_identity,
+            "dispatch_id": dispatch_id,
+            "worker_allocation": (
+                allocation.as_dict() if allocation is not None else None),
+            "worker_local_usage": dict(local_usage or {}),
         })
         if len(self.specialist_reports) > _MAX_REPORTS:
             self.workspace_omissions["reports"] += 1
@@ -738,23 +943,23 @@ def _report_tool(role: str) -> Any:
     from inspect_ai.tool import ToolDef
 
     async def submit_report(
-        findings: str,
+        findings: list[str],
         evidence: list[dict[str, str]],
-        commands_or_queries: str,
+        commands_or_queries: list[str],
         confidence: str,
-        uncertainties: str,
-        recommended_next_investigation: str,
-        candidate_answer_implications: str,
+        uncertainties: list[str],
+        recommended_next_investigation: list[str],
+        candidate_answer_implications: list[str],
     ) -> str:
         """Submit the specialist's structured investigation report.
 
         Args:
-          findings: Concise verified findings, using bullets inside one text value.
+          findings: Concise verified findings as separate text items.
           evidence: Claim/source/snippet records from official tool results.
-          commands_or_queries: Commands/queries actually executed, one per line.
+          commands_or_queries: Commands/queries actually executed.
           confidence: One of low, medium, or high.
-          uncertainties: Remaining uncertainty and unsupported claims as text.
-          recommended_next_investigation: Concrete next steps as one text value.
+          uncertainties: Remaining uncertainty and unsupported claims.
+          recommended_next_investigation: Concrete bounded next steps.
           candidate_answer_implications: Evidence-bearing answer implications.
         """
         return json.dumps({
@@ -790,14 +995,70 @@ class _DispatchController:
         self.official_names = set(official_tool_names(official_tools))
         self.commander_messages = commander_messages
         self.max_dispatches = max_dispatches
+        self.max_parallel_dispatches = max_parallel_dispatches
         self.model_gate = model_gate
         self.state = InvestigationState(
             hashlib.sha256(task_context.encode()).hexdigest())
         self._lock = asyncio.Lock()
         self._parallel = asyncio.Semaphore(max_parallel_dispatches)
+        self._active_allocations: dict[str, WorkerAllocation] = {}
 
-    async def _reserve(self, role: str, mission: str) -> dict[str, Any]:
+    def _active_reserved(self) -> dict[str, int | float]:
+        allocations = tuple(self._active_allocations.values())
+        return {
+            "provider_tokens": sum(item.token_limit for item in allocations),
+            "tool_calls": sum(
+                item.tool_call_limit for item in allocations),
+            "model_calls": sum(item.model_call_limit for item in allocations),
+            # Concurrent allocations overlap in wall-clock time, so their wall
+            # ceilings are not additive. The maximum remains auditable.
+            "wall_time_sec": max(
+                (item.wall_time_sec for item in allocations), default=0.0),
+        }
+
+    def commander_balance(self) -> dict[str, Any]:
+        """Global balance visible only to the Full commander."""
+        balance = self.model_gate.global_balance()
+        active = self._active_reserved()
+        reserves = {
+            "provider_tokens": _COMMANDER_TOKEN_RESERVE,
+            "tool_calls": _COMMANDER_TOOL_CALL_RESERVE,
+            "model_calls": _COMMANDER_MODEL_CALL_RESERVE,
+            "wall_time_sec": _COMMANDER_WALL_TIME_RESERVE_SEC,
+        }
+        allocatable = {}
+        for name, reserve in reserves.items():
+            remaining = balance["resources"][name]["remaining"]
+            if remaining is None:
+                allocatable[name] = None
+            else:
+                # Wall allocations overlap; all other active allocations are
+                # additive against the common sample budget.
+                reserved = 0 if name == "wall_time_sec" else active[name]
+                allocatable[name] = max(0, remaining - reserve - reserved)
+        balance.update({
+            "commander_finishing_reserve": reserves,
+            "active_worker_reservations": active,
+            "safe_worker_allocatable": allocatable,
+            "dispatches": {
+                "limit": self.max_dispatches,
+                "used": self.state.dispatches,
+                "remaining": max(
+                    0, self.max_dispatches - self.state.dispatches),
+                "max_parallel": self.max_parallel_dispatches,
+                "active": len(self._active_allocations),
+            },
+        })
+        return balance
+
+    async def _reserve(
+        self, role: str, mission: str, allocation: WorkerAllocation,
+    ) -> tuple[str, dict[str, Any]]:
         from inspect_ai.tool import ToolError
+        try:
+            allocation.validate()
+        except ValueError as exc:
+            raise ToolError(str(exc)) from exc
         async with self._lock:
             self.state.ingest_messages(
                 self.commander_messages, role="orchestrator",
@@ -805,63 +1066,153 @@ class _DispatchController:
             if self.state.dispatches >= self.max_dispatches:
                 raise ToolError(
                     f"global dispatch ceiling reached: {self.max_dispatches}")
-            self.state.record_dispatch(role, mission)
-            return json.loads(json.dumps(
+            available = self.commander_balance()["safe_worker_allocatable"]
+            requested = {
+                "provider_tokens": allocation.token_limit,
+                "tool_calls": allocation.tool_call_limit,
+                "model_calls": allocation.model_call_limit,
+                "wall_time_sec": allocation.wall_time_sec,
+            }
+            excessive = {
+                name: {"requested": value, "available": available[name]}
+                for name, value in requested.items()
+                if available[name] is not None and value > available[name]
+            }
+            if excessive:
+                raise ToolError(
+                    "worker allocation exceeds safely allocatable global "
+                    "balance: " + json.dumps(excessive, sort_keys=True))
+            dispatch_id = self.state.record_dispatch(
+                role, mission, allocation)
+            self._active_allocations[dispatch_id] = allocation
+            snapshot = json.loads(json.dumps(
                 self.state.public_snapshot(), ensure_ascii=False, default=str))
+            return dispatch_id, snapshot
 
-    async def dispatch(self, role: str, mission: str) -> str:
+    async def _release(self, dispatch_id: str) -> None:
+        async with self._lock:
+            self._active_allocations.pop(dispatch_id, None)
+
+    @staticmethod
+    def _worker_balance(
+        *, role: str, allocation: WorkerAllocation, token_budget: Any,
+        tool_budget: Any, time_budget: Any,
+        model_budget: _WorkerModelCallLimit,
+    ) -> dict[str, Any]:
+        return {
+            "scope": "worker_allocation",
+            "role": role,
+            "resources": {
+                "provider_tokens": _resource_row(
+                    limit=allocation.token_limit, usage=token_budget.usage),
+                "tool_calls": _resource_row(
+                    limit=allocation.tool_call_limit,
+                    usage=tool_budget.usage),
+                "model_calls": _resource_row(
+                    limit=allocation.model_call_limit,
+                    usage=model_budget.usage),
+                "wall_time_sec": _resource_row(
+                    limit=allocation.wall_time_sec, usage=time_budget.usage),
+            },
+            "instruction": (
+                "This is your complete local allocation. Submit the structured "
+                "report before any remaining value reaches zero."),
+        }
+
+    async def dispatch(self, role: str, mission: str,
+                       allocation: WorkerAllocation) -> str:
         """Run one isolated native Inspect specialist and return its report."""
         from inspect_ai.agent import AgentPrompt, AgentSubmit, react, run
-        from inspect_ai.util import LimitExceededError
+        from inspect_ai.util import time_limit, token_limit, tool_call_limit
 
-        shared_snapshot = await self._reserve(role, mission)
-        report_tool = _report_tool(role)
-        child = react(
-            name=f"cyberorion_excytin_{role}",
-            description=ROLE_DESCRIPTIONS[role],
-            prompt=AgentPrompt(
-                instructions=_combined_instructions(
-                    self.instruction_prompt, specialist_prompt(role)),
-                assistant_prompt=self.assistant_prompt or None,
-                handoff_prompt=None,
-                submit_prompt=None,
-            ),
-            tools=self.official_tools,
-            model=self.model_gate.agent(role),
-            submit=AgentSubmit(
-                tool=report_tool,
-                name=f"{_REPORT_TOOL_PREFIX}{role}_report",
-                description=f"Submit the structured {role} report.",
-                answer_only=True,
-                keep_in_messages=True,
-            ),
-            compaction=_native_context_compaction(),
-            truncation="auto",
-        )
-        child_input = (
-            "OFFICIAL TASK CONTEXT (identical information available to Single):\n"
-            f"{self.task_context}\n\n"
-            f"SPECIALIST MISSION:\n{mission}\n\n"
-            "CURRENT SHARED INVESTIGATION STATE:\n"
-            + json.dumps(shared_snapshot, ensure_ascii=False, default=str)
-        )
         status = "parse_failure"
         report: dict[str, Any] | None = None
         error: str | None = None
         raw = ""
         child_state = None
+        dispatch_id = ""
+        local_usage: dict[str, Any] = {}
         async with self._parallel:
             try:
-                child_state = await run(child, input=child_input, name=role)
-                raw = str(child_state.output.completion or "")
-                status, report, error = parse_specialist_report(raw, role)
-            except LimitExceededError:
-                # Inspect sample limits are global across commander and child.
-                # They are hard limits, not a recoverable per-role outcome.
-                raise
+                dispatch_id, shared_snapshot = await self._reserve(
+                    role, mission, allocation)
+                report_tool = _report_tool(role)
+                token_budget = token_limit(allocation.token_limit)
+                tool_budget = tool_call_limit(allocation.tool_call_limit)
+                time_budget = time_limit(allocation.wall_time_sec)
+                model_budget = _WorkerModelCallLimit(
+                    allocation.model_call_limit)
+                balance_provider = lambda: self._worker_balance(
+                    role=role, allocation=allocation,
+                    token_budget=token_budget, tool_budget=tool_budget,
+                    time_budget=time_budget, model_budget=model_budget)
+                child = react(
+                    name=f"cyberorion_excytin_{role}",
+                    description=ROLE_DESCRIPTIONS[role],
+                    prompt=AgentPrompt(
+                        instructions=_combined_instructions(
+                            self.instruction_prompt, specialist_prompt(role)),
+                        assistant_prompt=self.assistant_prompt or None,
+                        handoff_prompt=None,
+                        submit_prompt=None,
+                    ),
+                    tools=self.official_tools,
+                    model=self.model_gate.agent(
+                        role, balance_provider=balance_provider,
+                        local_model_limit=model_budget),
+                    submit=AgentSubmit(
+                        tool=report_tool,
+                        name=f"{_REPORT_TOOL_PREFIX}{role}_report",
+                        description=f"Submit the structured {role} report.",
+                        answer_only=True,
+                        keep_in_messages=True,
+                    ),
+                    compaction=_native_context_compaction(),
+                    truncation="auto",
+                )
+                child_input = (
+                    "OFFICIAL TASK CONTEXT (identical information available "
+                    "to Single):\n"
+                    f"{self.task_context}\n\n"
+                    f"SPECIALIST MISSION:\n{mission}\n\n"
+                    "HARD LOCAL WORKER ALLOCATION:\n"
+                    + json.dumps(allocation.as_dict(), ensure_ascii=False)
+                    + "\nSubmit the structured report before any local limit "
+                    "is exhausted. No report will be synthesized for you.\n\n"
+                    "CURRENT SHARED INVESTIGATION STATE:\n"
+                    + json.dumps(
+                        shared_snapshot, ensure_ascii=False, default=str)
+                )
+                child_state, limit_error = await run(
+                    child, input=child_input, name=role,
+                    limits=[token_budget, tool_budget, time_budget, model_budget],
+                )
+                local_usage = balance_provider()["resources"]
+                if limit_error is not None:
+                    status = "role_budget_exhaustion"
+                    error = json.dumps({
+                        "type": limit_error.type,
+                        "value": limit_error.value,
+                        "limit": limit_error.limit,
+                        "message": limit_error.message,
+                    }, ensure_ascii=False)
+                else:
+                    raw = str(child_state.output.completion or "")
+                    status, report, error = parse_specialist_report(raw, role)
             except Exception as exc:  # noqa: BLE001 - classified for audit
+                # Root/global Inspect limit errors have no worker-local source,
+                # are not caught by run(... limits=...), and must propagate.
+                from inspect_ai.util import LimitExceededError
+                from inspect_ai.tool import ToolError
+                if isinstance(exc, LimitExceededError):
+                    raise
+                if isinstance(exc, ToolError):
+                    raise
                 status = "parse_failure"
                 error = f"{type(exc).__name__}: {exc}"
+            finally:
+                if dispatch_id:
+                    await self._release(dispatch_id)
         async with self._lock:
             if child_state is not None:
                 self.state.ingest_messages(
@@ -869,12 +1220,16 @@ class _DispatchController:
                     official_names=self.official_names)
             self.state.record_report(
                 status=status, role=role, mission=mission, report=report,
-                error=error, raw=raw if status != "successful_report" else None)
+                error=error, raw=raw if status != "successful_report" else None,
+                allocation=allocation, local_usage=local_usage,
+                dispatch_id=dispatch_id or None)
             commander_report = self.state.specialist_reports[-1]["report"]
         return json.dumps({
             "status": status,
             "role": role,
             "mission": mission,
+            "worker_allocation": allocation.as_dict(),
+            "worker_local_usage": local_usage,
             "report": commander_report,
             "error": error,
             "audit": {
@@ -904,13 +1259,26 @@ class _DispatchController:
         )]
         for role in ROLES:
             def make_delegate(selected_role: str):
-                async def delegate(mission: str) -> str:
+                async def delegate(
+                    mission: str, token_limit: int, tool_call_limit: int,
+                    model_call_limit: int, wall_time_sec: float,
+                ) -> str:
                     """Delegate an independent investigation mission.
 
                     Args:
                       mission: Bounded specialist mission and expected evidence.
+                      token_limit: Hard provider-token ceiling for this worker.
+                      tool_call_limit: Hard native tool-call ceiling, including report.
+                      model_call_limit: Hard LLM-call ceiling for this worker.
+                      wall_time_sec: Hard wall-clock ceiling in seconds.
                     """
-                    return await self.dispatch(selected_role, mission)
+                    return await self.dispatch(
+                        selected_role, mission, WorkerAllocation(
+                            token_limit=token_limit,
+                            tool_call_limit=tool_call_limit,
+                            model_call_limit=model_call_limit,
+                            wall_time_sec=wall_time_sec,
+                        ))
 
                 return delegate
 
@@ -921,7 +1289,11 @@ class _DispatchController:
                     f"Dispatch the production {role} worker: "
                     f"{ROLE_DESCRIPTIONS[role]} "
                     "The specialist automatically receives official task context, "
-                    "bounded shared evidence, and the official bash/python tools."
+                    "bounded shared evidence, official bash/python tools, and only "
+                    "the hard local resource balance assigned in this call. "
+                    "The tool-call allocation includes the report call. "
+                    f"Mission contract: {ROLE_MISSION_CONTRACTS[role]} "
+                    "Independent delegate calls in one response run concurrently."
                 ),
                 parallel=True,
             ))
@@ -931,15 +1303,59 @@ class _DispatchController:
 class _GlobalModelGate:
     """Concurrency-safe hard model-call ceiling shared by commander/children."""
 
-    def __init__(self, limit: int) -> None:
+    def __init__(self, limit: int, *, token_limit_value: int,
+                 tool_call_limit_value: int,
+                 wall_time_limit_value: float) -> None:
         if limit <= 0:
             raise ValueError("model-call limit must be positive")
         self.limit = limit
+        self.token_limit_value = token_limit_value
+        self.tool_call_limit_value = tool_call_limit_value
+        self.wall_time_limit_value = wall_time_limit_value
         self.calls = 0
         self.by_role: dict[str, int] = {}
         self._lock = asyncio.Lock()
 
-    def agent(self, role: str):
+    def global_balance(self) -> dict[str, Any]:
+        resources = _sample_resource_rows(
+            token_limit_value=self.token_limit_value,
+            tool_call_limit_value=self.tool_call_limit_value,
+            wall_time_limit_value=self.wall_time_limit_value,
+        )
+        resources["model_calls"] = _resource_row(
+            limit=self.limit, usage=self.calls)
+        return {
+            "scope": "global",
+            "resources": resources,
+            "model_calls_by_role": dict(sorted(self.by_role.items())),
+            "instruction": (
+                "These are shared hard sample limits. Preserve enough balance "
+                "for verification and final submit."),
+        }
+
+    @staticmethod
+    def _attach_balance(input_value: Any,
+                        balance: Mapping[str, Any]) -> list[Any]:
+        """Attach an ephemeral system balance to exactly this provider call."""
+        from inspect_ai.model import ChatMessageSystem, ChatMessageUser
+
+        message = ChatMessageSystem(content=(
+            f"{_RESOURCE_BALANCE_MARKER}\n"
+            + json.dumps(balance, ensure_ascii=False, sort_keys=True,
+                         default=str)
+        ))
+        if isinstance(input_value, str):
+            return [message, ChatMessageUser(content=input_value)]
+        messages = list(input_value)
+        insert_at = 0
+        while (insert_at < len(messages)
+               and str(getattr(messages[insert_at], "role", "")) == "system"):
+            insert_at += 1
+        messages.insert(insert_at, message)
+        return messages
+
+    def agent(self, role: str, *, balance_provider=None,
+              local_model_limit: _WorkerModelCallLimit | None = None):
         """Return a transparent Inspect Model with shared call accounting.
 
         Returning an Inspect ``Model`` (rather than an Agent-shaped callable)
@@ -973,10 +1389,16 @@ class _GlobalModelGate:
                                 "CyberOrion global model-call ceiling reached: "
                                 f"{gate.calls}/{gate.limit}"),
                         )
+                    if local_model_limit is not None:
+                        local_model_limit.consume()
                     gate.calls += 1
                     gate.by_role[role] = gate.by_role.get(role, 0) + 1
+                    balance = (
+                        balance_provider() if balance_provider is not None
+                        else gate.global_balance())
+                    model_input = gate._attach_balance(input, balance)
                 return await self._underlying.generate(
-                    input=input, tools=tools, tool_choice=tool_choice,
+                    input=model_input, tools=tools, tool_choice=tool_choice,
                     config=config or GenerateConfig(), cache=cache,
                 )
 
@@ -1033,9 +1455,13 @@ def create_agent(*, arm: str = "single", **factory_kwargs: Any):
     max_model_calls = int(factory_kwargs.get("max_model_calls", 64))
     global_tool_call_limit = int(
         factory_kwargs.get("global_tool_call_limit", 64))
+    global_token_limit = int(
+        factory_kwargs.get("global_token_limit", 320_000))
+    global_time_limit = float(
+        factory_kwargs.get("global_time_limit", 240.0))
     if any(value <= 0 for value in (
             max_dispatches, max_parallel, max_model_calls,
-            global_tool_call_limit)):
+            global_tool_call_limit, global_token_limit, global_time_limit)):
         raise ValueError("resource and dispatch limits must be positive")
 
     def create_with_prompts(*, instruction_prompt: str = "",
@@ -1060,7 +1486,12 @@ def create_agent(*, arm: str = "single", **factory_kwargs: Any):
                 task_input=task_context,
             )
             contract = arm_tool_contract(arm, official_tools)
-            model_gate = _GlobalModelGate(max_model_calls)
+            model_gate = _GlobalModelGate(
+                max_model_calls,
+                token_limit_value=global_token_limit,
+                tool_call_limit_value=global_tool_call_limit,
+                wall_time_limit_value=global_time_limit,
+            )
             shared = InvestigationState(
                 hashlib.sha256(task_context.encode()).hexdigest())
             agent_state = AgentState(messages=state.messages)
@@ -1084,6 +1515,9 @@ def create_agent(*, arm: str = "single", **factory_kwargs: Any):
                 # directly own environment investigation tools.
                 native_tools = controller.tools()
 
+            root_balance_provider = (
+                controller.commander_balance if arm == "full" else None)
+
             native_agent = react(
                 name=f"cyberorion_excytin_{arm}",
                 prompt=AgentPrompt(
@@ -1094,7 +1528,8 @@ def create_agent(*, arm: str = "single", **factory_kwargs: Any):
                 ),
                 tools=native_tools,
                 model=model_gate.agent(
-                    "single" if arm == "single" else "orchestrator"),
+                    "single" if arm == "single" else "orchestrator",
+                    balance_provider=root_balance_provider),
                 submit=True,
                 compaction=_native_context_compaction(),
                 truncation="auto",
@@ -1108,10 +1543,12 @@ def create_agent(*, arm: str = "single", **factory_kwargs: Any):
                 official_names=set(contract["official_environment_tools"]),
             )
             trace = {
-                "schema": "cyberorion_excytin_native_trace_v1",
+                "schema": "cyberorion_excytin_native_trace_v2_resource_delegation",
                 "arm": arm,
                 "max_steps_from_official_task": int(max_steps),
                 "global_tool_call_limit": global_tool_call_limit,
+                "global_token_limit": global_token_limit,
+                "global_time_limit": global_time_limit,
                 "official_tool_contract": contract,
                 "full_tool_topology": {
                     "commander_environment_tools": contract[
@@ -1129,6 +1566,9 @@ def create_agent(*, arm: str = "single", **factory_kwargs: Any):
                 "shared_investigation_state": shared.audit_snapshot(),
                 "inspect_usage": _usage_snapshot(),
                 "global_model_call_budget": model_gate.snapshot(),
+                "final_global_resource_balance": (
+                    controller.commander_balance()
+                    if arm == "full" else model_gate.global_balance()),
                 "wall_clock_sec": time.perf_counter() - started,
                 "native_inspect_tool_execution": True,
                 "custom_json_action_protocol": False,
@@ -1179,7 +1619,8 @@ def register_official_agents() -> None:
 
 __all__ = [
     "COMMANDER_PROMPT", "InvestigationState", "ORCHESTRATOR_ONLY_PROMPT",
-    "ROLE_DESCRIPTIONS", "ROLES", "SINGLE_PROMPT", "SpecialistReport",
+    "ROLE_DESCRIPTIONS", "ROLE_MISSION_CONTRACTS", "ROLES", "SINGLE_PROMPT",
+    "SpecialistReport", "WorkerAllocation",
     "arm_tool_contract", "build_official_context", "create_agent",
     "official_tool_names", "parse_specialist_report",
     "register_official_agents", "specialist_prompt",
