@@ -97,6 +97,24 @@ def test_prompts_define_strong_arms_and_all_four_excytin_roles() -> None:
     assert "current GLOBAL resource balance" in bridge.COMMANDER_PROMPT
     assert "hard local token" in bridge.COMMANDER_PROMPT
     assert "parallel tool calls" in bridge.COMMANDER_PROMPT
+    assert "RESOURCE-AWARE DISPATCH PLAYBOOK" in bridge.COMMANDER_PROMPT
+    assert "bounded map-making mission" in bridge.COMMANDER_PROMPT
+    assert "no turn left for the required structured report" in bridge.COMMANDER_PROMPT
+    assert "narrow adversarial check" in bridge.COMMANDER_PROMPT
+    assert "report arguments" in bridge.COMMANDER_PROMPT
+    assert "fail schema validation" in bridge.COMMANDER_PROMPT
+    assert "3,000 provider tokens" in bridge.COMMANDER_PROMPT
+    assert "5,833" in bridge.COMMANDER_PROMPT
+    assert "8,398" in bridge.COMMANDER_PROMPT
+    assert "6,906" in bridge.COMMANDER_PROMPT
+    assert "7,896" in bridge.COMMANDER_PROMPT
+    assert "1/1" in bridge.COMMANDER_PROMPT
+    assert "2/2" in bridge.COMMANDER_PROMPT
+    assert "3/3" in bridge.COMMANDER_PROMPT
+    assert "4/4" in bridge.COMMANDER_PROMPT
+    assert "final report turn" in bridge.COMMANDER_PROMPT
+    assert "protected commander reserve" in bridge.COMMANDER_PROMPT
+    assert "stop opening new investigations" in bridge.COMMANDER_PROMPT
     assert all(
         f"dispatch_{role}(mission, token_limit" in bridge.COMMANDER_PROMPT
         for role in bridge.ROLES
@@ -166,9 +184,12 @@ def test_worker_allocations_are_positive_and_auditable() -> None:
             model_call_limit=3, wall_time_sec=30).validate()
 
 
-def test_new_protocol_defaults_to_64_global_model_calls() -> None:
+def test_new_protocol_defaults_to_expanded_resource_limits() -> None:
     source = inspect.getsource(bridge.create_agent)
     assert 'factory_kwargs.get("max_model_calls", 64)' in source
+    assert 'factory_kwargs.get("max_dispatches", 16)' in source
+    assert 'factory_kwargs.get("global_token_limit", 1_000_000)' in source
+    assert 'factory_kwargs.get("global_time_limit", 300.0)' in source
 
 
 def test_native_agents_use_pinned_inspect_context_compaction() -> None:

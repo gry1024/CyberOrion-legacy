@@ -254,6 +254,65 @@ CYBERORION EXCYTIN INVESTIGATION SOP:
 - Use native tool calls. Do not emit a second JSON action protocol.
 """.strip()
 
+_COMMANDER_DISPATCH_GUIDANCE = """
+RESOURCE-AWARE DISPATCH PLAYBOOK (from prior mechanism/resource traces; not
+from reward or answer quality):
+- A triage worker once broadened bash exploration across many records and
+  consumed its local allocation before submitting any report. Treat triage as
+  a bounded map-making mission, not as ownership of the whole incident.
+- Another worker spent all of its available model turns on discovery and had
+  no turn left for the required structured report. A worker allocation must
+  support investigation plus report submission; do not spend the last call or
+  token on another query.
+- Concrete prior allocation failures show why a superficially positive
+  allocation can still be unusable: a worker assigned 3,000 provider tokens
+  consumed about 5,833 in its first provider call and produced no tool call or
+  report; other workers assigned 3,000, 4,000, or 3,500 tokens consumed about
+  8,398, 6,906, or 7,896 respectively before they could report. These are
+  resource-planning observations, not task-specific instructions or score
+  targets. Leave enough room for at least one useful investigation turn and
+  the final structured report.
+- The same failure occurs with model-call ceilings: workers capped at 1/1,
+  2/2, 3/3, or 4/4 model calls exhausted the ceiling while investigating and
+  had no structured report recorded. A model-call allocation is not merely a
+  query budget; it must include a deliberate final report turn. If the
+  remaining model-call balance cannot cover that turn, stop investigating and
+  submit the report immediately.
+- After a useful triage report, a later escalation worker reopened a broad
+  investigation and consumed the remaining sample capacity instead of doing a
+  narrow adversarial check. Use the existing evidence and only delegate a
+  distinct, evidence-backed follow-up.
+- A worker can also finish useful investigation while its report arguments
+  fail schema validation. Keep missions and expected evidence concise, inspect
+  the returned status, and do not blindly repeat the same failed delegation.
+
+For every dispatch, follow this procedure:
+1. Read the current global balance and safe worker capacity first. Preserve a
+   protected commander reserve for evidence review, final synthesis, and
+   submit. Never allocate the last shared resources to a worker.
+2. Define one bounded mission with named pivots, an explicit stopping
+   condition, the evidence required, and the report deliverable. Assign a
+   worker enough local token, tool-call, model-call, and wall-time capacity to
+   complete both its investigation and its structured report. The report call
+   is part of the allocation and is never optional.
+3. Route schema/source mapping to triage, one hypothesis to threat_hunter,
+   explicit cross-entity links to lateral_analyst, and high-impact claim
+   checking to escalation. Do not ask one worker to perform all roles, and do
+   not issue duplicate or decorative missions.
+4. Dispatch independent missions in parallel when they do not depend on one
+   another; wait for prerequisite evidence before dispatching dependent work.
+   Account for the aggregate reservations and reduce scope instead of
+   over-allocating.
+5. When a worker report arrives, inspect it and the shared summary before
+   dispatching again. If a worker is exhausted, empty, or has a report parse
+   failure, preserve that fact, use the evidence already available, and only
+   retry with a materially narrower mission when the remaining balance can
+   support a complete report.
+6. When the balance is shrinking, stop opening new investigations and finish
+   from the bounded evidence. The commander owns final reconciliation and
+   must submit a supported answer before its own reserve is consumed.
+""".strip()
+
 SINGLE_PROMPT = f"""
 You are CyberOrion's strong monolithic ExCyTIn investigator. You own planning,
 schema discovery, multi-table correlation, targeted hunting, adversarial final
@@ -313,6 +372,8 @@ DELEGATION SEMANTICS:
   call get_investigation_summary. Do not ask workers to repeat full raw output.
 - Do not dispatch decorative or duplicate missions. You remain responsible for
   checking reports and producing the official final answer with submit.
+
+{_COMMANDER_DISPATCH_GUIDANCE}
 
 {_COMMON_INVESTIGATION_SOP}
 """.strip()
@@ -1450,15 +1511,15 @@ def create_agent(*, arm: str = "single", **factory_kwargs: Any):
     """Return the two-level factory expected by ``create_saber_solver``."""
     if arm not in {"single", "orchestrator_only", "full"}:
         raise ValueError(f"unknown arm: {arm}")
-    max_dispatches = int(factory_kwargs.get("max_dispatches", 8))
+    max_dispatches = int(factory_kwargs.get("max_dispatches", 16))
     max_parallel = int(factory_kwargs.get("max_parallel_dispatches", 4))
     max_model_calls = int(factory_kwargs.get("max_model_calls", 64))
     global_tool_call_limit = int(
         factory_kwargs.get("global_tool_call_limit", 64))
     global_token_limit = int(
-        factory_kwargs.get("global_token_limit", 320_000))
+        factory_kwargs.get("global_token_limit", 1_000_000))
     global_time_limit = float(
-        factory_kwargs.get("global_time_limit", 240.0))
+        factory_kwargs.get("global_time_limit", 300.0))
     if any(value <= 0 for value in (
             max_dispatches, max_parallel, max_model_calls,
             global_tool_call_limit, global_token_limit, global_time_limit)):

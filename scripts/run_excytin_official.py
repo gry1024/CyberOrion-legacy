@@ -173,12 +173,12 @@ def main() -> int:
         "--allow-dirty-mechanism-source", action="store_true",
         help="仅机制烟测可用；完整记录工作区指纹，正式运行仍拒绝脏工作区")
     parser.add_argument("--token-limit", type=int, default=1_000_000)
-    parser.add_argument("--time-limit", type=int, default=1800)
+    parser.add_argument("--time-limit", type=int, default=300)
     parser.add_argument("--max-samples", type=int, default=1,
                         help="并发 sample 上限；官方共享数据库机制烟测默认串行")
     parser.add_argument("--global-tool-call-limit", type=int, default=64)
     parser.add_argument("--global-model-call-limit", type=int, default=64)
-    parser.add_argument("--max-dispatches", type=int, default=8)
+    parser.add_argument("--max-dispatches", type=int, default=16)
     parser.add_argument("--max-parallel-dispatches", type=int, default=4)
     args = parser.parse_args()
 
